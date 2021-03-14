@@ -15,43 +15,21 @@ namespace VarCalculator
         {
             Console.WriteLine("\nProcessing : " + expression);
 
-            if (expression.Contains("=="))
-            {
-                _isEqual(expression);
-            }
+            // if fcn in expression : do fcn
 
-            else if (expression.Contains("+"))
+            if (expression.Contains('*') || expression.Contains('/'))
             {
 
             }
 
+            
 
         }
 
-        private void _isEqual(String expression)
+
+        private int _Sum(int x, int y)
         {
-            String[] members = expression.Split("==");
-
-            List<int> items = new List<int>();
-            foreach (String member in members)
-            {
-                items.Add(int.Parse(member));
-            }
-
-            foreach (int i in items)
-            {
-                foreach (int o in items)
-                {
-                    if (i != o)
-                    {
-                        Console.WriteLine("FALSE");
-                        return;
-                    }
-                }
-                Console.WriteLine("TRUE");
-                return;
-
-            }
+            return x + y;
         }
 
         ~Calculator()
