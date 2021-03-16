@@ -7,7 +7,16 @@ namespace SharpCalculator
         static void Main(string[] args)
         {
             Calculator calc = new Calculator();
-            calc.ProcessExpression("6+9*7+22*(4-8*6)-8*(8-(9*7*(7-9)))");
+
+            while (true)
+            {
+                Console.Write("$  ");
+                String input = Console.ReadLine();
+                if (input.Length != 0)
+                {
+                    calc.ProcessExpression(input);
+                }
+            }
         }
     }
 }
