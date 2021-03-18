@@ -6,7 +6,7 @@ namespace SharpCalculator
     {
         static void Main(string[] args)
         {
-            Calculator calc = new Calculator();
+            Calculator calc = new Calculator(true);
 
             while (true)
             {
