@@ -19,13 +19,15 @@ namespace SharpCalculator
 
             List<String> cleanedInfixExpression = _CleanInfix(Infixexpression);
             List<String> postfixExpression = _ConvertToPostfix(cleanedInfixExpression);
-
-            //Console.WriteLine(">>  " + postfixExpression);
+            decimal result = _EvaluatePostfixExpression(postfixExpression);
+            Console.WriteLine(">>  " + result);
 
         }
 
+        
         private List<String> _CleanInfix(String expression)
         {
+
             List<String> cleanedInfixExpression = new List<string>();
             int last = 0;  // 0 : space ; 1 : num ; 2 : operator ; 3 : ( ; 4 : ) ; 5 : fcn
 
@@ -36,7 +38,7 @@ namespace SharpCalculator
                 {
                     continue;
                 }
-
+                
                 if (last == 5)  // Last was a char -> function call
                 {
 
@@ -104,8 +106,10 @@ namespace SharpCalculator
 
                 else if ("-+*/".Contains(token))
                 {
-                    if (token == '-' && last != 1)
+
+                    if (token == '-' && last != 1 && last != 4)
                     {
+
                         cleanedInfixExpression.Add("0");
                     }
 
@@ -124,6 +128,7 @@ namespace SharpCalculator
                     cleanedInfixExpression.Add(token.ToString());
                     last = 5;
                 }
+
             }
             if (_verbose)
             {
@@ -175,6 +180,8 @@ namespace SharpCalculator
                         {
                             output.Add(pf_arg);
                         }
+
+                        output[output.Count-1] += ";"; // MAYBE ALREADY EVALUATE ARGS AT THAT POINT
 
                     }
                     output.Add(function_name);
@@ -243,9 +250,75 @@ namespace SharpCalculator
             return output;
         }
 
-        private void _EvaluatePostfixExpression(String expression)
+        private Decimal _EvaluatePostfixExpression(List<String> PostfixExpression)
         {
+            decimal result = 0;
+            decimal temp;
 
+            decimal ope1;
+            decimal ope2;
+
+            Stack operands = new Stack();
+            foreach(String ch in PostfixExpression)
+            {
+
+                if (Decimal.TryParse(ch, out temp))
+                {
+                    operands.Push(temp);
+                }
+
+
+
+                else if ("-+/*".Contains(ch))
+                {
+
+                    Decimal.TryParse(operands.Pop().ToString(), out ope1);
+                    Decimal.TryParse(operands.Pop().ToString(), out ope2);
+                    switch (ch)
+                    {
+                        case "-":
+                            result = ope2 - ope1;
+                            Console.WriteLine(ope2 + ch + ope1);
+                            break;
+                        case "+":
+                            result = ope1 + ope2;
+                            Console.WriteLine(ope2 + ch + ope1);
+                            break;
+
+                        case "/":
+                            result = ope2 / ope1;
+
+                            Console.WriteLine(ope2 + ch + ope1);
+                            break;
+
+                        case "*":
+                            result = ope1 * ope2;
+
+                            Console.WriteLine(ope2 + ch + ope1);
+                            break;
+
+                    }
+
+                    operands.Push(result);
+                }
+            }
+            Decimal.TryParse(operands.Pop().ToString(), out result);
+            return result;
+        }
+
+        private bool _isFunctionCall()
+        {
+            return false;
+        }
+
+        private bool _isInt()
+        {
+            return false;
+        }
+
+        private bool _isFloat()
+        {
+            return false;
         }
 
         ~Calculator()
