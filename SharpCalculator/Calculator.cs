@@ -19,13 +19,13 @@ namespace SharpCalculator
 
             List<String> cleanedInfixExpression = _CleanInfix(Infixexpression);
             List<String> postfixExpression = _ConvertToPostfix(cleanedInfixExpression);
-            decimal result = _EvaluatePostfixExpression(postfixExpression);
+            Double result = _EvaluatePostfixExpression(postfixExpression);
             Console.WriteLine(">>  " + result);
 
         }
 
         
-        private List<String> _CleanInfix(String expression)
+        private List<String> _CleanInfix(String expression)  // So dirty...
         {
 
             List<String> cleanedInfixExpression = new List<string>();
@@ -61,7 +61,7 @@ namespace SharpCalculator
                     }
                 }
 
-                else if (last == 2 && "-+*/".Contains(token))  // double oeprator -> error
+                else if (last == 2 && "-+*/^".Contains(token))  // double operator -> error
                 {
                     Exception error = new Exception("Error in input expression."+token);
                     Console.WriteLine(error);
@@ -104,7 +104,7 @@ namespace SharpCalculator
                     }
                 }
 
-                else if ("-+*/".Contains(token))
+                else if ("-+*/^".Contains(token))
                 {
 
                     if (token == '-' && last != 1 && last != 4)
@@ -147,6 +147,7 @@ namespace SharpCalculator
         {
 
             Dictionary<String, int> priorities = new Dictionary<String, int>();
+            priorities.Add("^", 3);
             priorities.Add("*", 3);
             priorities.Add("/", 3);
             priorities.Add("+", 2);
@@ -216,7 +217,7 @@ namespace SharpCalculator
 
                 }
 
-                else if ("+-*/".Contains(token))
+                else if ("+-*/^".Contains(token))
                 {
                     while (operatorStack.Count!=0 && priorities[(string)operatorStack.Peek()] >= priorities[token]) {
                         output.Add((string)operatorStack.Pop());
@@ -250,51 +251,58 @@ namespace SharpCalculator
             return output;
         }
 
-        private Decimal _EvaluatePostfixExpression(List<String> PostfixExpression)
+        private Double _EvaluatePostfixExpression(List<String> PostfixExpression)
         {
-            decimal result = 0;
-            decimal temp;
+            Double result = 0;
+            Double temp;
 
-            decimal ope1;
-            decimal ope2;
+            Double ope1;
+            Double ope2;
 
             Stack operands = new Stack();
             foreach(String ch in PostfixExpression)
             {
 
-                if (Decimal.TryParse(ch, out temp))
+                if (Double.TryParse(ch, out temp))
                 {
                     operands.Push(temp);
                 }
 
 
 
-                else if ("-+/*".Contains(ch))
+                else if ("-+/*^".Contains(ch))
                 {
 
-                    Decimal.TryParse(operands.Pop().ToString(), out ope1);
-                    Decimal.TryParse(operands.Pop().ToString(), out ope2);
+                    Double.TryParse(operands.Pop().ToString(), out ope1);
+                    Double.TryParse(operands.Pop().ToString(), out ope2);
                     switch (ch)
                     {
                         case "-":
                             result = ope2 - ope1;
-                            Console.WriteLine(ope2 + ch + ope1);
+                            //Console.WriteLine(ope2 + ch + ope1);
                             break;
                         case "+":
                             result = ope1 + ope2;
-                            Console.WriteLine(ope2 + ch + ope1);
+                            //Console.WriteLine(ope2 + ch + ope1);
                             break;
 
                         case "/":
                             result = ope2 / ope1;
 
-                            Console.WriteLine(ope2 + ch + ope1);
+                            //Console.WriteLine(ope2 + ch + ope1);
                             break;
 
                         case "*":
                             result = ope1 * ope2;
 
-                            Console.WriteLine(ope2 + ch + ope1);
+                            //Console.WriteLine(ope2 + ch + ope1);
+                            break;
+
+
+                        case "^":
+                            result = Math.Pow(ope1, ope2);
+
+                            //Console.WriteLine(ope2 + ch + ope1);
                             break;
 
                     }
@@ -302,7 +310,7 @@ namespace SharpCalculator
                     operands.Push(result);
                 }
             }
-            Decimal.TryParse(operands.Pop().ToString(), out result);
+            Double.TryParse(operands.Pop().ToString(), out result);
             return result;
         }
 
