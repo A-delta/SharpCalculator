@@ -14,7 +14,11 @@ namespace SharpCalculator
                 String input = Console.ReadLine();
                 if (input.Length != 0)
                 {
-                    calc.ProcessExpression(input);
+                    if (input == "cls") { Console.Clear(); }
+                    else
+                    {
+                        calc.ProcessExpressionDebug(input);
+                    }
                 }
             }
         }
