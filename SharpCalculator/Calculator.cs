@@ -301,8 +301,11 @@ namespace SharpCalculator
 
                     while (!(popped == "("))
                     {
-                        output.Add(popped);
+                        //output.Add(popped);
+
+                        output.Add(_isFunctionCall(popped));
                         popped = operatorStack.Pop().ToString();
+
                     }
 
                 }
@@ -311,7 +314,8 @@ namespace SharpCalculator
                 {
                     while (operatorStack.Count != 0 && priorities[(string)operatorStack.Peek()] >= priorities[token])
                     {
-                        output.Add((string)operatorStack.Pop());
+                        //output.Add((string)operatorStack.Pop());
+                        output.Add(_isFunctionCall((string)operatorStack.Pop()));
                     }
                     operatorStack.Push(token);
                 }
@@ -325,7 +329,8 @@ namespace SharpCalculator
 
             while (operatorStack.Count != 0)
             {
-                output.Add((string)operatorStack.Pop());
+                //output.Add((string)operatorStack.Pop());
+                output.Add(_isFunctionCall((string)operatorStack.Pop()));
             }
 
             //String postfixExpression = string.Join(" ", output.ToArray());
@@ -465,7 +470,6 @@ namespace SharpCalculator
 
             foreach (String functionName in functionsNamesList)
             {
-                Console.WriteLine(functionName);
 
                 IFunction function = _getFunction(functionName);
                 if (function.getAliases().Contains(token)) {
