@@ -21,9 +21,7 @@ namespace SharpCalculator
 
         public void PrintHelp()
         {
-            List<String> functionsList = GetAllFunctions();
-            functionsList.Sort();
-            foreach (String functionName in functionsList)
+            foreach (String functionName in _functionsNamesList)
             {
                 Console.WriteLine(functionName);
             }
