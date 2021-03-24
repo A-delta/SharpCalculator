@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SharpCalculator
 {
@@ -12,6 +13,18 @@ namespace SharpCalculator
         {
             _verbose = verbose;
             Console.WriteLine("Calculator initialised\n");
+
+
+        }
+
+        public void PrintHelp()
+        {
+            List<String> functionsList = GetAllFunctions();
+            functionsList.Sort();
+            foreach (String functionName in functionsList)
+            {
+                Console.WriteLine(functionName);
+            }
         }
 
         public void ProcessExpressionDebug(String Infixexpression)
@@ -66,10 +79,10 @@ namespace SharpCalculator
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.Write("]");
                 Console.WriteLine("[" + watchEvaluation.ElapsedMilliseconds + "ms]\n");
-            }
 
-            double total = (double)watchCleaning.ElapsedMilliseconds + (double)watchConversion.ElapsedMilliseconds + (double)watchEvaluation.ElapsedMilliseconds;
-            Console.WriteLine("[Tot: "+ total + "ms]");
+                double total = (double)watchCleaning.ElapsedMilliseconds + (double)watchConversion.ElapsedMilliseconds + (double)watchEvaluation.ElapsedMilliseconds;
+                Console.WriteLine("[Tot: " + total + "ms]");
+            }
 
             Console.WriteLine(">>  " + result);
 
@@ -179,7 +192,7 @@ namespace SharpCalculator
                     last = 2;
                 }
 
-                else if (97 <= (int)token && (int)token <= 122)  // Is a character -> variable or fcn ?
+                else if ((97 <= (int)token && (int)token <= 122) || (65 <= (int)token && (int)token <= 90))  // Is a character -> variable or fcn ?
                 {
                     if (last != 2 && (last == 1 || last == 4)) // no operator 
                     {
@@ -213,7 +226,7 @@ namespace SharpCalculator
             priorities.Add("*", 3);
             priorities.Add("/", 3);
             priorities.Add("+", 2);
-            priorities.Add("-", 2);
+            priorities.Add("-", 2);  // -> properties
             priorities.Add("(", 1);
 
             Stack operatorStack = new Stack();
@@ -231,23 +244,34 @@ namespace SharpCalculator
 
                 else if (token.Contains('[')) {
                     String function_name = token.Split('[')[0];
-                    String temp = token.Substring(token.IndexOf('[') + 1);
-                    temp = temp.Remove(temp.Length-1);
-                    Array args = temp.Split(',');
-                    foreach (String arg in args)
+                    if (_isFunctionCall(function_name))
                     {
-                        List<String> cleaned_arg = _CleanInfix(arg);
-                        List<String> postfix_arg = _ConvertToPostfix(cleaned_arg);
+                        IFunction function = _getFunction(function_name);
+                        String temp = token.Substring(token.IndexOf('[') + 1);
+                        temp = temp.Remove(temp.Length - 1);
+                        Array args = temp.Split(',');
 
-                        foreach (String pf_arg in postfix_arg)
+                        if (function.ArgumentsCount != args.Length)
                         {
-                            output.Add(pf_arg);
+                            throw new Exception("Error in arguments number for "+function_name);
                         }
+                        else
+                        {
+                            foreach (String arg in args)
+                            {
+                                List<String> cleaned_arg = _CleanInfix(arg);
+                                List<String> postfix_arg = _ConvertToPostfix(cleaned_arg);
+                                double to_output = _EvaluatePostfixExpression(postfix_arg);
+                                output.Add(to_output.ToString());
 
-                        output[output.Count-1] += ";"; // MAYBE ALREADY EVALUATE ARGS AT THAT POINT
-
+                            }
+                            output.Add(function_name);
+                        }
                     }
-                    output.Add(function_name);
+                    else
+                    {
+                        throw new Exception("Error in function call");
+                    }
 
                 }
 
@@ -338,7 +362,26 @@ namespace SharpCalculator
                     operands.Push(temp);
                 }
 
+                else if (_isFunctionCall(ch))
+                {
 
+                    IFunction function = _getFunction(ch);
+
+                    int argumentsCount = function.ArgumentsCount;
+                    List<Double> args = new List<Double>();
+                    for (int i = 0; i < argumentsCount; i++)
+                    {
+                        args.Add(Convert.ToDouble(operands.Pop()));
+                        
+                    }
+
+                    result = function.ExecuteFunction(args);
+                    operands.Push(result);
+                }
+                /*else if (_isVariableCall(ch))
+                {
+                    Console.WriteLine("This function doesnt exist. => is it a variable ?");
+                }*/
 
                 else if ("-+/*^".Contains(ch))
                 {
@@ -388,20 +431,35 @@ namespace SharpCalculator
             return result;
         }
 
-        private bool _isFunctionCall()
+
+
+
+        private static List<string> GetAllFunctions()
         {
-            return false;
+            return AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes())
+                 .Where(x => typeof(IFunction).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract)
+                 .Select(x => x.Name).ToList();
         }
 
-        private bool _isInt()
+
+
+        private bool _isVariableCall(String token)
         {
-            return false;
+            return true;
         }
 
-        private bool _isFloat()
+        private bool _isFunctionCall(String token)
         {
-            return false;
+            List<String> functionsNamesList = GetAllFunctions();
+            return functionsNamesList.Contains(token);
         }
+
+        private IFunction _getFunction(String token)
+        {
+            IFunction function = (IFunction)System.Activator.CreateInstance(Type.GetType("SharpCalculator.MathFunctions." + token));
+            return function;
+        }
+
 
         ~Calculator()
         {
