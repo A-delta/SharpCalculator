@@ -13,7 +13,7 @@ namespace SharpCalculator.MathFunctions
         }
 
         private List<String> _aliases = new List<string>();
-        
+
         public List<String> getAliases()
         {
             _aliases.Add("max");
@@ -25,6 +25,6 @@ namespace SharpCalculator.MathFunctions
             return Math.Max(args[0], args[1]);
         }
 
-    } 
+    }
 
 }

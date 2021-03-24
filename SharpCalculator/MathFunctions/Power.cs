@@ -16,7 +16,7 @@ namespace SharpCalculator.MathFunctions
 
         public List<String> getAliases()
         {
-            _aliases.Add("power");
+            _aliases.Add("pow");
             _aliases.Add("^");
             return _aliases;
         }

@@ -8,11 +8,13 @@ namespace SharpCalculator
     class Calculator
     {
         bool _verbose;
+        List<String> _functionsNamesList;
 
         public Calculator(bool verbose)
         {
             _verbose = verbose;
             Console.WriteLine("Calculator initialised\n");
+            _functionsNamesList = GetAllFunctions();
 
 
         }
@@ -461,14 +463,12 @@ namespace SharpCalculator
 
         private String _isFunctionCall(String token)
         {
-            List<String> functionsNamesList = GetAllFunctions();
-
-            if (functionsNamesList.Contains(token)) 
+            if (_functionsNamesList.Contains(token)) 
             {
                 return token; 
             }
 
-            foreach (String functionName in functionsNamesList)
+            foreach (String functionName in _functionsNamesList)
             {
 
                 IFunction function = _getFunction(functionName);
