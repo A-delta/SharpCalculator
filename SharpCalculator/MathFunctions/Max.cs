@@ -10,10 +10,15 @@ namespace SharpCalculator.MathFunctions
         {
             get => _argumentsCount;
 
-            set => _argumentsCount = value;
         }
 
-
+        private List<String> _aliases = new List<string>();
+        
+        public List<String> getAliases()
+        {
+            _aliases.Add("max");
+            return _aliases;
+        }
 
         public double ExecuteFunction(List<Double> args)
         {

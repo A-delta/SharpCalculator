@@ -113,7 +113,7 @@ namespace SharpCalculator
                 {
                     continue;
                 }
-                
+
                 if (last == 5)  // Last was a char -> function call
                 {
 
@@ -138,15 +138,15 @@ namespace SharpCalculator
 
                 else if (last == 2 && "-+*/^".Contains(token))  // double operator -> error
                 {
-                    Exception error = new Exception("Error in input expression."+token);
+                    Exception error = new Exception("Error in input expression." + token);
                     Console.WriteLine(error);
-                    
+
                 }
 
                 else if ("0123456789".Contains(token) || token == '.')
                 {
                     if (last == 1)
-                        cleanedInfixExpression[cleanedInfixExpression.Count-1] += token.ToString();
+                        cleanedInfixExpression[cleanedInfixExpression.Count - 1] += token.ToString();
                     else
                     {
 
@@ -162,7 +162,7 @@ namespace SharpCalculator
                 }
                 else if ("()".Contains(token))
                 {
-                    if (token == '('  && last != 2 && last != 0)
+                    if (token == '(' && last != 2 && last != 0)
                     {
                         Console.WriteLine("Implicit product");
                         cleanedInfixExpression.Add("*");
@@ -242,18 +242,22 @@ namespace SharpCalculator
                     continue;
                 }
 
-                else if (token.Contains('[')) {
+                else if (token.Contains('['))
+                {
                     String function_name = token.Split('[')[0];
-                    if (_isFunctionCall(function_name))
+
+                    String correctFunctionName = _isFunctionCall(function_name);
+                    if (correctFunctionName != "None")
                     {
-                        IFunction function = _getFunction(function_name);
+
+                        IFunction function = _getFunction(correctFunctionName);
                         String temp = token.Substring(token.IndexOf('[') + 1);
                         temp = temp.Remove(temp.Length - 1);
                         Array args = temp.Split(',');
 
                         if (function.ArgumentsCount != args.Length)
                         {
-                            throw new Exception("Error in arguments number for "+function_name);
+                            throw new Exception("Error in arguments number for " + function_name);
                         }
                         else
                         {
@@ -265,7 +269,7 @@ namespace SharpCalculator
                                 output.Add(to_output.ToString());
 
                             }
-                            output.Add(function_name);
+                            output.Add(correctFunctionName);
                         }
                     }
                     else
@@ -294,7 +298,7 @@ namespace SharpCalculator
                 {
                     String popped = operatorStack.Pop().ToString();
 
-                    
+
                     while (!(popped == "("))
                     {
                         output.Add(popped);
@@ -305,19 +309,21 @@ namespace SharpCalculator
 
                 else if ("+-*/^".Contains(token))
                 {
-                    while (operatorStack.Count!=0 && priorities[(string)operatorStack.Peek()] >= priorities[token]) {
+                    while (operatorStack.Count != 0 && priorities[(string)operatorStack.Peek()] >= priorities[token])
+                    {
                         output.Add((string)operatorStack.Pop());
                     }
                     operatorStack.Push(token);
                 }
 
-                else if (token.Contains('(') && token.Contains(')')) {
+                else if (token.Contains('(') && token.Contains(')'))
+                {
                     continue;
                 }
 
             }
 
-            while (operatorStack.Count!=0)
+            while (operatorStack.Count != 0)
             {
                 output.Add((string)operatorStack.Pop());
             }
@@ -334,7 +340,7 @@ namespace SharpCalculator
                 }
                 Console.WriteLine();
             }
-            
+
             return output;
         }
 
@@ -348,8 +354,8 @@ namespace SharpCalculator
 
             Stack operands = new Stack();
 
-            if (_verbose) 
-            { 
+            if (_verbose)
+            {
                 Console.Write("[Calculate] :\n");
             }
 
@@ -362,7 +368,7 @@ namespace SharpCalculator
                     operands.Push(temp);
                 }
 
-                else if (_isFunctionCall(ch))
+                else if (_isFunctionCall(ch) != "None")
                 {
 
                     IFunction function = _getFunction(ch);
@@ -372,7 +378,7 @@ namespace SharpCalculator
                     for (int i = 0; i < argumentsCount; i++)
                     {
                         args.Add(Convert.ToDouble(operands.Pop()));
-                        
+
                     }
 
                     result = function.ExecuteFunction(args);
@@ -445,19 +451,34 @@ namespace SharpCalculator
 
         private bool _isVariableCall(String token)
         {
-            return true;
+            return false;
         }
 
-        private bool _isFunctionCall(String token)
+        private String _isFunctionCall(String token)
         {
             List<String> functionsNamesList = GetAllFunctions();
-            return functionsNamesList.Contains(token);
+
+            if (functionsNamesList.Contains(token)) 
+            {
+                return token; 
+            }
+
+            foreach (String functionName in functionsNamesList)
+            {
+                Console.WriteLine(functionName);
+
+                IFunction function = _getFunction(functionName);
+                if (function.getAliases().Contains(token)) {
+                    return functionName;
+                }
+            }
+
+            return "None";
         }
 
-        private IFunction _getFunction(String token)
+        private IFunction _getFunction(String functionName)
         {
-            IFunction function = (IFunction)System.Activator.CreateInstance(Type.GetType("SharpCalculator.MathFunctions." + token));
-            return function;
+            return (IFunction)System.Activator.CreateInstance(Type.GetType("SharpCalculator.MathFunctions." + functionName));
         }
 
 
