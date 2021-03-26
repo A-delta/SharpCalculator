@@ -39,68 +39,6 @@ namespace SharpCalculator
             }
         }
 
-        public void ProcessExpressionDebug(String Infixexpression)  // need real log system
-        {
-            var watchCleaning = System.Diagnostics.Stopwatch.StartNew();
-
-            List<String> cleanedInfixExpression = _CleanInfix(Infixexpression);
-
-            watchCleaning.Stop();
-            if (_verbose)
-            {
-                Console.Write("[");
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write("✓");
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.Write("]");
-
-                Console.WriteLine("[" + watchCleaning.ElapsedMilliseconds + "ms]\n");
-            }
-
-
-
-            var watchConversion = System.Diagnostics.Stopwatch.StartNew();
-
-            List<String> postfixExpression = _ConvertToPostfix(cleanedInfixExpression);
-
-            watchConversion.Stop();
-            if (_verbose)
-            {
-                Console.Write("[");
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write("✓");
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.Write("]");
-
-
-                Console.WriteLine("[" + watchConversion.ElapsedMilliseconds + "ms]\n");
-            }
-
-
-
-            var watchEvaluation = System.Diagnostics.Stopwatch.StartNew();
-
-            Double result = _EvaluatePostfixExpression(postfixExpression);
-            watchEvaluation.Stop();
-            if (_verbose)
-            {
-                Console.Write("[");
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write("✓");
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.Write("]");
-                Console.WriteLine("[" + watchEvaluation.ElapsedMilliseconds + "ms]\n");
-
-                double total = (double)watchCleaning.ElapsedMilliseconds + (double)watchConversion.ElapsedMilliseconds + (double)watchEvaluation.ElapsedMilliseconds;
-                Console.WriteLine("[Tot: " + total + "ms]");
-            }
-
-            Console.WriteLine(">>  " + result);
-
-
-        }
-
-
         public void ProcessExpression(String Infixexpression)
         {
 
