@@ -12,7 +12,7 @@ namespace SharpCalculator
             //bool verbose = answer.ToLower().Contains("y");
 
 
-            Calculator calc = new Calculator(true);
+            Calculator calc = new Calculator(false);
 
             while (true)
             {

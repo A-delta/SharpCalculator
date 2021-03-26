@@ -23,7 +23,7 @@ namespace SharpCalculator.MathFunctions
 
         public double ExecuteFunction(List<Double> args)
         {
-            return Math.Pow(args[0], args[1]);
+            return Math.Pow(args[1], args[0]);
         }
 
     }

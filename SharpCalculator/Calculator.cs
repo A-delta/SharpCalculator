@@ -15,11 +15,9 @@ namespace SharpCalculator
             _verbose = verbose;
             Console.WriteLine("Calculator initialised\n");
             _functionsNamesList = GetAllFunctions();
-
-
         }
 
-        public void PrintHelp()
+        public void PrintHelp()  // Not finished
         {
             foreach (String functionName in _functionsNamesList)
             {
@@ -27,7 +25,7 @@ namespace SharpCalculator
             }
         }
 
-        public void ProcessExpressionDebug(String Infixexpression)
+        public void ProcessExpressionDebug(String Infixexpression)  // need real log system
         {
             var watchCleaning = System.Diagnostics.Stopwatch.StartNew();
 
@@ -100,11 +98,11 @@ namespace SharpCalculator
         }
 
 
-        private List<String> _CleanInfix(String expression)  // So dirty...
+        private List<String> _CleanInfix(String expression)
         {
-
             List<String> cleanedInfixExpression = new List<string>();
             int last = 0;  // 0 : space ; 1 : num ; 2 : operator ; 3 : ( ; 4 : ) ; 5 : fcn
+            int fcnToFinish = 0;
 
             char[] characters = expression.ToCharArray();
             foreach (char token in characters)
@@ -121,26 +119,37 @@ namespace SharpCalculator
                     if (token == ')')
                     {
                         cleanedInfixExpression[cleanedInfixExpression.Count - 1] += ']';
-                        last = 4;
+                        fcnToFinish--;
+                        if (fcnToFinish!=0)
+                        {
+
+                            last = 5;
+                        }
+                        else
+                        {
+
+                            last = 4;
+                        }
                     }
                     else if (token == '(')
                     {
                         cleanedInfixExpression[cleanedInfixExpression.Count - 1] += '[';
+                        fcnToFinish++;
                         last = 5;
                     }
 
                     else
                     {
                         cleanedInfixExpression[cleanedInfixExpression.Count - 1] += token.ToString();
+                        
                         last = 5;
                     }
                 }
 
-                else if (last == 2 && "-+*/^".Contains(token))  // double operator -> error
+                else if (last == 2 && "-+*/^".Contains(token))  // double operator -> error ( but what about == or || ?)
                 {
                     Exception error = new Exception("Error in input expression." + token);
                     Console.WriteLine(error);
-
                 }
 
                 else if ("0123456789".Contains(token) || token == '.')
@@ -149,7 +158,6 @@ namespace SharpCalculator
                         cleanedInfixExpression[cleanedInfixExpression.Count - 1] += token.ToString();
                     else
                     {
-
                         if (last != 2 && last == 4)
                         {
                             Console.WriteLine("Implicit product");
@@ -251,11 +259,64 @@ namespace SharpCalculator
                     {
 
                         IFunction function = _getFunction(correctFunctionName);
+
                         String temp = token.Substring(token.IndexOf('[') + 1);
                         temp = temp.Remove(temp.Length - 1);
-                        Array args = temp.Split(',');
 
-                        if (function.ArgumentsCount != args.Length)
+                        List<String> args = new List<string>();
+
+
+                        if ((temp.Contains("[") || temp.Contains("]")))
+                        {
+
+                            String buffer = "";
+
+                            int countOpen = 0;
+                            int countClose = 0;
+
+                            foreach (char ch in temp)
+                            {
+                                if (ch == ',' && countOpen == countClose)
+                                {
+                                    args.Add(buffer);
+                                    buffer = "";
+                                    countOpen = 0;
+                                    countClose = 0;
+
+                                }
+
+                                if (ch == '[')
+                                {
+                                    countOpen++;
+
+                                }
+
+                                if (ch == ']')
+                                {
+
+                                    countClose++;
+                                }
+
+                                buffer = buffer + ch;
+
+                                if (countOpen == countClose && countOpen + countClose != 0)
+                                {
+                                    args.Add(buffer);
+                                    buffer = "";
+                                    countOpen = 0;
+                                    countClose = 0;
+                                }
+
+                            }
+                        }
+
+                        else  // simple args
+                        {
+                            args = temp.Split(',').ToList<String>();
+                        }
+
+
+                        if (function.ArgumentsCount != args.Count)
                         {
                             throw new Exception("Error in arguments number for " + function_name);
                         }
@@ -265,6 +326,7 @@ namespace SharpCalculator
                             {
                                 List<String> cleaned_arg = _CleanInfix(arg);
                                 List<String> postfix_arg = _ConvertToPostfix(cleaned_arg);
+                                // Maybe I should evaluate all at once
                                 double to_output = _EvaluatePostfixExpression(postfix_arg);
                                 output.Add(to_output.ToString());
 
@@ -301,11 +363,8 @@ namespace SharpCalculator
 
                     while (!(popped == "("))
                     {
-                        //output.Add(popped);
-
                         output.Add(_isFunctionCall(popped));
                         popped = operatorStack.Pop().ToString();
-
                     }
 
                 }
@@ -314,7 +373,6 @@ namespace SharpCalculator
                 {
                     while (operatorStack.Count != 0 && priorities[(string)operatorStack.Peek()] >= priorities[token])
                     {
-                        //output.Add((string)operatorStack.Pop());
                         output.Add(_isFunctionCall((string)operatorStack.Pop()));
                     }
                     operatorStack.Push(token);
@@ -329,11 +387,8 @@ namespace SharpCalculator
 
             while (operatorStack.Count != 0)
             {
-                //output.Add((string)operatorStack.Pop());
                 output.Add(_isFunctionCall((string)operatorStack.Pop()));
             }
-
-            //String postfixExpression = string.Join(" ", output.ToArray());
 
             if (_verbose)
             {
@@ -451,8 +506,6 @@ namespace SharpCalculator
                  .Where(x => typeof(IFunction).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract)
                  .Select(x => x.Name).ToList();
         }
-
-
 
         private bool _isVariableCall(String token)
         {
