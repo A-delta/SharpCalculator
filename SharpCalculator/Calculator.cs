@@ -8,13 +8,27 @@ namespace SharpCalculator
     class Calculator
     {
         bool _verbose;
+        Logger logger;
+
         List<String> _functionsNamesList;
+        Dictionary<String, int> _operatorPriorities = new Dictionary<String, int>();
 
         public Calculator(bool verbose)
         {
             _verbose = verbose;
-            Console.WriteLine("Calculator initialised\n");
+            logger = new Logger(verbose);
+
+            logger.Log("Calculator initialised\n");
+
             _functionsNamesList = GetAllFunctions();
+            // opertors = getPrefixOperators
+
+            _operatorPriorities.Add("^", 4);
+            _operatorPriorities.Add("*", 3);
+            _operatorPriorities.Add("/", 3);
+            _operatorPriorities.Add("+", 2);
+            _operatorPriorities.Add("-", 2);
+            _operatorPriorities.Add("(", 1);
         }
 
         public void PrintHelp()  // Not finished
@@ -67,7 +81,6 @@ namespace SharpCalculator
             var watchEvaluation = System.Diagnostics.Stopwatch.StartNew();
 
             Double result = _EvaluatePostfixExpression(postfixExpression);
-
             watchEvaluation.Stop();
             if (_verbose)
             {
@@ -90,9 +103,20 @@ namespace SharpCalculator
 
         public void ProcessExpression(String Infixexpression)
         {
+
+            logger.StartWatcher();
             List<String> cleanedInfixExpression = _CleanInfix(Infixexpression);
+            logger.DisplayTaskEnd("[Clean] ", cleanedInfixExpression);
+
+            logger.StartWatcher();
             List<String> postfixExpression = _ConvertToPostfix(cleanedInfixExpression);
+            logger.DisplayTaskEnd("[Postfix] ", postfixExpression);
+
+
+            logger.StartWatcher();
             Double result = _EvaluatePostfixExpression(postfixExpression);
+            logger.DisplayTaskEnd("[Calculate] ");
+
             Console.WriteLine(">>  " + result);
 
         }
@@ -213,30 +237,11 @@ namespace SharpCalculator
                 }
 
             }
-            if (_verbose)
-            {
-                Console.Write("[Clean] ");
-                foreach (string a in cleanedInfixExpression)
-                {
-                    Console.Write(a + ' ');
-                }
-                Console.WriteLine();
-            }
-
             return cleanedInfixExpression;
         }
 
         private List<String> _ConvertToPostfix(List<String> expression)
         {
-
-            Dictionary<String, int> priorities = new Dictionary<String, int>();
-            priorities.Add("^", 4);
-            priorities.Add("*", 3);
-            priorities.Add("/", 3);
-            priorities.Add("+", 2);
-            priorities.Add("-", 2);  // -> properties
-            priorities.Add("(", 1);
-
             Stack operatorStack = new Stack();
             List<String> output = new List<string>();
 
@@ -371,7 +376,7 @@ namespace SharpCalculator
 
                 else if ("+-*/^".Contains(token))
                 {
-                    while (operatorStack.Count != 0 && priorities[(string)operatorStack.Peek()] >= priorities[token])
+                    while (operatorStack.Count != 0 && _operatorPriorities[(string)operatorStack.Peek()] >= _operatorPriorities[token])
                     {
                         output.Add(_isFunctionCall((string)operatorStack.Pop()));
                     }
@@ -390,17 +395,6 @@ namespace SharpCalculator
                 output.Add(_isFunctionCall((string)operatorStack.Pop()));
             }
 
-            if (_verbose)
-            {
-
-                Console.Write("[Postfix] ");
-                foreach (string a in output)
-                {
-                    Console.Write(a + ' ');
-                }
-                Console.WriteLine();
-            }
-
             return output;
         }
 
@@ -414,11 +408,7 @@ namespace SharpCalculator
 
             Stack operands = new Stack();
 
-            if (_verbose)
-            {
-                Console.Write("[Calculate] :\n");
-            }
-
+            logger.Log("[Calculate] :\n");
 
             foreach (String ch in PostfixExpression)
             {
@@ -442,6 +432,8 @@ namespace SharpCalculator
                     }
 
                     result = function.ExecuteFunction(args);
+
+                    logger.LogCalculation(ch, args, result);
                     operands.Push(result);
                 }
                 /*else if (_isVariableCall(ch))
@@ -487,7 +479,7 @@ namespace SharpCalculator
                             break;
 
                     }
-                    if (_verbose) { Console.WriteLine("\t >>  " + ope2 + ch + ope1 + " = " + result); }
+                    
                     operands.Push(result);
                 }
             }
