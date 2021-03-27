@@ -38,15 +38,6 @@ namespace SharpCalculator
             }
 
             _operatorPriorities.Add("(", 1);
-
-            // opertors = getPrefixOperators
-
-            /*_operatorPriorities.Add("^", 4);
-            _operatorPriorities.Add("*", 3);
-            _operatorPriorities.Add("/", 3);
-            _operatorPriorities.Add("+", 2);
-            _operatorPriorities.Add("-", 2);
-            _operatorPriorities.Add("(", 1);*/
         }
 
         public void PrintHelp()  // Not finished
@@ -430,9 +421,6 @@ namespace SharpCalculator
             Double result = 0;
             Double temp;
 
-            Double ope1;
-            Double ope2;
-
             Stack operands = new Stack();
 
 
@@ -462,52 +450,6 @@ namespace SharpCalculator
                     logger.LogCalculation(ch, args, result);
                     operands.Push(result);
                 }
-                /*else if (_isVariableCall(ch))
-                {
-                    Console.WriteLine("This function doesnt exist. => is it a variable ?");
-                }*/
-
-                /*else if ("-+/*^".Contains(ch))
-                {
-
-                    Double.TryParse(operands.Pop().ToString(), out ope1);
-                    Double.TryParse(operands.Pop().ToString(), out ope2);
-                    switch (ch)
-                    {
-                        case "-":
-                            result = ope2 - ope1;
-                            break;
-                        case "+":
-                            result = ope1 + ope2;
-                            break;
-
-                        case "/":
-
-                            if (operands.Count == 0)
-                            {
-                                Console.WriteLine("Last ?");
-                                result = ope2 / ope1;
-                            }
-
-                            result = ope2 / ope1;
-
-                            break;
-
-                        case "*":
-                            result = ope1 * ope2;
-
-                            break;
-
-
-                        case "^":
-                            result = Math.Pow(ope2, ope1);
-
-                            break;
-
-                    }
-                    
-                    operands.Push(result);
-                }*/
             }
             Double.TryParse(operands.Pop().ToString(), out result);
 
