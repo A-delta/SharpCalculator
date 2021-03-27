@@ -46,6 +46,7 @@ namespace SharpCalculator
             List<String> cleanedInfixExpression = _CleanInfix(Infixexpression);
             logger.DisplayTaskEnd("[Clean] ", cleanedInfixExpression);
 
+
             logger.StartWatcher();
             List<String> postfixExpression = _ConvertToPostfix(cleanedInfixExpression);
             logger.DisplayTaskEnd("[Postfix] ", postfixExpression);
@@ -60,15 +61,18 @@ namespace SharpCalculator
         }
 
 
+
         private List<String> _CleanInfix(String expression)
         {
             List<String> cleanedInfixExpression = new List<string>();
             int last = 0;  // 0 : space ; 1 : num ; 2 : operator ; 3 : ( ; 4 : ) ; 5 : fcn
+            char lastChar;
             int fcnToFinish = 0;
 
             char[] characters = expression.ToCharArray();
             foreach (char token in characters)
             {
+                lastChar = token;
                 if (token == ' ')
                 {
                     continue;
@@ -76,20 +80,16 @@ namespace SharpCalculator
 
                 if (last == 5)  // Last was a char -> function call
                 {
-
-
                     if (token == ')')
                     {
                         cleanedInfixExpression[cleanedInfixExpression.Count - 1] += ']';
                         fcnToFinish--;
-                        if (fcnToFinish!=0)
+                        if (fcnToFinish != 0)
                         {
-
                             last = 5;
                         }
                         else
                         {
-
                             last = 4;
                         }
                     }
@@ -99,11 +99,9 @@ namespace SharpCalculator
                         fcnToFinish++;
                         last = 5;
                     }
-
                     else
                     {
                         cleanedInfixExpression[cleanedInfixExpression.Count - 1] += token.ToString();
-                        
                         last = 5;
                     }
                 }
@@ -125,7 +123,6 @@ namespace SharpCalculator
                             Console.WriteLine("Implicit product");
                             cleanedInfixExpression.Add("*");
                         }
-
                         cleanedInfixExpression.Add(token.ToString());
                         last = 1;
                     }
@@ -154,14 +151,11 @@ namespace SharpCalculator
 
                     if (token == '-' && last != 1 && last != 4)
                     {
-
                         cleanedInfixExpression.Add("0");
                     }
-
                     cleanedInfixExpression.Add(token.ToString());
                     last = 2;
                 }
-
                 else if ((97 <= (int)token && (int)token <= 122) || (65 <= (int)token && (int)token <= 90))  // Is a character -> variable or fcn ?
                 {
                     if (last != 2 && (last == 1 || last == 4)) // no operator 
@@ -169,11 +163,9 @@ namespace SharpCalculator
                         Console.WriteLine("Implicit product");
                         cleanedInfixExpression.Add("*");
                     }
-
                     cleanedInfixExpression.Add(token.ToString());
                     last = 5;
                 }
-
             }
             return cleanedInfixExpression;
         }
