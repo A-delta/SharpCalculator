@@ -49,7 +49,12 @@ namespace SharpCalculator
                 
             }
         }
-
+        public void DebugLog(String log)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(log);
+            Console.ForegroundColor = ConsoleColor.White;
+        }
         public void DisplayTaskEnd(String task)
         {
             if (_verbose)

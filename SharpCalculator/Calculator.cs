@@ -82,22 +82,43 @@ namespace SharpCalculator
                 {
                     if (token == ')')
                     {
-                        cleanedInfixExpression[cleanedInfixExpression.Count - 1] += ']';
-                        fcnToFinish--;
-                        if (fcnToFinish != 0)
+                        if (_areParenthesisMatching(cleanedInfixExpression[cleanedInfixExpression.Count - 1]))
                         {
+                            cleanedInfixExpression[cleanedInfixExpression.Count - 1] += ']';
+                            fcnToFinish--;
+                            if (fcnToFinish != 0)
+                            {
+                                last = 5;
+                            }
+                            else
+                            {
+                                last = 4;
+                            }
+                        }
+                        else
+                        {
+                            cleanedInfixExpression[cleanedInfixExpression.Count - 1] += ')';
+                            last = 5;
+
+                            
+                        }
+                        
+                    }
+                    else if (token == '(')
+                    {
+                        if (_canOpenParenthesis(cleanedInfixExpression[cleanedInfixExpression.Count - 1]))
+                        {
+                            cleanedInfixExpression[cleanedInfixExpression.Count - 1] += '(';
                             last = 5;
                         }
                         else
                         {
-                            last = 4;
+                            cleanedInfixExpression[cleanedInfixExpression.Count - 1] += '[';
+                            fcnToFinish++;
+                            last = 5;
                         }
-                    }
-                    else if (token == '(')
-                    {
-                        cleanedInfixExpression[cleanedInfixExpression.Count - 1] += '[';
-                        fcnToFinish++;
-                        last = 5;
+
+                        
                     }
                     else
                     {
@@ -170,6 +191,65 @@ namespace SharpCalculator
             return cleanedInfixExpression;
         }
 
+
+        private bool _canOpenParenthesis(String lastToken)
+        {
+            //Console.WriteLine("Can open for : " + lastToken);
+            if (" ,;[(".Contains(lastToken[lastToken.Length - 1])) 
+            {
+                return true;
+            }
+
+            return false;
+        }
+        private bool _areParenthesisMatching(String lastToken)
+        {
+            //Console.WriteLine("AreParenthesisMatching : " + lastToken);
+
+            if (lastToken.Contains(','))
+            {
+                lastToken.Substring(lastToken.LastIndexOf(','));
+            }
+
+            //Console.WriteLine("new : " + lastToken);
+
+            int countOpen = 0;
+            int countClose = 0;
+
+            foreach (char ch in lastToken)
+            {
+                /*if (ch == ',' && countOpen == countClose)
+                {
+                    countOpen = 0;
+                    countClose = 0;
+
+                }*/
+
+                if (ch == '(')
+                {
+                    countOpen++;
+
+                }
+
+                if (ch == ')')
+                {
+
+                    countClose++;
+                }
+
+
+                if (countOpen == countClose && countOpen + countClose != 0)
+                {
+                    return true;
+                }
+
+            }
+
+            Console.WriteLine(countOpen + " " + countClose);
+            return countOpen + countClose == 0;
+        }
+
+
         private List<String> _ConvertToPostfix(List<String> expression)
         {
             Stack operatorStack = new Stack();
@@ -211,7 +291,7 @@ namespace SharpCalculator
 
                             foreach (char ch in temp)
                             {
-                                if (ch == ',' && countOpen == countClose)
+                                if (ch == ',' && countOpen == countClose && buffer != "")
                                 {
                                     args.Add(buffer);
                                     buffer = "";
@@ -231,8 +311,7 @@ namespace SharpCalculator
 
                                     countClose++;
                                 }
-
-                                buffer = buffer + ch;
+                                if (!(buffer == "" && ch == ',')) { buffer = buffer + ch; }
 
                                 if (countOpen == countClose && countOpen + countClose != 0)
                                 {
@@ -243,6 +322,12 @@ namespace SharpCalculator
                                 }
 
                             }
+
+                            if (buffer != "")
+                            {
+                                args.Add(buffer);
+                            }
+
                         }
 
                         else  // simple args
