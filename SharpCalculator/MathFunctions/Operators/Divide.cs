@@ -12,6 +12,21 @@ namespace SharpCalculator.MathFunctions
 
         }
 
+        private String _infixOperator = "/";
+        public String InfixOperator
+        {
+            get => _infixOperator;
+
+        }
+
+        private int _infixOperatorPriority = 3;
+        public int InfixOperatorPriority
+        {
+            get => _infixOperatorPriority;
+
+        }
+
+
         private List<String> _aliases = new List<string>();
 
         public List<String> getAliases()
@@ -23,7 +38,7 @@ namespace SharpCalculator.MathFunctions
 
         public double ExecuteFunction(List<Double> args)
         {
-            return args[0] / args[1];
+            return args[1] / args[0];
         }
 
     }

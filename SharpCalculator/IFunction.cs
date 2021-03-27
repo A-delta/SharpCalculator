@@ -6,6 +6,8 @@ namespace SharpCalculator
     interface IFunction
     {
         int ArgumentsCount { get; }
+        String InfixOperator { get; }
+        int InfixOperatorPriority { get; }
 
         public double ExecuteFunction(List<Double> args);
 

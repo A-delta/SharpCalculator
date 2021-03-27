@@ -79,11 +79,12 @@ namespace SharpCalculator
             {
                 String log;
                 log = functionName + "(";
+                args.Reverse();
                 foreach (Double arg in args)
                 {
                     log = log + arg + ", ";
                 }
-                log = log.Substring(0, log.Length-2) + ") = " + result;
+                log = "\t" + log.Substring(0, log.Length-2) + ") = " + result;
 
 
                 Console.WriteLine(log);

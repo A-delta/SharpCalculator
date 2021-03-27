@@ -11,6 +11,21 @@ namespace SharpCalculator.MathFunctions
             get => _argumentsCount;
         }
 
+        private String _infixOperator = "√";
+        public String InfixOperator
+        {
+            get => _infixOperator;
+
+        }
+
+        private int _infixOperatorPriority = 4;
+        public int InfixOperatorPriority
+        {
+            get => _infixOperatorPriority;
+
+        }
+
+
 
         private List<String> _aliases = new List<string>();
 

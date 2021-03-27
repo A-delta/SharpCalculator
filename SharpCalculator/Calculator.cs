@@ -11,6 +11,8 @@ namespace SharpCalculator
         Logger logger;
 
         List<String> _functionsNamesList;
+        List<String> _infixOperators = new List<string>();
+
         Dictionary<String, int> _operatorPriorities = new Dictionary<String, int>();
 
         public Calculator(bool verbose)
@@ -21,14 +23,30 @@ namespace SharpCalculator
             logger.Log("Calculator initialised\n");
 
             _functionsNamesList = GetAllFunctions();
+
+            foreach (String functionName in _functionsNamesList)
+            {
+                IFunction function = _getFunction(functionName);
+                String infixOperator = function.InfixOperator;
+
+                if (infixOperator != "None")
+                {
+                    _infixOperators.Add(infixOperator);
+                    _operatorPriorities.Add(infixOperator, function.InfixOperatorPriority);
+
+                }
+            }
+
+            _operatorPriorities.Add("(", 1);
+
             // opertors = getPrefixOperators
 
-            _operatorPriorities.Add("^", 4);
+            /*_operatorPriorities.Add("^", 4);
             _operatorPriorities.Add("*", 3);
             _operatorPriorities.Add("/", 3);
             _operatorPriorities.Add("+", 2);
             _operatorPriorities.Add("-", 2);
-            _operatorPriorities.Add("(", 1);
+            _operatorPriorities.Add("(", 1);*/
         }
 
         public void PrintHelp()  // Not finished
@@ -53,6 +71,7 @@ namespace SharpCalculator
 
 
             logger.StartWatcher();
+            logger.Log("[Calculation] ");
             Double result = _EvaluatePostfixExpression(postfixExpression);
             logger.DisplayTaskEnd("[Calculate] ");
 
@@ -99,10 +118,7 @@ namespace SharpCalculator
                         {
                             cleanedInfixExpression[cleanedInfixExpression.Count - 1] += ')';
                             last = 5;
-
-                            
                         }
-                        
                     }
                     else if (token == '(')
                     {
@@ -117,8 +133,6 @@ namespace SharpCalculator
                             fcnToFinish++;
                             last = 5;
                         }
-
-                        
                     }
                     else
                     {
@@ -167,7 +181,7 @@ namespace SharpCalculator
                     }
                 }
 
-                else if ("-+*/^".Contains(token))
+                else if (_infixOperators.Contains(token.ToString()))
                 {
 
                     if (token == '-' && last != 1 && last != 4)
@@ -194,8 +208,7 @@ namespace SharpCalculator
 
         private bool _canOpenParenthesis(String lastToken)
         {
-            //Console.WriteLine("Can open for : " + lastToken);
-            if (" ,;[(".Contains(lastToken[lastToken.Length - 1])) 
+            if (" ,;[(".Contains(lastToken[lastToken.Length - 1]) || _infixOperators.Contains(lastToken[lastToken.Length - 1].ToString())) 
             {
                 return true;
             }
@@ -204,27 +217,18 @@ namespace SharpCalculator
         }
         private bool _areParenthesisMatching(String lastToken)
         {
-            //Console.WriteLine("AreParenthesisMatching : " + lastToken);
 
             if (lastToken.Contains(','))
             {
                 lastToken.Substring(lastToken.LastIndexOf(','));
             }
 
-            //Console.WriteLine("new : " + lastToken);
 
             int countOpen = 0;
             int countClose = 0;
 
             foreach (char ch in lastToken)
             {
-                /*if (ch == ',' && countOpen == countClose)
-                {
-                    countOpen = 0;
-                    countClose = 0;
-
-                }*/
-
                 if (ch == '(')
                 {
                     countOpen++;
@@ -245,7 +249,6 @@ namespace SharpCalculator
 
             }
 
-            Console.WriteLine(countOpen + " " + countClose);
             return countOpen + countClose == 0;
         }
 
@@ -346,9 +349,18 @@ namespace SharpCalculator
                             {
                                 List<String> cleaned_arg = _CleanInfix(arg);
                                 List<String> postfix_arg = _ConvertToPostfix(cleaned_arg);
+
+                                foreach(String convertedArg in postfix_arg)
+                                {
+                                    output.Add(convertedArg);
+                                }
+
+
+                                /*List<String> cleaned_arg = _CleanInfix(arg);
+                                List<String> postfix_arg = _ConvertToPostfix(cleaned_arg);
                                 // Maybe I should evaluate all at once
                                 double to_output = _EvaluatePostfixExpression(postfix_arg);
-                                output.Add(to_output.ToString());
+                                output.Add(to_output.ToString());*/
 
                             }
                             output.Add(correctFunctionName);
@@ -389,7 +401,7 @@ namespace SharpCalculator
 
                 }
 
-                else if ("+-*/^".Contains(token))
+                else if (_infixOperators.Contains(token))
                 {
                     while (operatorStack.Count != 0 && _operatorPriorities[(string)operatorStack.Peek()] >= _operatorPriorities[token])
                     {
@@ -423,7 +435,6 @@ namespace SharpCalculator
 
             Stack operands = new Stack();
 
-            logger.Log("[Calculate] :\n");
 
             foreach (String ch in PostfixExpression)
             {
@@ -456,7 +467,7 @@ namespace SharpCalculator
                     Console.WriteLine("This function doesnt exist. => is it a variable ?");
                 }*/
 
-                else if ("-+/*^".Contains(ch))
+                /*else if ("-+/*^".Contains(ch))
                 {
 
                     Double.TryParse(operands.Pop().ToString(), out ope1);
@@ -496,7 +507,7 @@ namespace SharpCalculator
                     }
                     
                     operands.Push(result);
-                }
+                }*/
             }
             Double.TryParse(operands.Pop().ToString(), out result);
 
