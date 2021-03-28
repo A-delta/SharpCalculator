@@ -66,6 +66,9 @@ namespace SharpCalculator
             Double result = _EvaluatePostfixExpression(postfixExpression);
             logger.DisplayTaskEnd("[Calculate] ");
 
+            logger.LogTotalDuration();
+
+
             Console.WriteLine(">>  " + result);
 
         }
@@ -445,7 +448,6 @@ namespace SharpCalculator
                 }
             }
             Double.TryParse(operands.Pop().ToString(), out result);
-
 
             return result;
         }

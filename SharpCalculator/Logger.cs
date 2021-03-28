@@ -5,8 +5,9 @@ namespace SharpCalculator
 {
     class Logger
     {
-        bool _verbose;
-        System.Diagnostics.Stopwatch _watcher;
+        private bool _verbose;
+        private System.Diagnostics.Stopwatch _watcher;
+        private List<long> _endedTaskDuration = new List<long>();
 
         public Logger(bool verbose)
         {
@@ -45,8 +46,9 @@ namespace SharpCalculator
                 Console.Write("]");
                 Console.WriteLine("[" + _watcher.ElapsedMilliseconds + "ms]\n");
 
+                _endedTaskDuration.Add(_watcher.ElapsedMilliseconds);
 
-                
+
             }
         }
         public void DebugLog(String log)
@@ -70,6 +72,8 @@ namespace SharpCalculator
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.Write("]");
                 Console.WriteLine("[" + _watcher.ElapsedMilliseconds + "ms]\n");
+
+                _endedTaskDuration.Add(_watcher.ElapsedMilliseconds);
             }
         }
 
@@ -86,9 +90,20 @@ namespace SharpCalculator
                 }
                 log = "\t" + log.Substring(0, log.Length-2) + ") = " + result;
 
-
                 Console.WriteLine(log);
+
             }
+        }
+
+        public void LogTotalDuration()
+        {
+            long total = 0;
+            foreach (long duration in _endedTaskDuration)
+            {
+                total = total + duration;
+            }
+            _endedTaskDuration = new List<long>();
+            Console.WriteLine("[Tot : " + total + "ms]");
         }
     }
 }
