@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using SharpCalculatorLib;
 
 
-namespace SharpCalculator
+namespace SharpCalculatorApp
 {
     class Program
     {
