@@ -199,50 +199,40 @@ namespace SharpCalculator
 
         private bool _canOpenParenthesis(String lastToken)
         {
-            if (" ,;[(".Contains(lastToken[lastToken.Length - 1]) || _infixOperators.Contains(lastToken[lastToken.Length - 1].ToString())) 
+            if (" ,[(0123456789".Contains(lastToken[lastToken.Length - 1]) || _infixOperators.Contains(lastToken[lastToken.Length - 1].ToString())) 
             {
                 return true;
             }
-
             return false;
         }
         private bool _areParenthesisMatching(String lastToken)
         {
-
             if (lastToken.Contains(','))
             {
-                lastToken.Substring(lastToken.LastIndexOf(','));
+                lastToken = lastToken.Substring(lastToken.LastIndexOf(','));
             }
 
 
             int countOpen = 0;
             int countClose = 0;
-
             foreach (char ch in lastToken)
             {
                 if (ch == '(')
                 {
                     countOpen++;
-
                 }
 
                 if (ch == ')')
                 {
-
                     countClose++;
                 }
-
-
                 if (countOpen == countClose && countOpen + countClose != 0)
                 {
                     return true;
                 }
-
             }
-
             return countOpen + countClose == 0;
         }
-
 
         private List<String> _ConvertToPostfix(List<String> expression)
         {
@@ -285,50 +275,57 @@ namespace SharpCalculator
 
                             foreach (char ch in temp)
                             {
-                                if (ch == ',' && countOpen == countClose && buffer != "")
-                                {
-                                    args.Add(buffer);
-                                    buffer = "";
-                                    countOpen = 0;
-                                    countClose = 0;
+                                switch (ch) {
+                                    case '[':
+                                        countOpen++;
 
-                                }
+                                        buffer = buffer + ch;
 
-                                if (ch == '[')
-                                {
-                                    countOpen++;
+                                        continue;
 
-                                }
+                                    case ']':
+                                        countClose++;
+                                        buffer = buffer + ch;
+                                        
 
-                                if (ch == ']')
-                                {
 
-                                    countClose++;
-                                }
-                                if (!(buffer == "" && ch == ',')) { buffer = buffer + ch; }
+                                        continue;
 
-                                if (countOpen == countClose && countOpen + countClose != 0)
-                                {
-                                    args.Add(buffer);
-                                    buffer = "";
-                                    countOpen = 0;
-                                    countClose = 0;
+                                    case ',':
+                                        if (countOpen == countClose && buffer != "")
+                                        {
+                                            args.Add(buffer);
+                                            buffer = "";
+                                            countOpen = 0;
+                                            countClose = 0;
+                                        }
+                                        else
+                                        {
+                                            buffer = buffer + ch;
+                                        }
+
+                                        continue;
+
+                                    default:
+
+                                        buffer = buffer + ch;
+                                        continue;
                                 }
 
                             }
 
-                            if (buffer != "")
+                            if (countOpen == countClose && buffer != "")
                             {
                                 args.Add(buffer);
                             }
-
                         }
+
+                        
 
                         else  // simple args
                         {
                             args = temp.Split(',').ToList<String>();
                         }
-
 
                         if (function.ArgumentsCount != args.Count)
                         {
@@ -338,21 +335,16 @@ namespace SharpCalculator
                         {
                             foreach (String arg in args)
                             {
-                                List<String> cleaned_arg = _CleanInfix(arg);
-                                List<String> postfix_arg = _ConvertToPostfix(cleaned_arg);
+                                String cleanableArg = arg.Replace('[', '(').Replace(']', ')');
+
+                                List<String> cleanedArg = _CleanInfix(cleanableArg);
+
+                                List<String> postfix_arg = _ConvertToPostfix(cleanedArg);
 
                                 foreach(String convertedArg in postfix_arg)
                                 {
                                     output.Add(convertedArg);
                                 }
-
-
-                                /*List<String> cleaned_arg = _CleanInfix(arg);
-                                List<String> postfix_arg = _ConvertToPostfix(cleaned_arg);
-                                // Maybe I should evaluate all at once
-                                double to_output = _EvaluatePostfixExpression(postfix_arg);
-                                output.Add(to_output.ToString());*/
-
                             }
                             output.Add(correctFunctionName);
                         }
@@ -415,6 +407,7 @@ namespace SharpCalculator
 
             return output;
         }
+
 
         private Double _EvaluatePostfixExpression(List<String> PostfixExpression)
         {
