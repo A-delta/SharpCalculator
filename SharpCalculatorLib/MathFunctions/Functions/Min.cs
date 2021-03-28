@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SharpCalculator.MathFunctions
+namespace SharpCalculatorLib.MathFunctions
 {
-    public class Add : IFunction
+    public class Min : IFunction
     {
         private int _argumentsCount = 2;
         public int ArgumentsCount
@@ -12,16 +12,14 @@ namespace SharpCalculator.MathFunctions
 
         }
 
-
-
-       private String _infixOperator = "+";
-       public String InfixOperator
+        private String _infixOperator = "None";
+        public String InfixOperator
         {
             get => _infixOperator;
 
-       }
+        }
 
-        private int _infixOperatorPriority = 2;
+        private int _infixOperatorPriority = 0;
         public int InfixOperatorPriority
         {
             get => _infixOperatorPriority;
@@ -29,18 +27,18 @@ namespace SharpCalculator.MathFunctions
         }
 
 
+
         private List<String> _aliases = new List<string>();
 
         public List<String> getAliases()
         {
-            _aliases.Add("add");
-            _aliases.Add("+");
+            _aliases.Add("min");
             return _aliases;
         }
 
         public double ExecuteFunction(List<Double> args)
         {
-            return args[0] + args[1];
+            return Math.Min(args[0], args[1]);
         }
 
     }

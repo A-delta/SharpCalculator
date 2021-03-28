@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SharpCalculator
+namespace SharpCalculatorLib
 {
     class Logger
     {
@@ -97,13 +97,18 @@ namespace SharpCalculator
 
         public void LogTotalDuration()
         {
-            long total = 0;
-            foreach (long duration in _endedTaskDuration)
+            if (_verbose)
             {
-                total = total + duration;
+
+
+                long total = 0;
+                foreach (long duration in _endedTaskDuration)
+                {
+                    total = total + duration;
+                }
+                _endedTaskDuration = new List<long>();
+                Console.WriteLine("[Tot : " + total + "ms]");
             }
-            _endedTaskDuration = new List<long>();
-            Console.WriteLine("[Tot : " + total + "ms]");
         }
     }
 }

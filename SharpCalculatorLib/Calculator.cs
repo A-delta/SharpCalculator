@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SharpCalculator
+namespace SharpCalculatorLib
 {
-    class Calculator
+    public class Calculator
     {
         bool _verbose;
         Logger logger;
@@ -488,7 +488,7 @@ namespace SharpCalculator
 
         private IFunction _getFunction(String functionName)
         {
-            return (IFunction)System.Activator.CreateInstance(Type.GetType("SharpCalculator.MathFunctions." + functionName));
+            return (IFunction)System.Activator.CreateInstance(Type.GetType("SharpCalculatorLib.MathFunctions." + functionName));
         }
 
 

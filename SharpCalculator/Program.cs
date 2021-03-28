@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using SharpCalculatorLib;
+
 
 namespace SharpCalculator
 {
@@ -7,12 +9,12 @@ namespace SharpCalculator
     {
         static void Main(string[] args)
         {
-            //Console.Write("Enable verbose mode ? Y/[N] : ");
-            //String answer = Console.ReadLine();
-            //bool verbose = answer.ToLower().Contains("y");
+            Console.Write("Enable verbose mode ? Y/[N] : ");
+            String answer = Console.ReadLine();
+            bool verbose = answer.ToLower().Contains("y");
 
-
-            Calculator calc = new Calculator(true);
+            
+            Calculator calc = new Calculator(verbose);
 
             while (true)
             {

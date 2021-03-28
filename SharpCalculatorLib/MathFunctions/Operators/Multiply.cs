@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SharpCalculator.MathFunctions
+namespace SharpCalculatorLib.MathFunctions
 {
-    public class Minus : IFunction
+    public class Multiply : IFunction
     {
         private int _argumentsCount = 2;
         public int ArgumentsCount
@@ -12,14 +12,14 @@ namespace SharpCalculator.MathFunctions
 
         }
 
-        private String _infixOperator = "-";
+        private String _infixOperator = "*";
         public String InfixOperator
         {
             get => _infixOperator;
 
         }
 
-        private int _infixOperatorPriority = 2;
+        private int _infixOperatorPriority = 3;
         public int InfixOperatorPriority
         {
             get => _infixOperatorPriority;
@@ -30,14 +30,14 @@ namespace SharpCalculator.MathFunctions
 
         public List<String> getAliases()
         {
-            _aliases.Add("minus");
-            _aliases.Add("-");
+            _aliases.Add("multiply");
+            _aliases.Add("*");
             return _aliases;
         }
 
         public double ExecuteFunction(List<Double> args)
         {
-            return args[1] - args[0];
+            return args[0] * args[1];
         }
 
     }

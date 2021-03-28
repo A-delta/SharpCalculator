@@ -1,25 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SharpCalculator.MathFunctions
+namespace SharpCalculatorLib.MathFunctions
 {
-    public class Divide : IFunction
+    public class SquareRoot : IFunction
     {
-        private int _argumentsCount = 2;
+        private int _argumentsCount = 1;
         public int ArgumentsCount
         {
             get => _argumentsCount;
-
         }
 
-        private String _infixOperator = "/";
+        private String _infixOperator = "√";
         public String InfixOperator
         {
             get => _infixOperator;
 
         }
 
-        private int _infixOperatorPriority = 3;
+        private int _infixOperatorPriority = 4;
         public int InfixOperatorPriority
         {
             get => _infixOperatorPriority;
@@ -27,20 +26,20 @@ namespace SharpCalculator.MathFunctions
         }
 
 
+
         private List<String> _aliases = new List<string>();
 
         public List<String> getAliases()
         {
-            _aliases.Add("divide");
-            _aliases.Add("/");
+            _aliases.Add("sqrt");
             return _aliases;
         }
 
         public double ExecuteFunction(List<Double> args)
         {
-            return args[1] / args[0];
+            return Math.Sqrt(args[0]);
         }
 
-    }
+    } 
 
 }
