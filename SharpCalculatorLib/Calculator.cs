@@ -53,7 +53,7 @@ namespace SharpCalculatorLib
             List<String> cleanedInfixExpression = _CleanInfix(Infixexpression);
             logger.DisplayTaskEnd("[Clean] ", cleanedInfixExpression);
 
-            /*logger.StartWatcher();
+            logger.StartWatcher();
             List<String> postfixExpression = _ConvertToPostfix(cleanedInfixExpression);
             logger.DisplayTaskEnd("[Postfix] ", postfixExpression);
 
@@ -66,7 +66,7 @@ namespace SharpCalculatorLib
             logger.LogTotalDuration();
 
 
-            Console.WriteLine(">>  " + result + "\n");*/
+            Console.WriteLine(">>  " + result + "\n");
 
         }
 
@@ -82,6 +82,27 @@ namespace SharpCalculatorLib
             char[] characters = expression.ToCharArray();
             foreach (char token in characters)
             {
+                if (_infixOperators.Contains(token.ToString())) // OPERATOR
+                {
+                    isInfixOperatorMemory += token.ToString();
+                }
+
+                else  if (isInfixOperatorMemory.Length != 0)  // END OPERATOR
+                {
+                    if (isInfixOperatorMemory == "-" && last != "nb" && last != ")")  // NEGATIVE NUMBER
+                    {
+                        cleanedInfixExpression.Add("0");
+                        cleanedInfixExpression.Add(isInfixOperatorMemory);
+                    }
+                    else
+                    {
+                        cleanedInfixExpression.Add(isInfixOperatorMemory);
+                    }
+                    isInfixOperatorMemory = "";
+                    last = "ope";
+                }
+
+
                 if (token == ' ') { continue; }
 
                 else if (token == '(')
@@ -95,7 +116,7 @@ namespace SharpCalculatorLib
                     {
                         cleanedInfixExpression.Add("*");
                         cleanedInfixExpression.Add(token.ToString());
-                        
+
                     }
                     else
                     {
@@ -122,7 +143,7 @@ namespace SharpCalculatorLib
                 else if (".0123456789".Contains(token))  // DIGIT
                 {
                     if (last == "nb") // >9 number
-                        cleanedInfixExpression[cleanedInfixExpression.Count - 1] += token.ToString(); 
+                        cleanedInfixExpression[cleanedInfixExpression.Count - 1] += token.ToString();
                     else
                     {
                         if (last != "nb" && last == ")") // Implicit product
@@ -132,16 +153,6 @@ namespace SharpCalculatorLib
                         cleanedInfixExpression.Add(token.ToString());
                         last = "nb";
                     }
-                }
-
-                else if (_infixOperators.Contains(token.ToString())) // OPERATOR
-                {
-                    if (token == '-' && last != "nb" && last != ")")  // NEGATIVE NUMBER
-                    {
-                        cleanedInfixExpression.Add("0");
-                    }
-                    cleanedInfixExpression.Add(token.ToString());
-                    last = "ope";
                 }
 
 
