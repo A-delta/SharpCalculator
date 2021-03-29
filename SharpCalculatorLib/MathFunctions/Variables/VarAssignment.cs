@@ -28,7 +28,7 @@ namespace SharpCalculatorLib.MathFunctions
 
         }
 
-        private int _infixOperatorPriority = 2;
+        private int _infixOperatorPriority = 1;
         public int InfixOperatorPriority
         {
             get => _infixOperatorPriority;
@@ -45,9 +45,15 @@ namespace SharpCalculatorLib.MathFunctions
             return _aliases;
         }
 
-        public string ExecuteFunction(List<Double> args)
+        public string ExecuteFunction(State state, List<string> args)
         {
-            return (args[0] + args[1]).ToString();
+            string name = args[1];
+            string value = args[0];
+
+
+
+            state.SetNewVariable(name, value);
+            return args[0];
         }
 
     }

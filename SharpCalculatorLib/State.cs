@@ -7,18 +7,38 @@ using System.Threading.Tasks;
 namespace SharpCalculatorLib
 {
     
-    class State
+    public class State
     {
-        public Dictionary<String, Double> VarManager;
+        public List<String> FunctionsNamesList;
+        public List<String> InfixOperators = new List<string>();
+        public Dictionary<String, int> OperatorPriorities = new Dictionary<String, int>();
+
+        public Dictionary<String, string> VarManager;
 
 
         public State()
         {
-            VarManager = new Dictionary<string, double>();
+            FunctionsNamesList = Calculator.GetAllFunctions();
+            foreach (String functionName in FunctionsNamesList)
+            {
+                IFunction function = Calculator.GetFunction(functionName);
+                String infixOperator = function.InfixOperator;
+
+                if (infixOperator != "None")
+                {
+                    InfixOperators.Add(infixOperator);
+                    OperatorPriorities.Add(infixOperator, function.InfixOperatorPriority);
+
+                }
+            }
+
+            OperatorPriorities.Add("(", 1);
+
+            VarManager = new Dictionary<string, string>();
 
         }
 
-        public void SetNewVariable(string name, double value)
+        public void SetNewVariable(string name, string value)
         {
             VarManager.Add(name, value);
         }

@@ -77,14 +77,14 @@ namespace SharpCalculatorLib
             }
         }
 
-        public void LogCalculation(String functionName, List<Double> args, string result)
+        public void LogCalculation(String functionName, List<string> args, string result)
         {
             if (_verbose)
             {
                 String log;
                 log = functionName + "(";
                 args.Reverse();
-                foreach (Double arg in args)
+                foreach (string arg in args)
                 {
                     log = log + arg + ", ";
                 }

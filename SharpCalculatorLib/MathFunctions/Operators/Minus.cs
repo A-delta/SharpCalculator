@@ -42,9 +42,12 @@ namespace SharpCalculatorLib.MathFunctions
             return _aliases;
         }
 
-        public string ExecuteFunction(List<Double> args)
+        public string ExecuteFunction(State state, List<string> args)
         {
-            return (args[1] - args[0]).ToString();
+            double arg1 = Double.Parse(args[0]);
+            double arg2 = Double.Parse(args[1]);
+
+            return (arg2 - arg1).ToString();
         }
 
     }
