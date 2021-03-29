@@ -77,7 +77,7 @@ namespace SharpCalculatorLib
             }
         }
 
-        public void LogCalculation(String functionName, List<Double> args, Double result)
+        public void LogCalculation(String functionName, List<Double> args, string result)
         {
             if (_verbose)
             {

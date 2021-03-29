@@ -43,9 +43,9 @@ namespace SharpCalculatorLib.MathFunctions
             return _aliases;
         }
 
-        public double ExecuteFunction(List<Double> args)
+        public string ExecuteFunction(List<Double> args)
         {
-            return args[1] / args[0];
+            return (args[1] / args[0]).ToString();
         }
 
     }

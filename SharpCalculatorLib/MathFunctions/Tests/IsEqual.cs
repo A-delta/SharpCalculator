@@ -3,15 +3,14 @@ using System.Collections.Generic;
 
 namespace SharpCalculatorLib.MathFunctions
 {
-    public class Min : IFunction
+    public class IsEqual : IFunction
     {
-        private String _docstring = "Returns minimum value of two";
+        private String _docstring = "Returns true if arguments are equal";
         public String Docstring
         {
             get => _docstring;
 
         }
-
 
         private int _argumentsCount = 2;
         public int ArgumentsCount
@@ -20,14 +19,16 @@ namespace SharpCalculatorLib.MathFunctions
 
         }
 
-        private String _infixOperator = "None";
+
+
+        private String _infixOperator = "==";
         public String InfixOperator
         {
             get => _infixOperator;
 
         }
 
-        private int _infixOperatorPriority = 0;
+        private int _infixOperatorPriority = 2;
         public int InfixOperatorPriority
         {
             get => _infixOperatorPriority;
@@ -35,18 +36,18 @@ namespace SharpCalculatorLib.MathFunctions
         }
 
 
-
         private List<String> _aliases = new List<string>();
 
         public List<String> getAliases()
         {
-            _aliases.Add("min");
+            _aliases.Add("equal");
+            _aliases.Add("==");
             return _aliases;
         }
 
-        public double ExecuteFunction(List<Double> args)
+        public string ExecuteFunction(List<Double> args)
         {
-            return Math.Min(args[0], args[1]);
+            return (args[0] == args[1]).ToString();
         }
 
     }

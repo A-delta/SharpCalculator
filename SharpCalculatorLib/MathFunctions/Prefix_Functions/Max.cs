@@ -44,9 +44,9 @@ namespace SharpCalculatorLib.MathFunctions
             return _aliases;
         }
 
-        public double ExecuteFunction(List<Double> args)
+        public string ExecuteFunction(List<Double> args)
         {
-            return Math.Max(args[0], args[1]);
+            return Math.Max(args[0], args[1]).ToString();
         }
 
     }

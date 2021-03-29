@@ -3,29 +3,31 @@ using System.Collections.Generic;
 
 namespace SharpCalculatorLib.MathFunctions
 {
-    public class SquareRoot : IFunction
+    public class Min : IFunction
     {
-        private String _docstring = "Returns the squareroot of a number";
+        private String _docstring = "Returns minimum value of two";
         public String Docstring
         {
             get => _docstring;
 
         }
 
-        private int _argumentsCount = 1;
+
+        private int _argumentsCount = 2;
         public int ArgumentsCount
         {
             get => _argumentsCount;
+
         }
 
-        private String _infixOperator = "√";
+        private String _infixOperator = "None";
         public String InfixOperator
         {
             get => _infixOperator;
 
         }
 
-        private int _infixOperatorPriority = 4;
+        private int _infixOperatorPriority = 0;
         public int InfixOperatorPriority
         {
             get => _infixOperatorPriority;
@@ -38,15 +40,15 @@ namespace SharpCalculatorLib.MathFunctions
 
         public List<String> getAliases()
         {
-            _aliases.Add("sqrt");
+            _aliases.Add("min");
             return _aliases;
         }
 
         public string ExecuteFunction(List<Double> args)
         {
-            return Math.Sqrt(args[0]).ToString();
+            return Math.Min(args[0], args[1]).ToString();
         }
 
-    } 
+    }
 
 }

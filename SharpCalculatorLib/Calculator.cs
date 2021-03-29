@@ -53,20 +53,20 @@ namespace SharpCalculatorLib
             List<String> cleanedInfixExpression = _CleanInfix(Infixexpression);
             logger.DisplayTaskEnd("[Clean] ", cleanedInfixExpression);
 
-            logger.StartWatcher();
+            /*logger.StartWatcher();
             List<String> postfixExpression = _ConvertToPostfix(cleanedInfixExpression);
             logger.DisplayTaskEnd("[Postfix] ", postfixExpression);
 
 
             logger.StartWatcher();
             logger.Log("[Calculation] ");
-            Double result = _EvaluatePostfixExpression(postfixExpression);
+            string result = _EvaluatePostfixExpression(postfixExpression);
             logger.DisplayTaskEnd("[Calculate] ");
 
             logger.LogTotalDuration();
 
 
-            Console.WriteLine(">>  " + result + "\n");
+            Console.WriteLine(">>  " + result + "\n");*/
 
         }
 
@@ -76,6 +76,7 @@ namespace SharpCalculatorLib
 
             List<String> finalInfixExpression = new List<string>();
             String isFunctionMemory = "";
+            String isInfixOperatorMemory = "";
             String last = "";
 
             char[] characters = expression.ToCharArray();
@@ -441,10 +442,10 @@ namespace SharpCalculatorLib
             return output;
         }
 
-        private Double _EvaluatePostfixExpression(List<String> PostfixExpression)
+        private string _EvaluatePostfixExpression(List<String> PostfixExpression)
         {
-            Double result = 0;
-            Double temp;
+            string result;
+            double temp;
 
             Stack operands = new Stack();
 
@@ -454,7 +455,12 @@ namespace SharpCalculatorLib
 
                 if (Double.TryParse(ch, out temp))
                 {
-                    operands.Push(temp);
+                    operands.Push(ch);
+                }
+
+                else if (ch == "true" || ch == "false")
+                {
+                    return ch;
                 }
 
                 else if (_IsFunctionCall(ch) != "None")
@@ -466,7 +472,10 @@ namespace SharpCalculatorLib
                     List<Double> args = new List<Double>();
                     for (int i = 0; i < argumentsCount; i++)
                     {
-                        args.Add(Convert.ToDouble(operands.Pop()));
+
+                        var popped = operands.Pop();
+                        args.Add(Convert.ToDouble(popped));
+
 
                     }
 
@@ -476,9 +485,8 @@ namespace SharpCalculatorLib
                     operands.Push(result);
                 }
             }
-            Double.TryParse(operands.Pop().ToString(), out result);
 
-            return result;
+            return (string)operands.Pop();
         }
 
         private static List<string> _GetAllFunctions()

@@ -10,7 +10,7 @@ namespace SharpCalculatorLib
         String InfixOperator { get; }
         int InfixOperatorPriority { get; }
 
-        public double ExecuteFunction(List<Double> args);
+        public string ExecuteFunction(List<Double> args);
 
         public List<String> getAliases();
     }
