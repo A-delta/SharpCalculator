@@ -5,6 +5,14 @@ namespace SharpCalculatorLib.MathFunctions
 {
     public class Max : IFunction
     {
+        private String _docstring = "Returns maximum value of two";
+        public String Docstring
+        {
+            get => _docstring;
+
+        }
+
+
         private int _argumentsCount = 2;
         public int ArgumentsCount
         {

@@ -5,6 +5,13 @@ namespace SharpCalculatorLib.MathFunctions
 {
     public class SquareRoot : IFunction
     {
+        private String _docstring = "Returns the squareroot of a number";
+        public String Docstring
+        {
+            get => _docstring;
+
+        }
+
         private int _argumentsCount = 1;
         public int ArgumentsCount
         {

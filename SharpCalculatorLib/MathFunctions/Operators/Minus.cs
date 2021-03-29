@@ -5,6 +5,13 @@ namespace SharpCalculatorLib.MathFunctions
 {
     public class Minus : IFunction
     {
+        private String _docstring = "Returns the difference of two numbers";
+        public String Docstring
+        {
+            get => _docstring;
+
+        }
+
         private int _argumentsCount = 2;
         public int ArgumentsCount
         {

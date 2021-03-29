@@ -5,6 +5,7 @@ namespace SharpCalculatorLib
 {
     interface IFunction
     {
+        String Docstring { get; }
         int ArgumentsCount { get; }
         String InfixOperator { get; }
         int InfixOperatorPriority { get; }

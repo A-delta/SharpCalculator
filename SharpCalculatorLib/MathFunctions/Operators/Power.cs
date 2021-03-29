@@ -5,6 +5,13 @@ namespace SharpCalculatorLib.MathFunctions
 {
     public class Power : IFunction
     {
+        private String _docstring = "Returns x^y";
+        public String Docstring
+        {
+            get => _docstring;
+
+        }
+
         private int _argumentsCount = 2;
         public int ArgumentsCount
         {
