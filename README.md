@@ -10,7 +10,8 @@ The cleaned expression is converted to [postfix notation](https://en.wikipedia.o
 The SharpCalculatorApp is the console application written to interact with the library. There will be a graphical application in the future.
 
 # Contribute
-Feel free to contribute by submitting new Math Functions for the SharpCalculatorLib, it can be anything, for example : `PGCD()`, `IsPrime()`, `Cos()`
+Feel free to contribute by submitting new Math Functions for the SharpCalculatorLib, it can be anything, for example : `PGCD()`, `IsPrime()`, `Cos()` are missing.
+Note that your function must follow the IFunction interface.
 
 
 # TO DO
