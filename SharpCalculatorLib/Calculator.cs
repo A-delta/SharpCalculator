@@ -34,7 +34,7 @@ namespace SharpCalculatorLib
             }
         }
 
-        public void ProcessExpression(String Infixexpression)
+        public string ProcessExpression(String Infixexpression)
         {
             _logger.StartWatcher();
             List<String> cleanedInfixExpression = _CleanInfix(Infixexpression);
@@ -54,6 +54,8 @@ namespace SharpCalculatorLib
 
 
             Console.WriteLine(">>  " + result + "\n");
+
+            return result;
 
         }
 

@@ -1,0 +1,85 @@
+using NUnit.Framework;
+using SharpCalculatorLib;
+
+namespace NUnitTests
+{
+    public class BasicExpressions
+    {
+        Calculator _calc;
+        string _result;
+
+        [SetUp]
+        public void Setup()
+        {
+            _calc = new Calculator(false);
+        }
+
+        [Test]
+        public void Calculate()
+        {
+            _result = _calc.ProcessExpression("2*4-4");
+            Assert.IsTrue(_result == "4");
+        }
+
+        [Test]
+        public void Functions()
+        {
+            _result = _calc.ProcessExpression("sqrt(4)");
+            Assert.IsTrue(_result == "2", "Basic");
+
+            _result = _calc.ProcessExpression("sqrt(sqrt(16))");
+            Assert.IsTrue(_result == "2", "Function in function");
+
+
+
+            _result = _calc.ProcessExpression("max(1, 2)");
+            Assert.IsTrue(_result == "2", "Multiple arguments");
+
+            _result = _calc.ProcessExpression("max(sqrt(4), sqrt(2))");
+            Assert.IsTrue(_result == "2", "Multiple args and function in function");
+        }
+
+        [Test]
+        public void Variables()
+        {
+            _result = _calc.ProcessExpression("a = 4");
+            Assert.IsTrue(_result == "4", "Assignment");
+
+            _result = _calc.ProcessExpression("a");
+            Assert.IsTrue(_result == "4", "Get");
+
+        }
+
+        [Test]
+        public void ImplicitProducts()
+        {
+            _result = _calc.ProcessExpression("2(4)");
+            Assert.IsTrue(_result == "8", "Implicit products in a(b) form is false");
+
+            _result = _calc.ProcessExpression("2(4)");
+            Assert.IsTrue(_result == "8", "Implicit products in (a)b form is false");
+
+            _result = _calc.ProcessExpression("(4)(2)");
+            Assert.IsTrue(_result == "8", "Implicit products in (a)(b) form is false");
+
+            _result = _calc.ProcessExpression("((((4))))((((2))))");
+            Assert.IsTrue(_result == "8", "Implicit products in (abusive) (((a)))(((b))) form is false");
+
+
+
+            _result = _calc.ProcessExpression("sqrt(16)2");
+            Assert.IsTrue(_result == "8", "Implicit products in fcn()a form is false");
+
+            _result = _calc.ProcessExpression("2sqrt(16)");
+            Assert.IsTrue(_result == "8", "Implicit products in afcn() form is false");
+
+            _result = _calc.ProcessExpression("sqrt(16)(2)");
+            Assert.IsTrue(_result == "8", "Implicit products in fcn()(a) form is false");
+
+            _result = _calc.ProcessExpression("(2)sqrt(16)");
+            Assert.IsTrue(_result == "8", "Implicit products in (a)fcn() form is false");
+        }
+
+
+    }
+}
