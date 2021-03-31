@@ -13,8 +13,7 @@ namespace SharpCalculatorApp
             //String answer = Console.ReadLine();
             //bool verbose = answer.ToLower().Contains("y");
 
-            
-            Calculator calc = new Calculator(true);
+            ConsoleApplication app = new ConsoleApplication(true);
 
             while (true)
             {
@@ -22,19 +21,7 @@ namespace SharpCalculatorApp
                 String input = Console.ReadLine();
                 if (input.Length != 0)
                 {
-                    if (input == "cls") { Console.Clear(); }
-                    else if (input == "help") { calc.PrintHelp(); }
-                    else
-                    {
-                        /*try
-                        {*/
-                        calc.ProcessExpression(input);
-                        /*}
-                        catch
-                        {
-                            Console.WriteLine("An error occrured");
-                        }*/
-                    }
+                    app.ProcessExpression(input);
                 }
             }
         }

@@ -26,12 +26,15 @@ namespace SharpCalculatorLib
             
         }
 
-        public void PrintHelp()  // Not finished
+        public Dictionary<string, IFunction> GetHelp()
         {
+            Dictionary<string, IFunction> functionDict = new Dictionary<string, IFunction>();
+
             foreach (String functionName in _state.FunctionsNamesList)
             {
-                Console.WriteLine(functionName);
+                functionDict.Add(functionName, GetFunction(functionName));
             }
+            return functionDict;
         }
 
         public string ProcessExpression(String Infixexpression)
@@ -76,7 +79,7 @@ namespace SharpCalculatorLib
                     isInfixOperatorMemory += token.ToString();
                 }
 
-                else  if (isInfixOperatorMemory.Length != 0)  // IS END OPERATOR ?
+                else if (isInfixOperatorMemory.Length != 0)  // IS END OPERATOR ?
                 {
                     if (isInfixOperatorMemory == "-" && last != "nb" && last != ")")  // NEGATIVE NUMBER
                     {
@@ -91,14 +94,13 @@ namespace SharpCalculatorLib
                     last = "ope";
                 }
 
-
-
                 if ((97 <= (int)token && (int)token <= 122) || (65 <= (int)token && (int)token <= 90))  // Is a character -> variable or fcn ?
                 {
                     if (last != "ope" && (last == "nb" || last == ")")) // no operator -> implicit product
                     {
                         cleanedInfixExpression.Add("*");
                     }
+
                     if (last == "char")
                     {
                         cleanedInfixExpression[cleanedInfixExpression.Count - 1] += token.ToString();
@@ -116,6 +118,13 @@ namespace SharpCalculatorLib
                     else
                     {
                         last = "char";
+                    }
+                }
+                else
+                {
+                    if (isFunctionMemory.Length != 0)
+                    {
+                        isFunctionMemory = "";
                     }
                 }
 
@@ -137,16 +146,13 @@ namespace SharpCalculatorLib
                     {
                         cleanedInfixExpression.Add("*");
                         cleanedInfixExpression.Add(token.ToString());
-
                     }
                     else
                     {
                         cleanedInfixExpression.Add(token.ToString());
                     }
-
                     last = "(";
                 }
-
                 else if (token == ')')
                 {
                     if (_areParenthesisMatching(string.Join("", cleanedInfixExpression)))
@@ -159,7 +165,6 @@ namespace SharpCalculatorLib
                     }
                     last = ")";
                 }
-
 
                 else if (".0123456789".Contains(token))  // DIGIT
                 {
@@ -179,9 +184,7 @@ namespace SharpCalculatorLib
 
             if (cleanedInfixExpression.Contains("["))
             {
-
                 String buffer = "";
-
                 int countOpen = 0;
                 int countClose = 0;
 
@@ -219,9 +222,6 @@ namespace SharpCalculatorLib
                             }
                             continue;
                     }
-
-                    
-
                 }
 
                 if (countOpen == countClose && buffer != "")
@@ -233,10 +233,8 @@ namespace SharpCalculatorLib
             {
                 finalInfixExpression = cleanedInfixExpression;
             }
-
             return _VerifyCleanedExpression(finalInfixExpression);
         }
-
 
         private bool _canOpenParenthesis(String lastToken)
         {
@@ -273,17 +271,21 @@ namespace SharpCalculatorLib
 
         private List<String> _VerifyCleanedExpression(List<string> cleanedExpression)
         {
-            string expression = string.Join(" ", cleanedExpression.ToArray());
-
+            string expression = string.Join("  ", cleanedExpression.ToArray());
             if (expression.Contains(" = "))
             {
-                string[] parts = expression.Split(" =");
-                Console.WriteLine("part 0 : " + parts[0]);
+                string[] parts = expression.Split(" = ");
+
+                if (parts.Length > 2)
+                {
+                    throw new ArgumentException($"Bad argument number for variable assignements");
+                }
+
                 foreach (string ope in _state.InfixOperators)
                 {
                     if (parts[0].Contains(ope))
                     {
-                        throw new Exception("Illegal name for variable");
+                        throw new NotSupportedException($"Illegal name {parts[0]} for variable");
                     }
                 }
 
@@ -291,11 +293,10 @@ namespace SharpCalculatorLib
                 {
                     if (parts[0].Contains(nb))
                     {
-                        throw new Exception("Illegal name for variable");
+                        throw new NotSupportedException($"Illegal name {parts[0]} for variable");
                     }
                 }
             }
-
 
             return cleanedExpression;
         }
@@ -303,9 +304,12 @@ namespace SharpCalculatorLib
         {
             Stack operatorStack = new Stack();
             List<String> output = new List<string>();
+            expression.Add("");  // for checking if token is var to get or to assign...
+            int index = -1;
 
             foreach (string token in expression)
             {
+                index++;
                 int temp_parse_int;
                 float temp_parse_float;
 
@@ -394,7 +398,7 @@ namespace SharpCalculatorLib
 
                         if (function.ArgumentsCount != args.Count)
                         {
-                            throw new Exception("Error in arguments number for " + function_name);
+                            throw new ArgumentException("Error in arguments number for " + function_name);
                         }
                         else
                         {
@@ -463,9 +467,23 @@ namespace SharpCalculatorLib
                     continue;
                 }
 
-               else
+                else if (_IsVariableCall(token) && expression[index+1] != "=")
                 {
                     output.Add(token);
+                    output.Add("Get");
+
+                }
+
+                else if (expression[index + 1] == "=")
+                {
+                    output.Add(token);
+                }
+                else
+                {
+
+                    output.Add(token);
+                    _logger.DebugLog("This used else in convert : " + token);
+                    output.Add("Get"); // temp but used to throws exception
                 }
 
             }
@@ -520,10 +538,10 @@ namespace SharpCalculatorLib
                     _logger.LogCalculation(ch, args, result);
                     operands.Push(result);
                 }
-                else if (_IsVariableCall(ch) && !PostfixExpression.Contains("VarAssignment"))
+                /*else if (_IsVariableCall(ch) && !PostfixExpression.Contains("VarAssignment"))
                 {
                     operands.Push(_state.VarManager[ch]);
-                }
+                }*/
                 else
                 {
                     operands.Push(ch);

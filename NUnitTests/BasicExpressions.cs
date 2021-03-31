@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using SharpCalculatorLib;
+using System;
 
 namespace NUnitTests
 {
@@ -37,6 +38,11 @@ namespace NUnitTests
 
             _result = _calc.ProcessExpression("max(sqrt(4), sqrt(2))");
             Assert.IsTrue(_result == "2", "Multiple args and function in function");
+
+            Assert.Throws<ArgumentException>(() => _calc.ProcessExpression("sqrt(4,4)"));
+
+            Assert.Throws<ArgumentException>(() => _calc.ProcessExpression("max(sqrt(4),min(4, 2), add(1, 1))"));
+
         }
 
         [Test]
@@ -47,6 +53,30 @@ namespace NUnitTests
 
             _result = _calc.ProcessExpression("a");
             Assert.IsTrue(_result == "4", "Get");
+
+
+            _result = _calc.ProcessExpression("b = a + 4");
+            Assert.IsTrue(_result == "8", "var of var ?");
+
+            _result = _calc.ProcessExpression("b");
+            Assert.IsTrue(_result == "8", "get var of var ?");
+
+            _result = _calc.ProcessExpression("a = b + 4");
+            Assert.IsTrue(_result == "12", "get var of var of var ? ._. ");
+
+
+            _result = _calc.ProcessExpression("a = sqrt(4)");
+            Assert.IsTrue(_result == "2", "caused a bug");
+
+
+            Assert.Throws<ArgumentException>(() => _calc.ProcessExpression("x"));
+
+            Assert.Throws<ArgumentException>(() => _calc.ProcessExpression("a = 4 = 8"));
+
+            Assert.Throws<NotSupportedException>(() => _calc.ProcessExpression("a*/*- = 8"));
+
+            Assert.Throws<NotSupportedException>(() => _calc.ProcessExpression("a6 = 8"));
+            
 
         }
 

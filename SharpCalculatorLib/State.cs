@@ -40,6 +40,12 @@ namespace SharpCalculatorLib
 
         public void SetNewVariable(string name, string value)
         {
+            if (VarManager.ContainsKey(name))
+            {
+                VarManager.Remove(name);
+            }
+
+
             VarManager.Add(name, value);
         }
     }
