@@ -44,7 +44,6 @@ namespace SharpCalculatorLib.MathFunctions
 
         public string ExecuteFunction(State state, List<string> args)
         {
-            foreach (string a in args) { Console.WriteLine(a); }
             double arg1 = Double.Parse(args[0]);
             double arg2 = Double.Parse(args[1]);
 
