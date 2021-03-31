@@ -44,8 +44,6 @@ namespace SharpCalculatorLib
                 Console.WriteLine("[" + _watcher.ElapsedMilliseconds + "ms]\n");
 
                 _endedTaskDuration.Add(_watcher.ElapsedMilliseconds);
-
-
             }
         }
         public void DebugLog(String log)
@@ -61,7 +59,6 @@ namespace SharpCalculatorLib
                 _watcher.Stop();
 
                 Console.WriteLine(task);
-
 
                 Console.Write("[");
                 Console.ForegroundColor = ConsoleColor.Green;
@@ -88,7 +85,6 @@ namespace SharpCalculatorLib
                 log = "\t" + log.Substring(0, log.Length-2) + ") = " + result;
 
                 Console.WriteLine(log);
-
             }
         }
 
@@ -96,8 +92,6 @@ namespace SharpCalculatorLib
         {
             if (Verbose)
             {
-
-
                 long total = 0;
                 foreach (long duration in _endedTaskDuration)
                 {

@@ -13,6 +13,11 @@ namespace SharpCalculatorApp
         {
             calc = new Calculator(false);
         }
+
+        public List<string> GetMathFunctions()
+        {
+            return Calculator.GetAllFunctions();
+        }
         public void ProcessExpression(string expression)
         {
             switch (expression) {

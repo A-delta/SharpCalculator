@@ -10,16 +10,13 @@ namespace SharpCalculatorLib
         Logger _logger;
         State _state;
 
-
-
         public Calculator(bool verbose)
         {
             _logger = new Logger(verbose);
             _state = new State();
 
-
-            _logger.Log($"SharpCalculator {System.Reflection.Assembly.GetEntryAssembly().GetName().Version} initialised\n");
-
+            Console.WriteLine($"SharpCalculator {System.Reflection.Assembly.GetEntryAssembly().GetName().Version}\n");
+            Console.WriteLine("enter 'verbose' to see details in operations");
         }
 
         public void ChangeVerboseState(bool newVerbose)
@@ -251,7 +248,6 @@ namespace SharpCalculatorLib
                 lastToken = lastToken.Substring(lastToken.LastIndexOf(','));
             }
 
-
             int countOpen = 0;
             int countClose = 0;
             foreach (char ch in lastToken)
@@ -317,7 +313,6 @@ namespace SharpCalculatorLib
                 {
                     continue;
                 }
-
 
                 else if (token.Contains('['))
                 {
@@ -450,7 +445,6 @@ namespace SharpCalculatorLib
                         output.Add(_IsFunctionCall(popped));
                         popped = operatorStack.Pop().ToString();
                     }
-
                 }
 
                 else if (_state.InfixOperators.Contains(token))
@@ -482,7 +476,6 @@ namespace SharpCalculatorLib
                 {
 
                     output.Add(token);
-                    _logger.DebugLog("This used else in convert : " + token);
                     output.Add("Get"); // temp but used to throws exception
                 }
 
@@ -502,7 +495,6 @@ namespace SharpCalculatorLib
             double temp;
 
             Stack operands = new Stack();
-
 
             foreach (String ch in PostfixExpression)
             {
@@ -526,11 +518,8 @@ namespace SharpCalculatorLib
                     List<string> args = new List<string>();
                     for (int i = 0; i < argumentsCount; i++)
                     {
-
                         var popped = operands.Pop();
                         args.Add(popped.ToString());
-
-
                     }
 
                     result = function.ExecuteFunction(_state, args);
@@ -538,16 +527,11 @@ namespace SharpCalculatorLib
                     _logger.LogCalculation(ch, args, result);
                     operands.Push(result);
                 }
-                /*else if (_IsVariableCall(ch) && !PostfixExpression.Contains("VarAssignment"))
-                {
-                    operands.Push(_state.VarManager[ch]);
-                }*/
                 else
                 {
                     operands.Push(ch);
                 }
             }
-
             return (string)operands.Pop();
         }
 
@@ -572,7 +556,6 @@ namespace SharpCalculatorLib
 
             foreach (String functionName in _state.FunctionsNamesList)
             {
-
                 IFunction function = GetFunction(functionName);
                 if (function.getAliases().Contains(token))
                 {

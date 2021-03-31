@@ -12,9 +12,7 @@ namespace SharpCalculatorLib
         public List<String> FunctionsNamesList;
         public List<String> InfixOperators = new List<string>();
         public Dictionary<String, int> OperatorPriorities = new Dictionary<String, int>();
-
         public Dictionary<String, string> VarManager;
-
 
         public State()
         {
@@ -31,9 +29,7 @@ namespace SharpCalculatorLib
 
                 }
             }
-
             OperatorPriorities.Add("(", 1);
-
             VarManager = new Dictionary<string, string>();
 
         }
@@ -44,7 +40,6 @@ namespace SharpCalculatorLib
             {
                 VarManager.Remove(name);
             }
-
 
             VarManager.Add(name, value);
         }

@@ -21,7 +21,17 @@ namespace SharpCalculatorApp
                 String input = Console.ReadLine();
                 if (input.Length != 0)
                 {
-                    app.ProcessExpression(input);
+                    try
+                    {
+
+                        app.ProcessExpression(input);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write(e.Message + "\n");
+                        Console.ForegroundColor = ConsoleColor.White;
+                    }
                 }
             }
         }
