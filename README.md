@@ -9,6 +9,11 @@ The cleaned expression is converted to [postfix notation](https://en.wikipedia.o
 # SharpCalculator
 The SharpCalculatorApp is the console application written to interact with the library. There will be a graphical application in the future.
 
+# Build instructions
+
+SharpCalculator is compiled with the following arguments `dotnet publish -c Release -p:PublishSingleFile=true -p:PublishTrimmed=true --self-contained true -r <RID>`
+(Common [RID](https://docs.microsoft.com/en-us/dotnet/core/rid-catalog) are listed here.)
+
 # Contribute
 Feel free to contribute by submitting new Math Functions for the SharpCalculatorLib, it can be anything, for example : `PGCD()`, `IsPrime()`, `Cos()` are missing.
 Note that your function must follow the IFunction interface.
@@ -16,13 +21,9 @@ Note that your function must follow the IFunction interface.
 
 # TO DO
 ## Lib
-- real error reporter
-- unit tests
+- more error catchers
+- more unit tests
 - more math functions
-- better help function (shows docstrings) or -> console app
-
-## Console App
-- real console app with commands (function suggestion when typing for example)
 
 ## Graphical App
 - finish above things
