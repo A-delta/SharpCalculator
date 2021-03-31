@@ -7,7 +7,6 @@ namespace SharpCalculatorLib
 {
     public class Calculator
     {
-        bool _verbose;
         Logger _logger;
         State _state;
 
@@ -15,17 +14,18 @@ namespace SharpCalculatorLib
 
         public Calculator(bool verbose)
         {
-            _verbose = verbose;
             _logger = new Logger(verbose);
             _state = new State();
 
 
             _logger.Log($"SharpCalculator {System.Reflection.Assembly.GetEntryAssembly().GetName().Version} initialised\n");
 
-
-            
         }
 
+        public void ChangeVerboseState(bool newVerbose)
+        {
+            _logger.Verbose = newVerbose;
+        }
         public Dictionary<string, IFunction> GetHelp()
         {
             Dictionary<string, IFunction> functionDict = new Dictionary<string, IFunction>();

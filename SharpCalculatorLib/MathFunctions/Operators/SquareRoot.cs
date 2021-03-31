@@ -25,7 +25,7 @@ namespace SharpCalculatorLib.MathFunctions
 
         }
 
-        private int _infixOperatorPriority = 4;
+        private int _infixOperatorPriority = 5;
         public int InfixOperatorPriority
         {
             get => _infixOperatorPriority;

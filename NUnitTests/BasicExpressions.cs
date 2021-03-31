@@ -69,6 +69,15 @@ namespace NUnitTests
             Assert.IsTrue(_result == "2", "caused a bug");
 
 
+            _result = _calc.ProcessExpression("c = a == 4*2-6");
+            Assert.IsTrue(_result == "True", "was a priority problem");
+
+            _result = _calc.ProcessExpression("c");
+            Assert.IsTrue(_result == "True", "Get bool value");
+
+
+
+
             Assert.Throws<ArgumentException>(() => _calc.ProcessExpression("x"));
 
             Assert.Throws<ArgumentException>(() => _calc.ProcessExpression("a = 4 = 8"));

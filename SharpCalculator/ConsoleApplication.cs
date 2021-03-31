@@ -11,11 +11,15 @@ namespace SharpCalculatorApp
 
         public ConsoleApplication(bool verbose=false)
         {
-            calc = new Calculator(true);
+            calc = new Calculator(false);
         }
         public void ProcessExpression(string expression)
         {
             switch (expression) {
+                case "verbose":
+                    calc.ChangeVerboseState(true);
+                    break;
+
                 case "clear":
                     Console.Clear();
                     break;

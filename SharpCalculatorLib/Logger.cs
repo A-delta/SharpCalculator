@@ -5,31 +5,28 @@ namespace SharpCalculatorLib
 {
     class Logger
     {
-        private bool _verbose;
+        public bool Verbose;
         private System.Diagnostics.Stopwatch _watcher;
         private List<long> _endedTaskDuration = new List<long>();
 
         public Logger(bool verbose)
         {
-            _verbose = verbose;
-            
-
-            Console.WriteLine("Verbose enabled");
+            Verbose = verbose;
         }
 
         public void Log(String log)
         {
-            if (_verbose) { Console.WriteLine(log); }
+            if (Verbose) { Console.WriteLine(log); }
         }
 
         public void StartWatcher()
         {
-            if (_verbose) { _watcher = System.Diagnostics.Stopwatch.StartNew(); }
+            if (Verbose) { _watcher = System.Diagnostics.Stopwatch.StartNew(); }
         }
 
         public void DisplayTaskEnd(String task, List<String> taskOutput)
         {
-            if (_verbose)
+            if (Verbose)
             {
                 _watcher.Stop();
 
@@ -59,7 +56,7 @@ namespace SharpCalculatorLib
         }
         public void DisplayTaskEnd(String task)
         {
-            if (_verbose)
+            if (Verbose)
             {
                 _watcher.Stop();
 
@@ -79,7 +76,7 @@ namespace SharpCalculatorLib
 
         public void LogCalculation(String functionName, List<string> args, string result)
         {
-            if (_verbose)
+            if (Verbose)
             {
                 String log;
                 log = functionName + "(";
@@ -97,7 +94,7 @@ namespace SharpCalculatorLib
 
         public void LogTotalDuration()
         {
-            if (_verbose)
+            if (Verbose)
             {
 
 
