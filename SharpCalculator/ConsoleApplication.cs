@@ -24,10 +24,12 @@ namespace SharpCalculatorApp
                     calc.ChangeVerboseState(true);
                     break;
 
+                case "quit":
                 case "exit":
                     System.Environment.Exit(1);
                     break;
 
+                case "cls":
                 case "clear":
                     Console.Clear();
                     break;
