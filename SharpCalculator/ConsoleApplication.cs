@@ -8,7 +8,6 @@ namespace SharpCalculatorApp
     {
         Calculator calc;
 
-
         public ConsoleApplication(bool verbose=false)
         {
             calc = new Calculator(false);
@@ -23,6 +22,10 @@ namespace SharpCalculatorApp
             switch (expression) {
                 case "verbose":
                     calc.ChangeVerboseState(true);
+                    break;
+
+                case "exit":
+                    System.Environment.Exit(1);
                     break;
 
                 case "clear":
