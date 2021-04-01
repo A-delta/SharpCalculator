@@ -13,7 +13,7 @@ namespace SharpCalculatorApp
             //String answer = Console.ReadLine();
             //bool verbose = answer.ToLower().Contains("y");
 
-            ConsoleApplication app = new ConsoleApplication(true);
+            ConsoleApplication app = new ConsoleApplication(false);
 
             while (true)
             {

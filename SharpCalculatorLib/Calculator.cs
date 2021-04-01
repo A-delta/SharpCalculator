@@ -68,6 +68,7 @@ namespace SharpCalculatorLib
             String isInfixOperatorMemory = "";
             String last = "";
             string last2 = "";
+            bool space = false;
             char[] characters = expression.ToCharArray();
             foreach (char token in characters)
             {
@@ -93,9 +94,11 @@ namespace SharpCalculatorLib
 
                 if ((97 <= (int)token && (int)token <= 122) || (65 <= (int)token && (int)token <= 90))  // Is a character -> variable or fcn ?
                 {
-                    if (last != "ope" && (last == "nb" || last == ")" || (last2 == "char" && last == "space"))) // no operator -> implicit product
+                    if (last != "ope" && (last == "nb" || last == ")" || (last == "char" && space == true))) // no operator -> implicit product
                     {
+                        _logger.DebugLog(last2 + " : " + last);
                         cleanedInfixExpression.Add("*");
+                        last = "ope";
                     }
 
                     if (last == "char")
@@ -129,10 +132,10 @@ namespace SharpCalculatorLib
                 if (token == ',') { cleanedInfixExpression.Add(token.ToString()); last = "comma"; }
 
 
+                space = (token == ' ' ? true : false);
+                //else if (token == ' ') { space = true; continue; }
 
-                else if (token == ' ') { last = "space"; continue; }
-
-                else if (token == '(')
+                if (token == '(')
                 {
                     if (last == "fcn")
                     {
@@ -273,25 +276,29 @@ namespace SharpCalculatorLib
             if (expression.Contains(" = "))
             {
                 string[] parts = expression.Split(" = ");
-
+                string varName = parts[0];
                 if (parts.Length > 2)
                 {
                     throw new ArgumentException($"Bad argument number for variable assignements");
                 }
+                if (varName.Contains("True") || varName.Contains("False"))
+                {
+                    throw new NotSupportedException($"Illegal name {varName} for variable");
+                }
 
                 foreach (string ope in _state.InfixOperators)
                 {
-                    if (parts[0].Contains(ope))
+                    if (varName.Contains(ope))
                     {
-                        throw new NotSupportedException($"Illegal name {parts[0]} for variable");
+                        throw new NotSupportedException($"Illegal name {varName} for variable");
                     }
                 }
 
                 foreach (char nb in "0.123456789")
                 {
-                    if (parts[0].Contains(nb))
+                    if (varName.Contains(nb))
                     {
-                        throw new NotSupportedException($"Illegal name {parts[0]} for variable");
+                        throw new NotSupportedException($"Illegal name {varName} for variable");
                     }
                 }
             }

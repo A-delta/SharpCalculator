@@ -78,6 +78,9 @@ namespace NUnitTests
             _result = _calc.ProcessExpression("a a");
             Assert.IsTrue(_result == "4", "Was a bug 1/04/21");
 
+            _result = _calc.ProcessExpression("a= a");
+            Assert.IsTrue(_result == "2", "Was a bug 1/04/21");
+
 
 
 
