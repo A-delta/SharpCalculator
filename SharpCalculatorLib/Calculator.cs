@@ -67,7 +67,7 @@ namespace SharpCalculatorLib
             String isFunctionMemory = "";
             String isInfixOperatorMemory = "";
             String last = "";
-
+            string last2 = "";
             char[] characters = expression.ToCharArray();
             foreach (char token in characters)
             {
@@ -93,7 +93,7 @@ namespace SharpCalculatorLib
 
                 if ((97 <= (int)token && (int)token <= 122) || (65 <= (int)token && (int)token <= 90))  // Is a character -> variable or fcn ?
                 {
-                    if (last != "ope" && (last == "nb" || last == ")")) // no operator -> implicit product
+                    if (last != "ope" && (last == "nb" || last == ")" || (last2 == "char" && last == "space"))) // no operator -> implicit product
                     {
                         cleanedInfixExpression.Add("*");
                     }
@@ -126,11 +126,11 @@ namespace SharpCalculatorLib
                 }
 
 
-                if (token == ',') { cleanedInfixExpression.Add(token.ToString()); last = "space"; }
+                if (token == ',') { cleanedInfixExpression.Add(token.ToString()); last = "comma"; }
 
 
 
-                else if (token == ' ') { continue; }
+                else if (token == ' ') { last = "space"; continue; }
 
                 else if (token == '(')
                 {
@@ -177,6 +177,8 @@ namespace SharpCalculatorLib
                         last = "nb";
                     }
                 }
+
+                last2 = last;
             }
 
             if (cleanedInfixExpression.Contains("["))

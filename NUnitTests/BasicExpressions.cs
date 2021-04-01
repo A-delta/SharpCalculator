@@ -75,6 +75,9 @@ namespace NUnitTests
             _result = _calc.ProcessExpression("c");
             Assert.IsTrue(_result == "True", "Get bool value");
 
+            _result = _calc.ProcessExpression("a a");
+            Assert.IsTrue(_result == "4", "Was a bug 1/04/21");
+
 
 
 
