@@ -10,7 +10,7 @@ namespace SharpCalculatorApp
 
         public ConsoleApplication(bool verbose=false)
         {
-            calc = new Calculator(false);
+            calc = new Calculator(verbose);
         }
 
         public List<string> GetMathFunctions()

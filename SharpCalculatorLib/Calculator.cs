@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 
 namespace SharpCalculatorLib
 {
@@ -14,6 +16,12 @@ namespace SharpCalculatorLib
         {
             _logger = new Logger(verbose);
             _state = new State();
+
+            var ci = (CultureInfo)Thread.CurrentThread.CurrentCulture.Clone();
+            ci.NumberFormat.NegativeInfinitySymbol = "-Infinity";
+            ci.NumberFormat.PositiveInfinitySymbol = "+Infinity";
+            Thread.CurrentThread.CurrentCulture = ci;
+
 
             Console.WriteLine($"SharpCalculator {System.Reflection.Assembly.GetEntryAssembly().GetName().Version}\n");
             Console.WriteLine("enter 'verbose' to see details in operations");
@@ -470,6 +478,11 @@ namespace SharpCalculatorLib
                     continue;
                 }
 
+                else if (token == "True" || token == "False")
+                {
+                    output.Add(token);
+                }
+
                 else if (_IsVariableCall(token) && expression[index+1] != "=")
                 {
                     output.Add(token);
@@ -481,9 +494,8 @@ namespace SharpCalculatorLib
                 {
                     output.Add(token);
                 }
-                else
+                else 
                 {
-
                     output.Add(token);
                     output.Add("Get"); // temp but used to throws exception
                 }
@@ -553,7 +565,8 @@ namespace SharpCalculatorLib
 
         private bool _IsVariableCall(String token)
         {
-            return _state.VarManager.ContainsKey(token);
+            _logger.DebugLog(token.Length.ToString());
+            return _state.VarManager.ContainsKey(token) && !(token == "True") && !(token == "False");
         }
 
         private String _IsFunctionCall(String token)

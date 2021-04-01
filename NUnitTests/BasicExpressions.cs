@@ -81,7 +81,11 @@ namespace NUnitTests
             _result = _calc.ProcessExpression("a= a");
             Assert.IsTrue(_result == "2", "Was a bug 1/04/21");
 
+            _result = _calc.ProcessExpression("a = 1==1");
+            Assert.IsTrue(_result == "True", "logic test");
 
+            _result = _calc.ProcessExpression("a == True");
+            Assert.IsTrue(_result == "True", "was a bug");
 
 
             Assert.Throws<ArgumentException>(() => _calc.ProcessExpression("x"));
