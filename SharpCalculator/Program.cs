@@ -12,7 +12,7 @@ namespace SharpCalculatorApp
             //Console.Write("Enable verbose mode ? Y/[N] : ");
             //String answer = Console.ReadLine();
             //bool verbose = answer.ToLower().Contains("y");
-            bool verbose = true;
+            bool verbose = false;
             ConsoleApplication app = new ConsoleApplication(verbose);
 
             while (true)

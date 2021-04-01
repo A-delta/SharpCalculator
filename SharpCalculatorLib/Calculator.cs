@@ -22,8 +22,8 @@ namespace SharpCalculatorLib
             ci.NumberFormat.PositiveInfinitySymbol = "+Infinity";
             Thread.CurrentThread.CurrentCulture = ci;
 
-
-            Console.WriteLine($"SharpCalculator {System.Reflection.Assembly.GetEntryAssembly().GetName().Version}\n");
+            Version version = System.Reflection.Assembly.GetEntryAssembly().GetName().Version;
+            Console.WriteLine($"SharpCalculator {version.Major}.{version.Minor}.{version.Build}\n");
             Console.WriteLine("enter 'verbose' to see details in operations");
         }
 
@@ -104,7 +104,6 @@ namespace SharpCalculatorLib
                 {
                     if (last != "ope" && (last == "nb" || last == ")" || (last == "char" && space == true))) // no operator -> implicit product
                     {
-                        _logger.DebugLog(last2 + " : " + last);
                         cleanedInfixExpression.Add("*");
                         last = "ope";
                     }
@@ -565,7 +564,6 @@ namespace SharpCalculatorLib
 
         private bool _IsVariableCall(String token)
         {
-            _logger.DebugLog(token.Length.ToString());
             return _state.VarManager.ContainsKey(token) && !(token == "True") && !(token == "False");
         }
 
