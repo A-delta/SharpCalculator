@@ -22,9 +22,14 @@ namespace SharpCalculatorLib
             ci.NumberFormat.PositiveInfinitySymbol = "+Infinity";
             Thread.CurrentThread.CurrentCulture = ci;
 
-            Version version = System.Reflection.Assembly.GetEntryAssembly().GetName().Version;
-            Console.WriteLine($"SharpCalculator {version.Major}.{version.Minor}.{version.Build}\n");
-            Console.WriteLine("enter 'verbose' to see details in operations");
+            Version Appversion = System.Reflection.Assembly.GetEntryAssembly().GetName().Version;
+            Version libVersion = System.Reflection.Assembly.Load("SharpCalculatorLib").GetName().Version;
+
+
+            Console.WriteLine($"SharpCalculatorApp {Appversion.Major}.{Appversion.Minor}.{Appversion.Build}");
+            Console.WriteLine($"Using SharpCalculatorLib {libVersion.Major}.{libVersion.Minor}.{libVersion.Build}\n");
+
+            Console.WriteLine("Enter 'verbose' to see details in operations\n");
         }
 
         public void ChangeVerboseState(bool newVerbose)
