@@ -1,16 +1,27 @@
 ﻿using SharpCalculatorLib;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace SharpCalculatorApp
 {
-    class ConsoleApplication
+    public class ConsoleApplication
     {
         Calculator calc;
 
-        public ConsoleApplication(bool verbose=false)
+        public ConsoleApplication(string[] args, bool verbose=false)
         {
             calc = new Calculator(verbose);
+            _ProcessArguments(args);
+
+            Version Appversion = System.Reflection.Assembly.GetEntryAssembly().GetName().Version;
+            Version libVersion = System.Reflection.Assembly.Load("SharpCalculatorLib").GetName().Version;
+
+
+            Console.WriteLine($"SharpCalculatorApp {Appversion.Major}.{Appversion.Minor}.{Appversion.Build}");
+            Console.WriteLine($"Using SharpCalculatorLib {libVersion.Major}.{libVersion.Minor}.{libVersion.Build}\n");
+
+            Console.WriteLine("Enter 'verbose' to see details in operations\n");
         }
 
         public List<string> GetMathFunctions()
@@ -39,11 +50,77 @@ namespace SharpCalculatorApp
                     break;
 
                 default:
-                    calc.ProcessExpression(expression);
+                    string result = calc.ProcessExpression(expression);
+                    Console.WriteLine(">>  " + result + "\n");
                     break;
             }
         }
 
+        private void _ProcessArguments(string[] args)
+        {
+            int i = 0;
+            bool keepOpen = false;
+            if (args.Length != 0)
+            {
+                foreach (string arg in args)
+                {
+                    switch (arg)
+                    {
+                        case "-c":
+                        case "--calculate":
+                            string result = calc.ProcessExpression(args[i + 1]);
+                            Console.WriteLine(result);
+                            break;
+
+                        case "-h":
+                        case "--help":
+                            _PrintHelp();
+                            break;
+
+                        case "-v":
+                        case "--verbose":
+                            keepOpen = true;
+                            calc.ChangeVerboseState(true);
+                            break;
+
+                        case "-i":
+                        case "--input":
+                            string[] expressions = LoadFile(args[i + 1]);
+                            int lineNumber = 1;
+                            Console.WriteLine($"Processing {args[i + 1]} : ");
+                            foreach (string expression in expressions)
+                            {
+                                Console.WriteLine($"{lineNumber}\t{expression} = {calc.ProcessExpression(expression)}");
+                                lineNumber++;
+                            }
+                            
+                            break;
+                    }
+                    i++;
+                }
+                if (keepOpen == false) { System.Environment.Exit(1); }
+            }
+            else
+            {
+                return;
+            }
+            
+        }
+
+        private string[] LoadFile(string fileName)
+        {
+            if (File.Exists(fileName))
+            {
+                return System.IO.File.ReadAllLines(fileName);
+            }
+            else
+            {
+                throw new FileNotFoundException();
+            }
+        }
+
+
+        
         private void _PrintHelp() // DIRTY
         {
             Dictionary<string, IFunction> functionList = calc.GetHelp();

@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SharpCalculatorLib\SharpCalculatorLib.csproj" />
+    <ProjectReference Include="..\SharpCalculator\SharpCalculatorApp.csproj" />
   </ItemGroup>
 
 </Project>

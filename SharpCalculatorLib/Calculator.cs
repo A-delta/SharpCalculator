@@ -18,18 +18,11 @@ namespace SharpCalculatorLib
             _state = new State();
 
             var ci = (CultureInfo)Thread.CurrentThread.CurrentCulture.Clone();
-            ci.NumberFormat.NegativeInfinitySymbol = "-Infinity";
+            ci.NumberFormat.NegativeInfinitySymbol = "-Infinity"; // some system printed "8" instead of +oo
             ci.NumberFormat.PositiveInfinitySymbol = "+Infinity";
             Thread.CurrentThread.CurrentCulture = ci;
 
-            Version Appversion = System.Reflection.Assembly.GetEntryAssembly().GetName().Version;
-            Version libVersion = System.Reflection.Assembly.Load("SharpCalculatorLib").GetName().Version;
-
-
-            Console.WriteLine($"SharpCalculatorApp {Appversion.Major}.{Appversion.Minor}.{Appversion.Build}");
-            Console.WriteLine($"Using SharpCalculatorLib {libVersion.Major}.{libVersion.Minor}.{libVersion.Build}\n");
-
-            Console.WriteLine("Enter 'verbose' to see details in operations\n");
+            
         }
 
         public void ChangeVerboseState(bool newVerbose)
@@ -66,7 +59,7 @@ namespace SharpCalculatorLib
             _logger.LogTotalDuration();
 
 
-            Console.WriteLine(">>  " + result + "\n");
+            
 
             return result;
 
