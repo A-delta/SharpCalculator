@@ -43,17 +43,17 @@ namespace SharpCalculatorLib
         public string ProcessExpression(String Infixexpression)
         {
             _logger.StartWatcher();
-            List<String> cleanedInfixExpression = _CleanInfix(Infixexpression);
+            List<String> cleanedInfixExpression = CleanInfix(Infixexpression);
             _logger.DisplayTaskEnd("[Clean] ", cleanedInfixExpression);
 
             _logger.StartWatcher();
-            List<String> postfixExpression = _ConvertToPostfix(cleanedInfixExpression);
+            List<String> postfixExpression = ConvertToPostfix(cleanedInfixExpression);
             _logger.DisplayTaskEnd("[Postfix] ", postfixExpression);
 
 
             _logger.StartWatcher();
             _logger.Log("[Calculation] ");
-            string result = _EvaluatePostfixExpression(postfixExpression);
+            string result = EvaluatePostfixExpression(postfixExpression);
             _logger.DisplayTaskEnd("[Calculate] ");
 
             _logger.LogTotalDuration();
@@ -62,7 +62,7 @@ namespace SharpCalculatorLib
 
         }
 
-        private List<String> _CleanInfix(String expression)
+        public List<String> CleanInfix(String expression)
         {
             List<String> cleanedInfixExpression = new List<string>();
 
@@ -307,7 +307,7 @@ namespace SharpCalculatorLib
 
             return cleanedExpression;
         }
-        private List<String> _ConvertToPostfix(List<String> expression)
+        public List<String> ConvertToPostfix(List<String> expression)
         {
             Stack operatorStack = new Stack();
             List<String> output = new List<string>();
@@ -412,9 +412,9 @@ namespace SharpCalculatorLib
                             {
                                 String cleanableArg = arg.Replace('[', '(').Replace(']', ')');
 
-                                List<String> cleanedArg = _CleanInfix(cleanableArg);
+                                List<String> cleanedArg = CleanInfix(cleanableArg);
 
-                                List<String> postfix_arg = _ConvertToPostfix(cleanedArg);
+                                List<String> postfix_arg = ConvertToPostfix(cleanedArg);
 
                                 foreach (String convertedArg in postfix_arg)
                                 {
@@ -505,7 +505,7 @@ namespace SharpCalculatorLib
             return output;
         }
 
-        private string _EvaluatePostfixExpression(List<String> PostfixExpression)
+        public string EvaluatePostfixExpression(List<String> PostfixExpression)
         {
             string result;
             double temp;
