@@ -6,11 +6,18 @@ The cleaned expression is converted to [postfix notation](https://en.wikipedia.o
 
 
 
-# SharpCalculator
-The SharpCalculatorApp is the console application written to interact with the library. There will be a graphical application in the future.
+# SharpCalculatorApp
+The SharpCalculatorApp project is the console application written to interact with the library. There will be a graphical application in the future.
+
+
+# SharpCalculatorLib
+The SharpCalculatorLib library is a math expression cleaner, parser and evaluator supporting functions, variables and basic operations (with implicit products support)
+
+# In the future
+When [.NET MAUI](https://devblogs.microsoft.com/dotnet/introducing-net-multi-platform-app-ui/) will be released, I will make a Desktop/Mobile app to interact with the Library.
+For now, I will probably make a temporary Windows Application.
 
 # Build instructions
-
 SharpCalculator is compiled with the following arguments `dotnet publish -c Release -p:PublishSingleFile=true -p:PublishTrimmed=true --self-contained true -r <RID>`
 (Common [RID](https://docs.microsoft.com/en-us/dotnet/core/rid-catalog) are listed here.)
 
@@ -26,4 +33,4 @@ Note that your function must follow the IFunction interface.
 - more math functions
 
 ## Graphical App
-- finish above things
+- see above
