@@ -12,6 +12,7 @@ The SharpCalculatorApp project is the console application written to interact wi
 
 # SharpCalculatorLib
 The SharpCalculatorLib library is a math expression cleaner, parser and evaluator supporting functions, variables and basic operations (with implicit products support)
+You can download the NuGet package [here](https://www.nuget.org/packages/SharpCalculatorLib/)
 
 # In the future
 When [.NET MAUI](https://devblogs.microsoft.com/dotnet/introducing-net-multi-platform-app-ui/) will be released, I will make a Desktop/Mobile app to interact with the Library.
