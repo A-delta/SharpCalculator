@@ -100,10 +100,6 @@ namespace SharpCalculatorApp
                 }
                 if (keepOpen == false) { System.Environment.Exit(1); }
             }
-            else
-            {
-                return;
-            }
             
         }
 

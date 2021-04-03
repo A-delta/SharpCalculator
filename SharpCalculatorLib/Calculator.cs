@@ -58,9 +58,6 @@ namespace SharpCalculatorLib
 
             _logger.LogTotalDuration();
 
-
-            
-
             return result;
 
         }
@@ -493,6 +490,7 @@ namespace SharpCalculatorLib
                 }
                 else 
                 {
+                    //throw new InvalidOperationException();
                     output.Add(token);
                     output.Add("Get"); // temp but used to throws exception
                 }

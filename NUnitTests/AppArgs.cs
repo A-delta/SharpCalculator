@@ -14,7 +14,7 @@ namespace NUnitTests
         {
         }
 
-        [Test]
+        /*[Test]
         public void Calculate()
         {
             string[] args = new string[1];
@@ -24,7 +24,7 @@ namespace NUnitTests
             ConsoleApplication app = new ConsoleApplication(args);
 
             
-        }
+        }*/
     }
 
 }
