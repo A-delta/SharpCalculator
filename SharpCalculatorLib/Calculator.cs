@@ -134,7 +134,6 @@ namespace SharpCalculatorLib
                 if (token == ',') { cleanedInfixExpression.Add(token.ToString()); last = "comma"; }
 
 
-                space = (token == ' ' ? true : false);
                 //else if (token == ' ') { space = true; continue; }
 
                 if (token == '(')
@@ -144,8 +143,9 @@ namespace SharpCalculatorLib
                         cleanedInfixExpression.Add("[");
                     }
 
-                    else if (last != "ope" && last != "space" && last != "(" && last != "") // Implicit product
+                    else if (last != "ope" && space == false && last != "comma" && last != "(" && last != "") // Implicit product
                     {
+                        _logger.DebugLog(last2 + " >> " + last);
                         cleanedInfixExpression.Add("*");
                         cleanedInfixExpression.Add(token.ToString());
                     }
@@ -183,6 +183,7 @@ namespace SharpCalculatorLib
                     }
                 }
 
+                space = (token == ' ' ? true : false);
                 last2 = last;
             }
 
@@ -232,11 +233,17 @@ namespace SharpCalculatorLib
                 {
                     finalInfixExpression.Add(buffer);
                 }
+                /*else
+                {
+                    throw new Exception("Not matching parenthesis for function");
+                }*/
             }
             else
             {
                 finalInfixExpression = cleanedInfixExpression;
             }
+
+
             return _VerifyCleanedExpression(finalInfixExpression);
         }
 
@@ -248,8 +255,11 @@ namespace SharpCalculatorLib
             }
             return false;
         }
-        private bool _areParenthesisMatching(String lastToken)
+        private bool _areParenthesisMatching(String lastToken, string type="()")
         {
+            char open = type[0];
+            char close = type[1];
+
             if (lastToken.Contains(','))
             {
                 lastToken = lastToken.Substring(lastToken.LastIndexOf(','));
@@ -259,12 +269,12 @@ namespace SharpCalculatorLib
             int countClose = 0;
             foreach (char ch in lastToken)
             {
-                if (ch == '(')
+                if (ch == open)
                 {
                     countOpen++;
                 }
 
-                if (ch == ')')
+                if (ch == close)
                 {
                     countClose++;
                 }
@@ -275,7 +285,7 @@ namespace SharpCalculatorLib
         private List<String> _VerifyCleanedExpression(List<string> cleanedExpression)
         {
             string expression = string.Join("  ", cleanedExpression.ToArray());
-            if (expression.Contains(" = "))
+            if (expression.Contains(" = "))  // ILEGAL NAMES
             {
                 string[] parts = expression.Split(" = ");
                 string varName = parts[0];
@@ -288,7 +298,7 @@ namespace SharpCalculatorLib
                     throw new NotSupportedException($"Illegal name {varName} for variable");
                 }
 
-                foreach (string ope in _state.InfixOperators)
+                foreach (string ope in _state.InfixOperators)  // I could simplify all of this
                 {
                     if (varName.Contains(ope))
                     {
@@ -304,6 +314,10 @@ namespace SharpCalculatorLib
                     }
                 }
             }
+            /*if (_areParenthesisMatching(expression, "()")
+            {
+                throw new Exception("Not Matching parenthesis");
+            }*/
 
             return cleanedExpression;
         }

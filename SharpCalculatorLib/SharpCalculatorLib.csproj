@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <Version>1.0.3.0</Version>
+    <Version>1.3.1.0</Version>
     <Authors>Adelta</Authors>
     <Description>SharpCalculatorLib is a math expressions cleaner, parser and evaluator that supports basic operations, functions and variables. Its cleaner side lets the input contains implicit products and spaces like a human would write it.</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>

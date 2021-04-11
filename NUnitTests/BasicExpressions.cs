@@ -127,6 +127,19 @@ namespace NUnitTests
 
             _result = _calc.ProcessExpression("(2)sqrt(16)");
             Assert.IsTrue(_result == "8", "Implicit products in (a)fcn() form is false");
+
+
+            _result = _calc.ProcessExpression("max(4*4, (4))");
+            Assert.IsTrue(_result == "16", "was a bug 3/04");
+
+        }
+
+        [Test]
+        public void Errors()
+        {
+            //Assert.Throws<Exception>(() => _calc.ProcessExpression("4*(4)-4)"));
+            
+
         }
 
 
