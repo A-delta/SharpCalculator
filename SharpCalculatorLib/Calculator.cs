@@ -333,6 +333,7 @@ namespace SharpCalculatorLib
                 index++;
                 int temp_parse_int;
                 float temp_parse_float;
+                double temp_parse_double;
 
                 if (token == "")
                 {
@@ -444,8 +445,11 @@ namespace SharpCalculatorLib
                     }
 
                 }
-
-                else if (int.TryParse(token, out temp_parse_int))
+                else if (double.TryParse(token, out temp_parse_double))
+                {
+                    output.Add(temp_parse_double.ToString());
+                }
+                /*else if (int.TryParse(token, out temp_parse_int))
                 {
                     output.Add(token);
                 }
@@ -453,7 +457,7 @@ namespace SharpCalculatorLib
                 else if (float.TryParse(token, out temp_parse_float))
                 {
                     output.Add(token);
-                }
+                }*/
 
                 else if ("(" == (token))
                 {

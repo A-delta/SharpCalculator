@@ -47,9 +47,6 @@ namespace SharpCalculatorLib.MathFunctions
 
         public string ExecuteFunction(State state, List<string> args)
         {
-            //double arg1 = Double.Parse(args[0]);
-            //double arg2 = Double.Parse(args[1]);
-
             return (args[0] == args[1]).ToString();
         }
 
