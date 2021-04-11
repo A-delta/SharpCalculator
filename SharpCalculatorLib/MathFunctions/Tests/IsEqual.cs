@@ -40,7 +40,7 @@ namespace SharpCalculatorLib.MathFunctions
 
         public List<String> getAliases()
         {
-            _aliases.Add("equal");
+            _aliases.Add("isEqual");
             _aliases.Add("==");
             return _aliases;
         }
