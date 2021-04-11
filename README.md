@@ -7,7 +7,7 @@ The cleaned expression is converted to [postfix notation](https://en.wikipedia.o
 
 
 # SharpCalculatorApp
-The SharpCalculatorApp project is the console application written to interact with the library. There will be a graphical application in the future.
+The SharpCalculatorApp project is a console application written to interact with the library. There will be a graphical application in the future.
 
 
 # SharpCalculatorLib
