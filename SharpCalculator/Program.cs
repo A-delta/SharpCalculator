@@ -9,10 +9,11 @@ namespace SharpCalculatorApp
     {
         static void Main(string[] args)
         {
-            //Console.Write("Enable verbose mode ? Y/[N] : ");
-            //String answer = Console.ReadLine();
-            //bool verbose = answer.ToLower().Contains("y");
-            bool verbose = false;
+            Console.Write("Enable verbose mode ? Y/[N] : ");
+            String answer = Console.ReadLine();
+            bool verbose = answer.ToLower().Contains("y");
+            Console.Write("\n");
+
             ConsoleApplication app = new ConsoleApplication(args, verbose);
 
             while (true)
@@ -23,7 +24,6 @@ namespace SharpCalculatorApp
                 {
                     try
                     {
-
                         app.ProcessExpression(input);
                     }
                     catch (Exception e)

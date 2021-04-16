@@ -18,10 +18,10 @@ namespace SharpCalculatorApp
             Version libVersion = System.Reflection.Assembly.Load("SharpCalculatorLib").GetName().Version;
 
 
-            Console.WriteLine($"SharpCalculatorApp {Appversion.Major}.{Appversion.Minor}.{Appversion.Build}");
+            Console.WriteLine($"SharpCalculatorCLI {Appversion.Major}.{Appversion.Minor}.{Appversion.Build}");
             Console.WriteLine($"Using SharpCalculatorLib {libVersion.Major}.{libVersion.Minor}.{libVersion.Build}\n");
 
-            Console.WriteLine("Enter 'verbose' to see details in operations\n");
+            if (!verbose) { Console.WriteLine("Enter 'verbose' to see details in operations\n"); }
         }
 
         public List<string> GetMathFunctions()
@@ -32,7 +32,7 @@ namespace SharpCalculatorApp
         {
             switch (expression) {
                 case "verbose":
-                    calc.ChangeVerboseState(true);
+                    calc.ChangeVerboseState();
                     break;
 
                 case "quit":
@@ -80,7 +80,7 @@ namespace SharpCalculatorApp
                         case "-v":
                         case "--verbose":
                             keepOpen = true;
-                            calc.ChangeVerboseState(true);
+                            calc.ChangeVerboseState();
                             break;
 
                         case "-i":

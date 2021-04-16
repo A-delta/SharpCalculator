@@ -8,7 +8,9 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <TextBlock Text="Hello, world!" Margin="20" FontSize="30" />
+        <TextBlock Text="SharpCalculatorGUI" Margin="20" FontSize="30" />
+
+        <TextBox PlaceholderText="Default" Style="{StaticResource MaterialFilledTextBoxStyle}" />
     </Grid>
 
 </Page>

@@ -28,6 +28,7 @@ namespace SharpCalculatorLib
         {
             if (Verbose)
             {
+                
                 _watcher.Stop();
 
                 Console.Write(task);
@@ -103,7 +104,3 @@ namespace SharpCalculatorLib
         }
     }
 }
-
-
-// double total = (double)watchCleaning.ElapsedMilliseconds + (double)watchConversion.ElapsedMilliseconds + (double)watchEvaluation.ElapsedMilliseconds;
-//Console.WriteLine("[Tot: " + total + "ms]");

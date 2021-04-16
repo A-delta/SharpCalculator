@@ -25,10 +25,11 @@ namespace SharpCalculatorLib
             
         }
 
-        public void ChangeVerboseState(bool newVerbose)
+        public void ChangeVerboseState()
         {
-            _logger.Verbose = newVerbose;
+            _logger.Verbose = !_logger.Verbose;
         }
+
         public Dictionary<string, IFunction> GetHelp()
         {
             Dictionary<string, IFunction> functionDict = new Dictionary<string, IFunction>();
