@@ -43,6 +43,9 @@ namespace NUnitTests
 
             Assert.Throws<ArgumentException>(() => _calc.ProcessExpression("max(sqrt(4),min(4, 2), add(1, 1))"));
 
+            _result = _calc.ProcessExpression("1==1.0");
+            Assert.IsTrue(_result == "True", "was a bug 11/04/21");
+
         }
 
         [Test]

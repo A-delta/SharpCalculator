@@ -449,15 +449,6 @@ namespace SharpCalculatorLib
                 {
                     output.Add(temp_parse_double.ToString());
                 }
-                /*else if (int.TryParse(token, out temp_parse_int))
-                {
-                    output.Add(token);
-                }
-
-                else if (float.TryParse(token, out temp_parse_float))
-                {
-                    output.Add(token);
-                }*/
 
                 else if ("(" == (token))
                 {
