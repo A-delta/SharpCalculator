@@ -7,12 +7,12 @@ namespace SharpCalculatorApp
 {
     public class ConsoleApplication
     {
-        Calculator calc;
+        readonly Calculator calc;
 
         public ConsoleApplication(string[] args, bool verbose=false)
         {
             calc = new Calculator(verbose);
-            _ProcessArguments(args);
+            ProcessArguments(args);
 
             Version Appversion = System.Reflection.Assembly.GetEntryAssembly().GetName().Version;
             Version libVersion = System.Reflection.Assembly.Load("SharpCalculatorLib").GetName().Version;
@@ -24,7 +24,7 @@ namespace SharpCalculatorApp
             if (!verbose) { Console.WriteLine("Enter 'verbose' to see details in operations\n"); }
         }
 
-        public List<string> GetMathFunctions()
+        public static List<string> GetMathFunctions()
         {
             return Calculator.GetAllFunctions();
         }
@@ -46,7 +46,7 @@ namespace SharpCalculatorApp
                     break;
 
                 case "help":
-                    _PrintHelp();
+                    PrintHelp();
                     break;
 
                 default:
@@ -56,7 +56,7 @@ namespace SharpCalculatorApp
             }
         }
 
-        private void _ProcessArguments(string[] args)
+        private void ProcessArguments(string[] args)
         {
             int i = 0;
             bool keepOpen = false;
@@ -74,7 +74,7 @@ namespace SharpCalculatorApp
 
                         case "-h":
                         case "--help":
-                            _PrintHelp();
+                            PrintHelp();
                             break;
 
                         case "-v":
@@ -103,7 +103,7 @@ namespace SharpCalculatorApp
             
         }
 
-        private string[] LoadFile(string fileName)
+        private static string[] LoadFile(string fileName)
         {
             if (File.Exists(fileName))
             {
@@ -117,7 +117,7 @@ namespace SharpCalculatorApp
 
 
         
-        private void _PrintHelp() // DIRTY
+        private void PrintHelp() // DIRTY
         {
             Dictionary<string, IFunction> functionList = calc.GetHelp();
 

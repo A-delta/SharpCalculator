@@ -14,11 +14,13 @@ namespace SharpCalculatorApp
             bool verbose = answer.ToLower().Contains("y");
             Console.Write("\n");
 
-            ConsoleApplication app = new ConsoleApplication(args, verbose);
+            ConsoleApplication app = new(args, verbose);
 
             while (true)
             {
+                Console.ForegroundColor = ConsoleColor.Blue;
                 Console.Write("$  ");
+                Console.ForegroundColor = ConsoleColor.White;
                 String input = Console.ReadLine();
                 if (input.Length != 0)
                 {

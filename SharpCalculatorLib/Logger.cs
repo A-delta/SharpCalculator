@@ -7,7 +7,7 @@ namespace SharpCalculatorLib
     {
         public bool Verbose;
         private System.Diagnostics.Stopwatch _watcher;
-        private List<long> _endedTaskDuration = new List<long>();
+        private List<long> _endedTaskDuration = new();
 
         public Logger(bool verbose)
         {
@@ -24,13 +24,11 @@ namespace SharpCalculatorLib
             if (Verbose) { _watcher = System.Diagnostics.Stopwatch.StartNew(); }
         }
 
-        public void DisplayTaskEnd(String task, List<String> taskOutput)
+        public void ConsoleDisplayTaskEnd(String task, List<String> taskOutput)
         {
             if (Verbose)
             {
-                
                 _watcher.Stop();
-
                 Console.Write(task);
                 foreach (String i in taskOutput)
                 {
@@ -47,13 +45,7 @@ namespace SharpCalculatorLib
                 _endedTaskDuration.Add(_watcher.ElapsedMilliseconds);
             }
         }
-        public void DebugLog(String log)
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(log);
-            Console.ForegroundColor = ConsoleColor.White;
-        }
-        public void DisplayTaskEnd(String task)
+        public void ConsoleDisplayTaskEnd(String task)
         {
             if (Verbose)
             {
@@ -71,8 +63,7 @@ namespace SharpCalculatorLib
                 _endedTaskDuration.Add(_watcher.ElapsedMilliseconds);
             }
         }
-
-        public void LogCalculation(String functionName, List<string> args, string result)
+        public void ConsoleLogCalculation(String functionName, List<string> args, string result)
         {
             if (Verbose)
             {
@@ -83,24 +74,29 @@ namespace SharpCalculatorLib
                 {
                     log = log + arg + ", ";
                 }
-                log = "\t" + log.Substring(0, log.Length-2) + ") = " + result;
+                log = "\t" + log[0..^2] + ") = " + result;
 
                 Console.WriteLine(log);
             }
         }
-
-        public void LogTotalDuration()
+        public void ConsoleLogTotalDuration()
         {
             if (Verbose)
             {
                 long total = 0;
                 foreach (long duration in _endedTaskDuration)
                 {
-                    total = total + duration;
+                    total += duration;
                 }
                 _endedTaskDuration = new List<long>();
                 Console.WriteLine("[Tot : " + total + "ms]");
             }
+        }
+        public static void DebugLog(String log)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(log);
+            Console.ForegroundColor = ConsoleColor.White;
         }
     }
 }
