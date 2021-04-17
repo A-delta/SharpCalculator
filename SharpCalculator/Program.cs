@@ -1,21 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using SharpCalculatorLib;
-
 
 namespace SharpCalculatorApp
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            Console.Write("Enable verbose mode ? Y/[N] : ");
-            String answer = Console.ReadLine();
-            bool verbose = answer.ToLower().Contains("y");
-            Console.Write("\n");
-
-            ConsoleApplication app = new(args, verbose);
-
+            ConsoleApplication app = new(args);
             while (true)
             {
                 Console.ForegroundColor = ConsoleColor.Blue;
@@ -31,15 +22,7 @@ namespace SharpCalculatorApp
                     catch (Exception e)
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
-                        if (verbose)
-                        {
-
-                            Console.Write(e + "\n");
-                        }
-                        else
-                        {
-                            Console.Write(e.Message + "\n");
-                        }
+                        Console.Write(e.Message + "\n");
                         Console.ForegroundColor = ConsoleColor.White;
                     }
                 }

@@ -7,32 +7,49 @@ namespace SharpCalculatorApp
 {
     public class ConsoleApplication
     {
-        readonly Calculator calc;
+        /*Console.Write("Enable verbose mode ? Y/[N] : ");
+            String answer = Console.ReadLine();
+        bool verbose = answer.ToLower().Contains("y");
+        Console.Write("\n");*/
 
-        public ConsoleApplication(string[] args, bool verbose=false)
+        private bool _verbose;
+        private readonly Calculator calc;
+
+        public ConsoleApplication(string[] args)
         {
-            calc = new Calculator(verbose);
+            calc = new Calculator(false);
             ProcessArguments(args);
 
             Version Appversion = System.Reflection.Assembly.GetEntryAssembly().GetName().Version;
             Version libVersion = System.Reflection.Assembly.Load("SharpCalculatorLib").GetName().Version;
 
-
             Console.WriteLine($"SharpCalculatorCLI {Appversion.Major}.{Appversion.Minor}.{Appversion.Build}");
             Console.WriteLine($"Using SharpCalculatorLib {libVersion.Major}.{libVersion.Minor}.{libVersion.Build}\n");
 
-            if (!verbose) { Console.WriteLine("Enter 'verbose' to see details in operations\n"); }
+            if (!_verbose) { Console.WriteLine("Enter 'verbose' to see details in operations\n"); }
         }
 
         public static List<string> GetMathFunctions()
         {
             return Calculator.GetAllFunctions();
         }
+
         public void ProcessExpression(string expression)
         {
-            switch (expression) {
+            switch (expression)
+            {
                 case "verbose":
+                    _verbose = !_verbose;
                     calc.ChangeVerboseState();
+                    break;
+
+                case "history":
+                case "hist":
+                    PrintHistory();
+                    break;
+
+                case "var":
+                    PrintUserVariables();
                     break;
 
                 case "quit":
@@ -79,6 +96,7 @@ namespace SharpCalculatorApp
 
                         case "-v":
                         case "--verbose":
+                            _verbose = true;
                             keepOpen = true;
                             calc.ChangeVerboseState();
                             break;
@@ -93,14 +111,13 @@ namespace SharpCalculatorApp
                                 Console.WriteLine($"{lineNumber}\t{expression} = {calc.ProcessExpression(expression)}");
                                 lineNumber++;
                             }
-                            
+
                             break;
                     }
                     i++;
                 }
                 if (keepOpen == false) { System.Environment.Exit(1); }
             }
-            
         }
 
         private static string[] LoadFile(string fileName)
@@ -115,24 +132,23 @@ namespace SharpCalculatorApp
             }
         }
 
-
-        
         private void PrintHelp() // DIRTY
         {
             Dictionary<string, IFunction> functionList = calc.GetHelp();
 
             string columnsName = "Name";
-            for (int i = 0; i < 20-4; i++) { columnsName += " "; }
+            for (int i = 0; i < 20 - 4; i++) { columnsName += " "; }
             columnsName += "Aliases";
             for (int i = 0; i < 21; i++) { columnsName += " "; }
             columnsName += "Description";
 
-            Console.WriteLine(columnsName+"\n");
+            Console.WriteLine(columnsName + "\n");
 
             foreach (KeyValuePair<string, IFunction> item in functionList)
             {
                 string toPrint = item.Key;
-                for (int i = 0; i < (20 - item.Key.Length); i++) {
+                for (int i = 0; i < (20 - item.Key.Length); i++)
+                {
                     toPrint += " ";
                 }
 
@@ -143,7 +159,7 @@ namespace SharpCalculatorApp
                     toPrint += alias + " ; ";
                 }
 
-                for (int i = 0; i < (35 - (toPrint.Length-name)); i++)
+                for (int i = 0; i < (35 - (toPrint.Length - name)); i++)
                 {
                     toPrint += " ";
                 }
@@ -153,5 +169,31 @@ namespace SharpCalculatorApp
             }
         }
 
+        private void PrintUserVariables()
+        {
+            foreach (KeyValuePair<string, string> item in calc.State.VarManager.UserVars)
+            {
+                Console.WriteLine($"{item.Key} = {item.Value}");
+            }
+        }
+
+        private void PrintHistory()
+        {
+            Dictionary<DateTime, List<string>> history = calc.State.History;
+
+            foreach (KeyValuePair<DateTime, List<string>> item in history)
+            {
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.Write($"[{item.Key.Hour}:{item.Key.Minute}:{item.Key.Second}] \t ");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write($"{item.Value[1]}");
+
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write(" = ");
+                Console.ForegroundColor = ConsoleColor.White;
+
+                Console.Write($"{item.Value[0]}\n");
+            }
+        }
     }
 }

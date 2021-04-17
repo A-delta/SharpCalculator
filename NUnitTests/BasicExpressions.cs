@@ -6,8 +6,8 @@ namespace NUnitTests
 {
     public class BasicExpressions
     {
-        Calculator _calc;
-        string _result;
+        private Calculator _calc;
+        private string _result;
 
         [SetUp]
         public void Setup()
@@ -31,8 +31,6 @@ namespace NUnitTests
             _result = _calc.ProcessExpression("sqrt(sqrt(16))");
             Assert.IsTrue(_result == "2", "Function in function");
 
-
-
             _result = _calc.ProcessExpression("max(1, 2)");
             Assert.IsTrue(_result == "2", "Multiple arguments");
 
@@ -45,7 +43,6 @@ namespace NUnitTests
 
             _result = _calc.ProcessExpression("1==1.0");
             Assert.IsTrue(_result == "True", "was a bug 11/04/21");
-
         }
 
         [Test]
@@ -57,7 +54,6 @@ namespace NUnitTests
             _result = _calc.ProcessExpression("a");
             Assert.IsTrue(_result == "4", "Get");
 
-
             _result = _calc.ProcessExpression("b = a + 4");
             Assert.IsTrue(_result == "8", "var of var ?");
 
@@ -67,10 +63,8 @@ namespace NUnitTests
             _result = _calc.ProcessExpression("a = b + 4");
             Assert.IsTrue(_result == "12", "get var of var of var ? ._. ");
 
-
             _result = _calc.ProcessExpression("a = sqrt(4)");
             Assert.IsTrue(_result == "2", "caused a bug");
-
 
             _result = _calc.ProcessExpression("c = a == 4*2-6");
             Assert.IsTrue(_result == "True", "was a priority problem");
@@ -90,7 +84,6 @@ namespace NUnitTests
             _result = _calc.ProcessExpression("a == True");
             Assert.IsTrue(_result == "True", "was a bug");
 
-
             Assert.Throws<ArgumentException>(() => _calc.ProcessExpression("x"));
 
             Assert.Throws<ArgumentException>(() => _calc.ProcessExpression("a = 4 = 8"));
@@ -98,8 +91,8 @@ namespace NUnitTests
             Assert.Throws<NotSupportedException>(() => _calc.ProcessExpression("a*/*- = 8"));
 
             Assert.Throws<NotSupportedException>(() => _calc.ProcessExpression("a6 = 8"));
-            
 
+            Assert.Throws<ArgumentException>(() => _calc.ProcessExpression("e = 4"));
         }
 
         [Test]
@@ -117,8 +110,6 @@ namespace NUnitTests
             _result = _calc.ProcessExpression("((((4))))((((2))))");
             Assert.IsTrue(_result == "8", "Implicit products in (abusive) (((a)))(((b))) form is false");
 
-
-
             _result = _calc.ProcessExpression("sqrt(16)2");
             Assert.IsTrue(_result == "8", "Implicit products in fcn()a form is false");
 
@@ -131,20 +122,14 @@ namespace NUnitTests
             _result = _calc.ProcessExpression("(2)sqrt(16)");
             Assert.IsTrue(_result == "8", "Implicit products in (a)fcn() form is false");
 
-
             _result = _calc.ProcessExpression("max(4*4, (4))");
             Assert.IsTrue(_result == "16", "was a bug 3/04");
-
         }
 
         [Test]
         public void Errors()
         {
             //Assert.Throws<Exception>(() => _calc.ProcessExpression("4*(4)-4)"));
-            
-
         }
-
-
     }
 }

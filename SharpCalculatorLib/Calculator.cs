@@ -9,20 +9,18 @@ namespace SharpCalculatorLib
 {
     public class Calculator
     {
-        readonly Logger _logger;
-        readonly State _state;
+        private readonly Logger _logger;
+        public State State;
 
         public Calculator(bool verbose)
         {
             _logger = new Logger(verbose);
-            _state = new State();
+            State = new State();
 
-            var ci = (CultureInfo)Thread.CurrentThread.CurrentCulture.Clone();
-            ci.NumberFormat.NegativeInfinitySymbol = "-Infinity"; // some system printed "8" instead of +oo
-            ci.NumberFormat.PositiveInfinitySymbol = "+Infinity";
-            Thread.CurrentThread.CurrentCulture = ci;
-
-            
+            CultureInfo cultureInfo = (CultureInfo)Thread.CurrentThread.CurrentCulture.Clone();
+            cultureInfo.NumberFormat.NegativeInfinitySymbol = "-Infinity"; // some system printed "8" instead of +oo
+            cultureInfo.NumberFormat.PositiveInfinitySymbol = "+Infinity";
+            Thread.CurrentThread.CurrentCulture = cultureInfo;
         }
 
         public void ChangeVerboseState()
@@ -34,7 +32,7 @@ namespace SharpCalculatorLib
         {
             Dictionary<string, IFunction> functionDict = new();
 
-            foreach (String functionName in _state.FunctionsNamesList)
+            foreach (String functionName in State.FunctionsNamesList)
             {
                 functionDict.Add(functionName, GetFunction(functionName));
             }
@@ -51,7 +49,6 @@ namespace SharpCalculatorLib
             List<String> postfixExpression = ConvertToPostfix(cleanedInfixExpression);
             _logger.ConsoleDisplayTaskEnd("[Postfix] ", postfixExpression);
 
-
             _logger.StartWatcher();
             _logger.Log("[Calculation] ");
             string result = EvaluatePostfixExpression(postfixExpression);
@@ -59,14 +56,13 @@ namespace SharpCalculatorLib
 
             _logger.ConsoleLogTotalDuration();
 
+            State.AddToHistory(string.Join("", cleanedInfixExpression), result);
             return result;
-
         }
 
         public List<String> CleanInfix(String expression)
         {
             List<String> cleanedInfixExpression = new();
-
             List<String> finalInfixExpression = new();
             String isFunctionMemory = "";
             String isInfixOperatorMemory = "";
@@ -76,11 +72,10 @@ namespace SharpCalculatorLib
             char[] characters = expression.ToCharArray();
             foreach (char token in characters)
             {
-                if (_state.InfixOperators.Contains(token.ToString())) // OPERATOR
+                if (State.InfixOperators.Contains(token.ToString())) // OPERATOR
                 {
                     isInfixOperatorMemory += token.ToString();
                 }
-
                 else if (isInfixOperatorMemory.Length != 0)  // IS END OPERATOR ?
                 {
                     if (isInfixOperatorMemory == "-" && last != "nb" && last != ")")  // NEGATIVE NUMBER
@@ -103,7 +98,6 @@ namespace SharpCalculatorLib
                         cleanedInfixExpression.Add("*");
                         last = "ope";
                     }
-
                     if (last == "char")
                     {
                         cleanedInfixExpression[^1] += token.ToString();
@@ -131,9 +125,7 @@ namespace SharpCalculatorLib
                     }
                 }
 
-
                 if (token == ',') { cleanedInfixExpression.Add(token.ToString()); last = "comma"; }
-
 
                 //else if (token == ' ') { space = true; continue; }
 
@@ -143,7 +135,6 @@ namespace SharpCalculatorLib
                     {
                         cleanedInfixExpression.Add("[");
                     }
-
                     else if (last != "ope" && space == false && last != "comma" && last != "(" && last != "") // Implicit product
                     {
                         Logger.DebugLog(last2 + " >> " + last);
@@ -168,7 +159,6 @@ namespace SharpCalculatorLib
                     }
                     last = ")";
                 }
-
                 else if (".0123456789".Contains(token))  // DIGIT
                 {
                     if (last == "nb") // >9 number
@@ -218,7 +208,7 @@ namespace SharpCalculatorLib
                             continue;
 
                         default:
-                            if ((IsFunctionCall(token) != "None" && !_state.InfixOperators.Contains(token)) || countOpen != countClose)
+                            if ((IsFunctionCall(token) != "None" && !State.InfixOperators.Contains(token)) || countOpen != countClose)
                             {
                                 buffer += token;
                             }
@@ -244,19 +234,19 @@ namespace SharpCalculatorLib
                 finalInfixExpression = cleanedInfixExpression;
             }
 
-
             return VerifyCleanedExpression(finalInfixExpression);
         }
 
         private bool CanOpenParenthesis(String lastToken)
         {
-            if (" ,[()0123456789".Contains(lastToken[^1]) || _state.InfixOperators.Contains(lastToken[^1].ToString()))
+            if (" ,[()0123456789".Contains(lastToken[^1]) || State.InfixOperators.Contains(lastToken[^1].ToString()))
             {
                 return true;
             }
             return false;
         }
-        private static bool AreParenthesisMatching(String lastToken, string type="()")
+
+        private static bool AreParenthesisMatching(String lastToken, string type = "()")
         {
             char open = type[0];
             char close = type[1];
@@ -299,7 +289,7 @@ namespace SharpCalculatorLib
                     throw new NotSupportedException($"Illegal name {varName} for variable");
                 }
 
-                foreach (string ope in _state.InfixOperators)  // I could simplify all of this
+                foreach (string ope in State.InfixOperators)  // I could simplify all of this
                 {
                     if (varName.Contains(ope))
                     {
@@ -322,6 +312,7 @@ namespace SharpCalculatorLib
 
             return cleanedExpression;
         }
+
         public List<String> ConvertToPostfix(List<String> expression)
         {
             Stack operatorStack = new();
@@ -337,7 +328,6 @@ namespace SharpCalculatorLib
                 {
                     continue;
                 }
-
                 else if (token.Contains('['))
                 {
                     String function_name = token.Split('[')[0];
@@ -345,7 +335,6 @@ namespace SharpCalculatorLib
                     String correctFunctionName = IsFunctionCall(function_name);
                     if (correctFunctionName != "None")
                     {
-
                         IFunction function = GetFunction(correctFunctionName);
 
                         String temp = token[(token.IndexOf('[') + 1)..];
@@ -353,10 +342,8 @@ namespace SharpCalculatorLib
 
                         List<String> args = new();
 
-
                         if ((temp.Contains("[") || temp.Contains("]")))
                         {
-
                             String buffer = "";
 
                             int countOpen = 0;
@@ -376,8 +363,6 @@ namespace SharpCalculatorLib
                                     case ']':
                                         countClose++;
                                         buffer += ch;
-
-
 
                                         continue;
 
@@ -401,7 +386,6 @@ namespace SharpCalculatorLib
                                         buffer += ch;
                                         continue;
                                 }
-
                             }
 
                             if (countOpen == countClose && buffer != "")
@@ -409,7 +393,6 @@ namespace SharpCalculatorLib
                                 args.Add(buffer);
                             }
                         }
-
                         else  // simple args
                         {
                             args = temp.Split(',').ToList<String>();
@@ -441,22 +424,18 @@ namespace SharpCalculatorLib
                     {
                         throw new Exception("Error in function call");
                     }
-
                 }
                 else if (double.TryParse(token, out double temp_parse_double))
                 {
                     output.Add(temp_parse_double.ToString());
                 }
-
                 else if ("(" == (token))
                 {
                     operatorStack.Push(token);
                 }
-
                 else if (")" == (token))
                 {
                     String popped = operatorStack.Pop().ToString();
-
 
                     while (!(popped == "("))
                     {
@@ -464,33 +443,27 @@ namespace SharpCalculatorLib
                         popped = operatorStack.Pop().ToString();
                     }
                 }
-
-                else if (_state.InfixOperators.Contains(token))
+                else if (State.InfixOperators.Contains(token))
                 {
-                    while (operatorStack.Count != 0 && _state.OperatorPriorities[(string)operatorStack.Peek()] >= _state.OperatorPriorities[token])
+                    while (operatorStack.Count != 0 && State.OperatorPriorities[(string)operatorStack.Peek()] >= State.OperatorPriorities[token])
                     {
                         output.Add(IsFunctionCall((string)operatorStack.Pop()));
                     }
                     operatorStack.Push(token);
                 }
-
                 else if (token.Contains('(') && token.Contains(')'))
                 {
                     continue;
                 }
-
                 else if (token == "True" || token == "False")
                 {
                     output.Add(token);
                 }
-
                 else if (IsVariableCall(token) && expression[index + 1] != "=")
                 {
                     output.Add(token);
                     output.Add("Get");
-
                 }
-
                 else if (expression[index + 1] == "=")
                 {
                     output.Add(token);
@@ -501,7 +474,6 @@ namespace SharpCalculatorLib
                     output.Add(token);
                     output.Add("Get"); // temp but used to throws exception
                 }
-
             }
 
             while (operatorStack.Count != 0)
@@ -520,20 +492,16 @@ namespace SharpCalculatorLib
 
             foreach (String ch in PostfixExpression)
             {
-
                 if (Double.TryParse(ch, out double temp))
                 {
                     operands.Push(ch);
                 }
-
                 else if (ch == "true" || ch == "false")
                 {
                     return ch;
                 }
-
                 else if (IsFunctionCall(ch) != "None")
                 {
-
                     IFunction function = GetFunction(ch);
 
                     int argumentsCount = function.ArgumentsCount;
@@ -544,7 +512,7 @@ namespace SharpCalculatorLib
                         args.Add(popped.ToString());
                     }
 
-                    result = function.ExecuteFunction(_state, args);
+                    result = function.ExecuteFunction(State, args);
 
                     _logger.ConsoleLogCalculation(ch, args, result);
                     operands.Push(result);
@@ -566,17 +534,17 @@ namespace SharpCalculatorLib
 
         private bool IsVariableCall(String token)
         {
-            return _state.VarManager.ContainsKey(token) && !(token == "True") && !(token == "False");
+            return (State.VarManager.UserVars.ContainsKey(token) || State.VarManager.Constants.ContainsKey(token)) && !(token == "True") && !(token == "False");
         }
 
         private String IsFunctionCall(String token)
         {
-            if (_state.FunctionsNamesList.Contains(token))
+            if (State.FunctionsNamesList.Contains(token))
             {
                 return token;
             }
 
-            foreach (String functionName in _state.FunctionsNamesList)
+            foreach (String functionName in State.FunctionsNamesList)
             {
                 IFunction function = GetFunction(functionName);
                 if (function.getAliases().Contains(token))
@@ -593,11 +561,9 @@ namespace SharpCalculatorLib
             return (IFunction)System.Activator.CreateInstance(Type.GetType("SharpCalculatorLib.MathFunctions." + functionName));
         }
 
-
         ~Calculator()
         {
             Console.WriteLine("Calculator deleted");
         }
-
     }
 }

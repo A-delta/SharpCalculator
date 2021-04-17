@@ -6,35 +6,32 @@ namespace SharpCalculatorLib.MathFunctions
     public class VarAssignment : IFunction
     {
         private String _docstring = "Used when creating new variables";
+
         public String Docstring
         {
             get => _docstring;
-
         }
 
         private int _argumentsCount = 2;
+
         public int ArgumentsCount
         {
             get => _argumentsCount;
-
         }
 
-
-
         private String _infixOperator = "=";
+
         public String InfixOperator
         {
             get => _infixOperator;
-
         }
 
         private int _infixOperatorPriority = 1;
+
         public int InfixOperatorPriority
         {
             get => _infixOperatorPriority;
-
         }
-
 
         private List<String> _aliases = new List<string>();
 
@@ -50,12 +47,8 @@ namespace SharpCalculatorLib.MathFunctions
             string name = args[1];
             string value = args[0];
 
-
-
             state.SetNewVariable(name, value);
             return args[0];
         }
-
     }
-
 }
