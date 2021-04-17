@@ -6,33 +6,32 @@ namespace SharpCalculatorLib.MathFunctions
     public class Divide : IFunction
     {
         private String _docstring = "Returns the division of two numbers";
+
         public String Docstring
         {
             get => _docstring;
-
         }
 
         private int _argumentsCount = 2;
+
         public int ArgumentsCount
         {
             get => _argumentsCount;
-
         }
 
         private String _infixOperator = "/";
+
         public String InfixOperator
         {
             get => _infixOperator;
-
         }
 
         private int _infixOperatorPriority = 4;
+
         public int InfixOperatorPriority
         {
             get => _infixOperatorPriority;
-
         }
-
 
         private List<String> _aliases = new List<string>();
 
@@ -50,7 +49,5 @@ namespace SharpCalculatorLib.MathFunctions
 
             return (arg2 / arg1).ToString();
         }
-
     }
-
 }

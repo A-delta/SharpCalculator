@@ -6,35 +6,32 @@ namespace SharpCalculatorLib.MathFunctions
     public class Add : IFunction
     {
         private String _docstring = "Returns the sum of two numbers";
+
         public String Docstring
         {
             get => _docstring;
-
         }
 
         private int _argumentsCount = 2;
+
         public int ArgumentsCount
         {
             get => _argumentsCount;
-
         }
 
+        private String _infixOperator = "+";
 
-
-       private String _infixOperator = "+";
-       public String InfixOperator
+        public String InfixOperator
         {
             get => _infixOperator;
-
-       }
+        }
 
         private int _infixOperatorPriority = 3;
+
         public int InfixOperatorPriority
         {
             get => _infixOperatorPriority;
-
         }
-
 
         private List<String> _aliases = new List<string>();
 
@@ -52,7 +49,5 @@ namespace SharpCalculatorLib.MathFunctions
 
             return (arg1 + arg2).ToString();
         }
-
     }
-
 }

@@ -7,11 +7,6 @@ namespace SharpCalculatorApp
 {
     public class ConsoleApplication
     {
-        /*Console.Write("Enable verbose mode ? Y/[N] : ");
-            String answer = Console.ReadLine();
-        bool verbose = answer.ToLower().Contains("y");
-        Console.Write("\n");*/
-
         private bool _verbose;
         private readonly Calculator calc;
 
@@ -49,6 +44,9 @@ namespace SharpCalculatorApp
                     break;
 
                 case "var":
+                case "variables":
+                case "ls":
+                case "lsvar":
                     PrintUserVariables();
                     break;
 

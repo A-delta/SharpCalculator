@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SharpCalculatorLib
 {
-    class Logger
+    internal class Logger
     {
         public bool Verbose;
         private System.Diagnostics.Stopwatch _watcher;
@@ -32,7 +32,7 @@ namespace SharpCalculatorLib
                 Console.Write(task);
                 foreach (String i in taskOutput)
                 {
-                    Console.Write(i+" ");
+                    Console.Write(i + " ");
                 }
 
                 Console.Write("\n[");
@@ -45,6 +45,7 @@ namespace SharpCalculatorLib
                 _endedTaskDuration.Add(_watcher.ElapsedMilliseconds);
             }
         }
+
         public void ConsoleDisplayTaskEnd(String task)
         {
             if (Verbose)
@@ -63,6 +64,7 @@ namespace SharpCalculatorLib
                 _endedTaskDuration.Add(_watcher.ElapsedMilliseconds);
             }
         }
+
         public void ConsoleLogCalculation(String functionName, List<string> args, string result)
         {
             if (Verbose)
@@ -79,6 +81,7 @@ namespace SharpCalculatorLib
                 Console.WriteLine(log);
             }
         }
+
         public void ConsoleLogTotalDuration()
         {
             if (Verbose)
@@ -92,6 +95,7 @@ namespace SharpCalculatorLib
                 Console.WriteLine("[Tot : " + total + "ms]");
             }
         }
+
         public static void DebugLog(String log)
         {
             Console.ForegroundColor = ConsoleColor.Red;

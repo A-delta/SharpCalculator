@@ -6,31 +6,31 @@ namespace SharpCalculatorLib.MathFunctions
     public class Power : IFunction
     {
         private String _docstring = "Returns x^y";
+
         public String Docstring
         {
             get => _docstring;
-
         }
 
         private int _argumentsCount = 2;
+
         public int ArgumentsCount
         {
             get => _argumentsCount;
-
         }
 
         private String _infixOperator = "^";
+
         public String InfixOperator
         {
             get => _infixOperator;
-
         }
 
         private int _infixOperatorPriority = 5;
+
         public int InfixOperatorPriority
         {
             get => _infixOperatorPriority;
-
         }
 
         private List<String> _aliases = new List<string>();
@@ -49,7 +49,5 @@ namespace SharpCalculatorLib.MathFunctions
 
             return Math.Pow(arg2, arg1).ToString();
         }
-
     }
-
 }

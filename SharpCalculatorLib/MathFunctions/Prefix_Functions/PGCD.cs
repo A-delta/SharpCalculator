@@ -1,43 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SharpCalculatorLib.MathFunctions
 {
-    class PGCD : IFunction
+    internal class PGCD : IFunction
     {
         private String _docstring = "Returns PGCD of two values";
+
         public String Docstring
         {
             get => _docstring;
-
         }
 
-
         private int _argumentsCount = 2;
+
         public int ArgumentsCount
         {
             get => _argumentsCount;
-
         }
 
         private String _infixOperator = "None";
+
         public String InfixOperator
         {
             get => _infixOperator;
-
         }
 
         private int _infixOperatorPriority = 0;
+
         public int InfixOperatorPriority
         {
             get => _infixOperatorPriority;
-
         }
-
-
 
         private List<String> _aliases = new List<string>();
 
@@ -56,12 +50,12 @@ namespace SharpCalculatorLib.MathFunctions
                 a = Math.Abs(int.Parse(args[1]));
                 b = Math.Abs(int.Parse(args[0]));
             }
-            catch(Exception)
+            catch (Exception)
             {
                 throw new ArgumentException("Only integers are allowed in arithmetic");
             }
 
-            if (b==0) { return a.ToString(); }
+            if (b == 0) { return a.ToString(); }
             if (b == 1) { return "1"; }
             if (a % b == 0) { return b.ToString(); }
 
