@@ -69,7 +69,9 @@ namespace SharpCalculatorLib
             String last = "";
             string last2 = "";
             bool space = false;
+
             char[] characters = expression.ToCharArray();
+
             foreach (char token in characters)
             {
                 if (State.InfixOperators.Contains(token.ToString())) // OPERATOR
@@ -78,6 +80,10 @@ namespace SharpCalculatorLib
                 }
                 else if (isInfixOperatorMemory.Length != 0)  // IS END OPERATOR ?
                 {
+                    if (!State.InfixOperators.Contains(isInfixOperatorMemory))
+                    {
+                        throw new Exception("This opertator does not exist.");
+                    }
                     if (isInfixOperatorMemory == "-" && last != "nb" && last != ")")  // NEGATIVE NUMBER
                     {
                         cleanedInfixExpression.Add("0");
@@ -127,8 +133,6 @@ namespace SharpCalculatorLib
 
                 if (token == ',') { cleanedInfixExpression.Add(token.ToString()); last = "comma"; }
 
-                //else if (token == ' ') { space = true; continue; }
-
                 if (token == '(')
                 {
                     if (last == "fcn")
@@ -137,7 +141,6 @@ namespace SharpCalculatorLib
                     }
                     else if (last != "ope" && space == false && last != "comma" && last != "(" && last != "") // Implicit product
                     {
-                        Logger.DebugLog(last2 + " >> " + last);
                         cleanedInfixExpression.Add("*");
                         cleanedInfixExpression.Add(token.ToString());
                     }
@@ -176,6 +179,26 @@ namespace SharpCalculatorLib
 
                 space = (token == ' ');
                 last2 = last;
+            }
+
+            if (isInfixOperatorMemory.Length != 0)
+            {
+                Logger.DebugLog(isInfixOperatorMemory);
+                if (!State.InfixOperators.Contains(isInfixOperatorMemory))
+                {
+                    throw new Exception("This opertator does not exist.");
+                }
+                if (isInfixOperatorMemory == "-" && last != "nb" && last != ")")  // NEGATIVE NUMBER
+                {
+                    cleanedInfixExpression.Add("0");
+                    cleanedInfixExpression.Add(isInfixOperatorMemory);
+                }
+                else
+                {
+                    cleanedInfixExpression.Add(isInfixOperatorMemory);
+                }
+                isInfixOperatorMemory = "";
+                last = "ope";
             }
 
             if (cleanedInfixExpression.Contains("["))
@@ -224,17 +247,13 @@ namespace SharpCalculatorLib
                 {
                     finalInfixExpression.Add(buffer);
                 }
-                /*else
-                {
-                    throw new Exception("Not matching parenthesis for function");
-                }*/
             }
             else
             {
                 finalInfixExpression = cleanedInfixExpression;
             }
 
-            return VerifyCleanedExpression(finalInfixExpression);
+            return VerifyCleanedExpression(expression, finalInfixExpression);
         }
 
         private bool CanOpenParenthesis(String lastToken)
@@ -250,11 +269,6 @@ namespace SharpCalculatorLib
         {
             char open = type[0];
             char close = type[1];
-
-            if (lastToken.Contains(','))
-            {
-                lastToken = lastToken[lastToken.LastIndexOf(',')..];
-            }
 
             int countOpen = 0;
             int countClose = 0;
@@ -273,10 +287,10 @@ namespace SharpCalculatorLib
             return ((countOpen == countClose && countOpen + countClose != 0) || countOpen + countClose == 0);
         }
 
-        private List<String> VerifyCleanedExpression(List<string> cleanedExpression)
+        private List<String> VerifyCleanedExpression(string originalExpression, List<string> cleanedExpression)
         {
             string expression = string.Join("  ", cleanedExpression.ToArray());
-            if (expression.Contains(" = "))  // ILEGAL NAMES
+            if (expression.Contains(" = "))  // ILLEGAL NAMES FOR VARS
             {
                 string[] parts = expression.Split(" = ");
                 string varName = parts[0];
@@ -305,10 +319,11 @@ namespace SharpCalculatorLib
                     }
                 }
             }
-            /*if (_areParenthesisMatching(expression, "()")
+
+            if (!AreParenthesisMatching(originalExpression, "()"))
             {
-                throw new Exception("Not Matching parenthesis");
-            }*/
+                throw new Exception("Parenthesis are not matching");
+            }
 
             return cleanedExpression;
         }

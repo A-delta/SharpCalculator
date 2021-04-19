@@ -88,11 +88,27 @@ namespace NUnitTests
 
             Assert.Throws<ArgumentException>(() => _calc.ProcessExpression("a = 4 = 8"));
 
-            Assert.Throws<NotSupportedException>(() => _calc.ProcessExpression("a*/*- = 8"));
+            //Assert.Throws<NotSupportedException>(() => _calc.ProcessExpression("a*/*- = 8"));  became operatorDoesntExist
 
             Assert.Throws<NotSupportedException>(() => _calc.ProcessExpression("a6 = 8"));
 
             Assert.Throws<ArgumentException>(() => _calc.ProcessExpression("e = 4"));
+        }
+
+        [Test]
+        public void Parenthesis()
+        {
+            Assert.Throws<Exception>(() => _calc.ProcessExpression("2*(4))"));
+            Assert.Throws<Exception>(() => _calc.ProcessExpression("2*((4)"));
+            Assert.Throws<Exception>(() => _calc.ProcessExpression("(2*(4-4)"));
+        }
+
+        [Test]
+        public void OperatorError()
+        {
+            Assert.Throws<Exception>(() => _calc.ProcessExpression("4++4"));
+            Assert.Throws<Exception>(() => _calc.ProcessExpression("4**4"));
+            Assert.Throws<Exception>(() => _calc.ProcessExpression("4++"));
         }
 
         [Test]
