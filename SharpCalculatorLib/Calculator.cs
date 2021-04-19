@@ -12,6 +12,18 @@ namespace SharpCalculatorLib
         private readonly Logger _logger;
         public State State;
 
+        private enum TokenTypes
+        {
+            None,
+            Character,
+            Function,
+            Comma,
+            Number,
+            Operator,
+            RightParenthesis,
+            LeftParenthesis
+        }
+
         public Calculator(bool verbose)
         {
             _logger = new Logger(verbose);
@@ -66,8 +78,9 @@ namespace SharpCalculatorLib
             List<String> finalInfixExpression = new();
             String isFunctionMemory = "";
             String isInfixOperatorMemory = "";
-            String last = "";
-            string last2 = "";
+
+            TokenTypes last = TokenTypes.None;
+            TokenTypes last2 = TokenTypes.None;
             bool space = false;
 
             char[] characters = expression.ToCharArray();
@@ -84,7 +97,7 @@ namespace SharpCalculatorLib
                     {
                         throw new Exception("This opertator does not exist.");
                     }
-                    if (isInfixOperatorMemory == "-" && last != "nb" && last != ")")  // NEGATIVE NUMBER
+                    if (isInfixOperatorMemory == "-" && last != TokenTypes.Number && last != TokenTypes.RightParenthesis)  // NEGATIVE NUMBER
                     {
                         cleanedInfixExpression.Add("0");
                         cleanedInfixExpression.Add(isInfixOperatorMemory);
@@ -94,17 +107,17 @@ namespace SharpCalculatorLib
                         cleanedInfixExpression.Add(isInfixOperatorMemory);
                     }
                     isInfixOperatorMemory = "";
-                    last = "ope";
+                    last = TokenTypes.Operator;
                 }
 
                 if ((97 <= (int)token && (int)token <= 122) || (65 <= (int)token && (int)token <= 90))  // Is a character -> variable or fcn ?
                 {
-                    if (last != "ope" && (last == "nb" || last == ")" || (last == "char" && space == true))) // no operator -> implicit product
+                    if (last != TokenTypes.Operator && (last == TokenTypes.Number || last == TokenTypes.RightParenthesis || (last == TokenTypes.Character && space == true))) // no operator -> implicit product
                     {
                         cleanedInfixExpression.Add("*");
-                        last = "ope";
+                        last = TokenTypes.Operator;
                     }
-                    if (last == "char")
+                    if (last == TokenTypes.Character)
                     {
                         cleanedInfixExpression[^1] += token.ToString();
                     }
@@ -115,12 +128,12 @@ namespace SharpCalculatorLib
                     isFunctionMemory += (token);
                     if (IsFunctionCall(isFunctionMemory) != "None")
                     {
-                        last = "fcn";
+                        last = TokenTypes.Function;
                         isFunctionMemory = "";
                     }
                     else
                     {
-                        last = "char";
+                        last = TokenTypes.Character;
                     }
                 }
                 else
@@ -131,15 +144,15 @@ namespace SharpCalculatorLib
                     }
                 }
 
-                if (token == ',') { cleanedInfixExpression.Add(token.ToString()); last = "comma"; }
+                if (token == ',') { cleanedInfixExpression.Add(token.ToString()); last = TokenTypes.Comma; }
 
                 if (token == '(')
                 {
-                    if (last == "fcn")
+                    if (last == TokenTypes.Function)
                     {
                         cleanedInfixExpression.Add("[");
                     }
-                    else if (last != "ope" && space == false && last != "comma" && last != "(" && last != "") // Implicit product
+                    else if (last != TokenTypes.Operator && space == false && last != TokenTypes.Comma && last != TokenTypes.LeftParenthesis && last != TokenTypes.None) // Implicit product
                     {
                         cleanedInfixExpression.Add("*");
                         cleanedInfixExpression.Add(token.ToString());
@@ -148,7 +161,7 @@ namespace SharpCalculatorLib
                     {
                         cleanedInfixExpression.Add(token.ToString());
                     }
-                    last = "(";
+                    last = TokenTypes.LeftParenthesis;
                 }
                 else if (token == ')')
                 {
@@ -160,20 +173,20 @@ namespace SharpCalculatorLib
                     {
                         cleanedInfixExpression.Add(token.ToString());
                     }
-                    last = ")";
+                    last = TokenTypes.RightParenthesis;
                 }
                 else if (".0123456789".Contains(token))  // DIGIT
                 {
-                    if (last == "nb") // >9 number
+                    if (last == TokenTypes.Number) // >9 number
                         cleanedInfixExpression[^1] += token.ToString();
                     else
                     {
-                        if (last != "nb" && last == ")") // Implicit product
+                        if (last != TokenTypes.Number && last == TokenTypes.RightParenthesis) // Implicit product
                         {
                             cleanedInfixExpression.Add("*");
                         }
                         cleanedInfixExpression.Add(token.ToString());
-                        last = "nb";
+                        last = TokenTypes.Number;
                     }
                 }
 
@@ -188,7 +201,7 @@ namespace SharpCalculatorLib
                 {
                     throw new Exception("This opertator does not exist.");
                 }
-                if (isInfixOperatorMemory == "-" && last != "nb" && last != ")")  // NEGATIVE NUMBER
+                if (isInfixOperatorMemory == "-" && last != TokenTypes.Number && last != TokenTypes.RightParenthesis)  // NEGATIVE NUMBER
                 {
                     cleanedInfixExpression.Add("0");
                     cleanedInfixExpression.Add(isInfixOperatorMemory);
@@ -198,7 +211,7 @@ namespace SharpCalculatorLib
                     cleanedInfixExpression.Add(isInfixOperatorMemory);
                 }
                 isInfixOperatorMemory = "";
-                last = "ope";
+                last = TokenTypes.Operator;
             }
 
             if (cleanedInfixExpression.Contains("["))
