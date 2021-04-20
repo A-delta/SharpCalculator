@@ -24,12 +24,36 @@ namespace SharpCalculatorApp
             if (!_verbose) { Console.WriteLine("Enter 'verbose' to see details in operations\n"); }
         }
 
+        public void Run()
+        {
+            while (true)
+            {
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.Write("$  ");
+                Console.ForegroundColor = ConsoleColor.White;
+                String input = Console.ReadLine();
+                if (input.Length != 0)
+                {
+                    try
+                    {
+                        ProcessExpression(input);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write(e.Message + "\n");
+                        Console.ForegroundColor = ConsoleColor.White;
+                    }
+                }
+            }
+        }
+
         public static List<string> GetMathFunctions()
         {
             return Calculator.GetAllFunctions();
         }
 
-        public void ProcessExpression(string expression)
+        private void ProcessExpression(string expression)
         {
             switch (expression)
             {
