@@ -95,7 +95,7 @@ namespace SharpCalculatorLib
                 {
                     if (!State.InfixOperators.Contains(isInfixOperatorMemory))
                     {
-                        throw new Exception("This opertator does not exist.");
+                        throw new Exception("This operator does not exist");
                     }
                     if (isInfixOperatorMemory == "-" && last != TokenTypes.Number && last != TokenTypes.RightParenthesis)  // NEGATIVE NUMBER
                     {

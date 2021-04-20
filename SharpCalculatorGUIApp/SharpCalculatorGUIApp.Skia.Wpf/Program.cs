@@ -1,4 +1,0 @@
-﻿
-namespace SharpCalculatorGUIApp.Skia.Gtk
-{
-}
