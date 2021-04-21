@@ -14,6 +14,14 @@ namespace SharpCalculatorLib
             Verbose = verbose;
         }
 
+        public static void InfoLog(string message)
+        {
+            ConsoleColor original = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.WriteLine($"[INFO] {message}");
+            Console.ForegroundColor = original;
+        }
+
         public void Log(String log)
         {
             if (Verbose) { Console.WriteLine(log); }

@@ -45,10 +45,19 @@ namespace SharpCalculatorLib.MathFunctions
         public string ExecuteFunction(State state, List<string> args)
         {
             string name = args[1];
-            string value = args[0];
+            string value = string.Empty;
+
+            if (args[0] == "False" || args[0] == "True")
+            {
+                value = args[0];
+            }
+            else
+            {
+                value = VarNumberConverter.GetNumber(state, args[0]).ToString();
+            }
 
             state.SetNewVariable(name, value);
-            return args[0];
+            return value;
         }
     }
 }

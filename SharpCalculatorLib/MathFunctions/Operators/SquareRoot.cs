@@ -43,7 +43,7 @@ namespace SharpCalculatorLib.MathFunctions
 
         public string ExecuteFunction(State state, List<string> args)
         {
-            double arg1 = Double.Parse(args[0]);
+            double arg1 = VarNumberConverter.GetNumber(state, args[0]);
 
             return Math.Sqrt(arg1).ToString();
         }

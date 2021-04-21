@@ -43,8 +43,8 @@ namespace SharpCalculatorLib.MathFunctions
 
         public string ExecuteFunction(State state, List<string> args)
         {
-            double arg1 = Double.Parse(args[0]);
-            double arg2 = Double.Parse(args[1]);
+            double arg1 = VarNumberConverter.GetNumber(state, args[0]);
+            double arg2 = VarNumberConverter.GetNumber(state, args[1]);
 
             return Math.Min(arg1, arg2).ToString();
         }

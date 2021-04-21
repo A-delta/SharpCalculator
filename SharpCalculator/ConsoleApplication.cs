@@ -41,7 +41,7 @@ namespace SharpCalculatorApp
                     catch (Exception e)
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.Write(e.Message + "\n");
+                        Console.Write("[ERROR] "  + e.Message + "\n");
                         Console.ForegroundColor = ConsoleColor.White;
                     }
                 }

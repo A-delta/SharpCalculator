@@ -47,8 +47,8 @@ namespace SharpCalculatorLib.MathFunctions
             int b;
             try
             {
-                a = Math.Abs(int.Parse(args[1]));
-                b = Math.Abs(int.Parse(args[0]));
+                b = (int)(VarNumberConverter.GetNumber(state, args[0]));
+                a = (int)(VarNumberConverter.GetNumber(state, args[1]));
             }
             catch (Exception)
             {

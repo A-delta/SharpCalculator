@@ -4,7 +4,7 @@ using System;
 
 namespace NUnitTests
 {
-    public class BasicExpressions
+    public class KnownBugs
     {
         private Calculator _calc;
         private string _result;
@@ -93,6 +93,24 @@ namespace NUnitTests
             Assert.Throws<NotSupportedException>(() => _calc.ProcessExpression("a6 = 8"));
 
             Assert.Throws<ArgumentException>(() => _calc.ProcessExpression("e = 4"));
+
+            _result = _calc.ProcessExpression("z = 4");
+            Assert.IsTrue(_result == "4");
+
+            _result = _calc.ProcessExpression("z++");
+            Assert.IsTrue(_result == "5", "was a bug");
+
+            _result = _calc.ProcessExpression("z");
+            Assert.IsTrue(_result == "5", "was a bug");
+
+            _result = _calc.ProcessExpression("z = (2==2)");
+            Assert.IsTrue(_result == "True", "was a bug");
+
+            _result = _calc.ProcessExpression("z == True");
+            Assert.IsTrue(_result == "True", "was a bug");
+
+            _result = _calc.ProcessExpression("z++");
+            Assert.IsTrue(_result == "2", "was a bug");
         }
 
         [Test]
@@ -106,9 +124,7 @@ namespace NUnitTests
         [Test]
         public void OperatorError()
         {
-            Assert.Throws<Exception>(() => _calc.ProcessExpression("4++4"));
             Assert.Throws<Exception>(() => _calc.ProcessExpression("4**4"));
-            Assert.Throws<Exception>(() => _calc.ProcessExpression("4++"));
         }
 
         [Test]

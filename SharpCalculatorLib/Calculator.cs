@@ -196,7 +196,6 @@ namespace SharpCalculatorLib
 
             if (isInfixOperatorMemory.Length != 0)
             {
-                Logger.DebugLog(isInfixOperatorMemory);
                 if (!State.InfixOperators.Contains(isInfixOperatorMemory))
                 {
                     throw new Exception("This opertator does not exist.");
@@ -490,7 +489,11 @@ namespace SharpCalculatorLib
                 else if (IsVariableCall(token) && expression[index + 1] != "=")
                 {
                     output.Add(token);
-                    output.Add("Get");
+                    if (expression.Count == 2)
+                    {
+                        output.Add("Get");  // when typing variable name only
+                    }
+                    //output.Add("Get");  // DELETE THIS AND DO IT IN PROCESS
                 }
                 else if (expression[index + 1] == "=")
                 {
@@ -498,9 +501,9 @@ namespace SharpCalculatorLib
                 }
                 else
                 {
-                    //throw new InvalidOperationException();
                     output.Add(token);
                     output.Add("Get"); // temp but used to throws exception
+                    Logger.DebugLog("temp was called");
                 }
             }
 
@@ -563,6 +566,11 @@ namespace SharpCalculatorLib
         private bool IsVariableCall(String token)
         {
             return (State.VarManager.UserVars.ContainsKey(token) || State.VarManager.Constants.ContainsKey(token)) && !(token == "True") && !(token == "False");
+        }
+
+        public static bool IsVariableCall(string token, State state)
+        {
+            return (state.VarManager.UserVars.ContainsKey(token) || state.VarManager.Constants.ContainsKey(token)) && !(token == "True") && !(token == "False");
         }
 
         private String IsFunctionCall(String token)

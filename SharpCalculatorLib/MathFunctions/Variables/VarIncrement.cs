@@ -3,30 +3,30 @@ using System.Collections.Generic;
 
 namespace SharpCalculatorLib.MathFunctions
 {
-    public class IsEqual : IFunction
+    public class VarIncrement : IFunction
     {
-        private String _docstring = "Returns true if arguments are equal";
+        private String _docstring = "Add 1 to the variable";
 
         public String Docstring
         {
             get => _docstring;
         }
 
-        private int _argumentsCount = 2;
+        private int _argumentsCount = 1;
 
         public int ArgumentsCount
         {
             get => _argumentsCount;
         }
 
-        private String _infixOperator = "==";
+        private String _infixOperator = "++";
 
         public String InfixOperator
         {
             get => _infixOperator;
         }
 
-        private int _infixOperatorPriority = 2;
+        private int _infixOperatorPriority = 4;
 
         public int InfixOperatorPriority
         {
@@ -37,17 +37,17 @@ namespace SharpCalculatorLib.MathFunctions
 
         public List<String> getAliases()
         {
-            _aliases.Add("isEqual");
-            _aliases.Add("==");
+            _aliases.Add("increment");
+            _aliases.Add("++");
             return _aliases;
         }
 
         public string ExecuteFunction(State state, List<string> args)
         {
-            double arg1 = VarNumberConverter.GetNumber(state, args[0]);
-            double arg2 = VarNumberConverter.GetNumber(state, args[1]);
-
-            return (arg1 == arg2).ToString();
+            string name = args[0];
+            double value = VarNumberConverter.GetNumber(state, args[0]) + 1;
+            state.SetNewVariable(name, value.ToString());
+            return (value).ToString();
         }
     }
 }
