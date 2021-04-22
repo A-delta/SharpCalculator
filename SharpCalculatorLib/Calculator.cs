@@ -178,14 +178,28 @@ namespace SharpCalculatorLib
                 }
                 else if (token == ')')
                 {
-                    if (AreParenthesisMatching(string.Join("", cleanedInfixExpression)))
+                    for (int i = 1; i <= cleanedInfixExpression.Count; i++)
                     {
-                        cleanedInfixExpression.Add("]");
+                        if (cleanedInfixExpression[^i] == "(" && !AreParenthesisMatching(string.Join("", cleanedInfixExpression)))
+                        {
+                            cleanedInfixExpression.Add(token.ToString());
+                            break;
+                        }
+                        else if (cleanedInfixExpression[^i] == "[" && !AreParenthesisMatching(string.Join("", cleanedInfixExpression), "[]"))
+                        {
+                            cleanedInfixExpression.Add("]");
+                            break;
+                        }
                     }
-                    else
-                    {
-                        cleanedInfixExpression.Add(token.ToString());
-                    }
+
+                    //if (AreParenthesisMatching(string.Join("", cleanedInfixExpression)))
+                    //{
+                    //    cleanedInfixExpression.Add("]");
+                    //}
+                    //else
+                    //{
+                    //    cleanedInfixExpression.Add(token.ToString());
+                    //}
                     last = TokenTypes.RightParenthesis;
                 }
                 else if (".0123456789".Contains(token))  // DIGIT
