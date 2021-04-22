@@ -1,22 +1,21 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <Version>2.0.0.0</Version>
-    <Authors>Adelta</Authors>
-    <Description>SharpCalculatorLib is a math expressions cleaner, parser and evaluator that supports basic operations, functions and variables. Its cleaner side lets the input contains implicit products and spaces like a human would write it.</Description>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageProjectUrl></PackageProjectUrl>
-    <RepositoryUrl>https://github.com/A-delta/SharpCalculator/tree/master/SharpCalculatorLib</RepositoryUrl>
-    <PackageTags>calculator, math expression parser</PackageTags>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+		<Version>2.0.0.0</Version>
+		<Authors>Adelta</Authors>
+		<Description>SharpCalculatorLib is a math expressions cleaner, parser and evaluator that supports basic operations, functions and variables. Its cleaner side lets the input contains implicit products and spaces like a human would write it. It is currently being developped and more functions are added over time as well as bug fix. Documentation will be written when the project will be "finished" as things may change.</Description>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<PackageProjectUrl></PackageProjectUrl>
+		<RepositoryUrl>https://github.com/A-delta/SharpCalculator/tree/master/SharpCalculatorLib</RepositoryUrl>
+		<PackageTags>calculator, math expression parser</PackageTags>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Include="..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-  </ItemGroup>
-
+	<ItemGroup>
+		<None Include="..\LICENSE">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+	</ItemGroup>
 </Project>
