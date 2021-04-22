@@ -7,6 +7,7 @@ namespace SharpCalculatorLib
     {
         public List<String> FunctionsNamesList;
         public List<String> InfixOperators;
+        public List<string> PostfixOperators;
         public Dictionary<String, int> OperatorPriorities;
 
         public struct VarManagerStruct
@@ -24,19 +25,27 @@ namespace SharpCalculatorLib
             FunctionsNamesList = Calculator.GetAllFunctions();
             InfixOperators = new();
             OperatorPriorities = new();
+            PostfixOperators = new();
             History = new();
 
             foreach (String functionName in FunctionsNamesList) //catching math functions
             {
                 IFunction function = Calculator.GetFunction(functionName);
                 String infixOperator = function.InfixOperator;
+                string postfixOperator = function.PostfixOperator;
 
                 if (infixOperator != "None")
                 {
                     InfixOperators.Add(infixOperator);
-                    OperatorPriorities.Add(infixOperator, function.InfixOperatorPriority);
+                    OperatorPriorities.Add(infixOperator, function.OperatorPriority);
+                }
+                if (postfixOperator != "None")
+                {
+                    PostfixOperators.Add(postfixOperator);
+                    OperatorPriorities.Add(postfixOperator, function.OperatorPriority);
                 }
             }
+
             OperatorPriorities.Add("(", 1);
 
             VarManager.UserVars = new();

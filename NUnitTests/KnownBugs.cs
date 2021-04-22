@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using SharpCalculatorLib;
 using System;
+using SharpCalculatorLib.Exceptions;
 
 namespace NUnitTests
 {
@@ -90,7 +91,7 @@ namespace NUnitTests
 
             //Assert.Throws<NotSupportedException>(() => _calc.ProcessExpression("a*/*- = 8"));  became operatorDoesntExist
 
-            Assert.Throws<NotSupportedException>(() => _calc.ProcessExpression("a6 = 8"));
+            Assert.Throws<IllegalVariableNameException>(() => _calc.ProcessExpression("a6 = 8"));
 
             Assert.Throws<ArgumentException>(() => _calc.ProcessExpression("e = 4"));
 
@@ -99,7 +100,6 @@ namespace NUnitTests
 
             _result = _calc.ProcessExpression("z++");
             Assert.IsTrue(_result == "5", "was a bug");
-
             _result = _calc.ProcessExpression("z");
             Assert.IsTrue(_result == "5", "was a bug");
 
@@ -116,9 +116,9 @@ namespace NUnitTests
         [Test]
         public void Parenthesis()
         {
-            Assert.Throws<Exception>(() => _calc.ProcessExpression("2*(4))"));
-            Assert.Throws<Exception>(() => _calc.ProcessExpression("2*((4)"));
-            Assert.Throws<Exception>(() => _calc.ProcessExpression("(2*(4-4)"));
+            Assert.Throws<ParenthesisNotMatchingException>(() => _calc.ProcessExpression("2*(4))"));
+            Assert.Throws<ParenthesisNotMatchingException>(() => _calc.ProcessExpression("2*((4)"));
+            Assert.Throws<ParenthesisNotMatchingException>(() => _calc.ProcessExpression("(2*(4-4)"));
 
             _result = _calc.ProcessExpression("a=2");
             _result = _calc.ProcessExpression("a-2");
@@ -128,7 +128,7 @@ namespace NUnitTests
         [Test]
         public void OperatorError()
         {
-            Assert.Throws<Exception>(() => _calc.ProcessExpression("4**4"));
+            Assert.Throws<UnknownOperatorException>(() => _calc.ProcessExpression("4**4"));
         }
 
         [Test]
@@ -165,7 +165,7 @@ namespace NUnitTests
         [Test]
         public void Errors()
         {
-            //Assert.Throws<Exception>(() => _calc.ProcessExpression("4*(4)-4)"));
+            Assert.Throws<ParenthesisNotMatchingException>(() => _calc.ProcessExpression("4*(4)-4)"));
         }
     }
 }

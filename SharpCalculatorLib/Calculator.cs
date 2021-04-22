@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
+using SharpCalculatorLib.Exceptions;
 
 namespace SharpCalculatorLib
 {
@@ -20,6 +21,7 @@ namespace SharpCalculatorLib
             Comma,
             Number,
             Operator,
+            PostFixOperator,
             RightParenthesis,
             LeftParenthesis
         }
@@ -101,11 +103,12 @@ namespace SharpCalculatorLib
 
                 if (!isInfixOperator && isInfixOperatorMemory.Length != 0)  // IS END OPERATOR ?
                 {
-                    if (!State.InfixOperators.Contains(isInfixOperatorMemory))
+                    if (!State.InfixOperators.Contains(isInfixOperatorMemory) && !State.PostfixOperators.Contains(isInfixOperatorMemory))
                     {
-                        throw new Exception("This operator does not exist");
+                        Logger.DebugLog(isInfixOperatorMemory);
+                        throw new UnknownOperatorException("This operator does not exist");
                     }
-                    if (isInfixOperatorMemory == "-" && last != TokenTypes.Number && last != TokenTypes.RightParenthesis)  // NEGATIVE NUMBER
+                    if (isInfixOperatorMemory == "-" && last != TokenTypes.Number && last != TokenTypes.RightParenthesis && last != TokenTypes.Character)  // NEGATIVE NUMBER
                     {
                         cleanedInfixExpression.Add("0");
                         cleanedInfixExpression.Add(isInfixOperatorMemory);
@@ -114,13 +117,15 @@ namespace SharpCalculatorLib
                     {
                         cleanedInfixExpression.Add(isInfixOperatorMemory);
                     }
+
+                    last = (State.PostfixOperators.Contains(isInfixOperatorMemory) ? TokenTypes.PostFixOperator : TokenTypes.Operator);
                     isInfixOperatorMemory = "";
-                    last = TokenTypes.Operator;
+                    //last = TokenTypes.Operator;
                 }
 
                 if ((97 <= (int)token && (int)token <= 122) || (65 <= (int)token && (int)token <= 90))  // Is a character -> variable or fcn ?
                 {
-                    if (last != TokenTypes.Operator && (last == TokenTypes.Number || last == TokenTypes.RightParenthesis || (last == TokenTypes.Character && space == true))) // no operator -> implicit product
+                    if (last != TokenTypes.Operator && (last == TokenTypes.PostFixOperator || last == TokenTypes.Number || last == TokenTypes.RightParenthesis || (last == TokenTypes.Character && space == true))) // no operator -> implicit product
                     {
                         cleanedInfixExpression.Add("*");
                         last = TokenTypes.Operator;
@@ -189,7 +194,7 @@ namespace SharpCalculatorLib
                         cleanedInfixExpression[^1] += token.ToString();
                     else
                     {
-                        if (last != TokenTypes.Number && last == TokenTypes.RightParenthesis) // Implicit product
+                        if (last != TokenTypes.Number && (last == TokenTypes.RightParenthesis || last == TokenTypes.PostFixOperator)) // Implicit product
                         {
                             cleanedInfixExpression.Add("*");
                         }
@@ -204,9 +209,9 @@ namespace SharpCalculatorLib
 
             if (isInfixOperatorMemory.Length != 0)
             {
-                if (!State.InfixOperators.Contains(isInfixOperatorMemory))
+                if (!State.InfixOperators.Contains(isInfixOperatorMemory) && !State.PostfixOperators.Contains(isInfixOperatorMemory))
                 {
-                    throw new Exception("This opertator does not exist.");
+                    throw new UnknownOperatorException("This operator does not exist.");
                 }
                 if (isInfixOperatorMemory == "-" && last != TokenTypes.Number && last != TokenTypes.RightParenthesis)  // NEGATIVE NUMBER
                 {
@@ -217,8 +222,9 @@ namespace SharpCalculatorLib
                 {
                     cleanedInfixExpression.Add(isInfixOperatorMemory);
                 }
+                last = (State.PostfixOperators.Contains(isInfixOperatorMemory) ? TokenTypes.PostFixOperator : TokenTypes.Operator);
                 isInfixOperatorMemory = "";
-                last = TokenTypes.Operator;
+                //last = TokenTypes.Operator;
             }
 
             if (cleanedInfixExpression.Contains("["))
@@ -272,7 +278,7 @@ namespace SharpCalculatorLib
             {
                 finalInfixExpression = cleanedInfixExpression;
             }
-
+            //Logger.DebugLog(expression);
             return VerifyCleanedExpression(expression, finalInfixExpression);
         }
 
@@ -320,14 +326,15 @@ namespace SharpCalculatorLib
                 }
                 if (varName.Contains("True") || varName.Contains("False"))
                 {
-                    throw new NotSupportedException($"Illegal name {varName} for variable");
+                    throw new IllegalVariableNameException($"Variable names can not contain number, operators or bool value.");
                 }
 
                 foreach (string ope in State.InfixOperators)  // I could simplify all of this
                 {
                     if (varName.Contains(ope))
                     {
-                        throw new NotSupportedException($"Illegal name {varName} for variable");
+                        Logger.DebugLog(ope);
+                        throw new IllegalVariableNameException($"Variable names can not contain number, operators or bool value.");
                     }
                 }
 
@@ -335,14 +342,14 @@ namespace SharpCalculatorLib
                 {
                     if (varName.Contains(nb))
                     {
-                        throw new NotSupportedException($"Illegal name {varName} for variable");
+                        throw new IllegalVariableNameException($"Variable names can not contain number, operators or bool value.");
                     }
                 }
             }
 
             if (!AreParenthesisMatching(originalExpression, "()"))
             {
-                throw new Exception("Parenthesis are not matching");
+                throw new ParenthesisNotMatchingException("Parenthesis are not matching");
             }
 
             return cleanedExpression;
@@ -478,7 +485,7 @@ namespace SharpCalculatorLib
                         popped = operatorStack.Pop().ToString();
                     }
                 }
-                else if (State.InfixOperators.Contains(token))
+                else if (State.InfixOperators.Contains(token) || State.PostfixOperators.Contains(token))
                 {
                     while (operatorStack.Count != 0 && State.OperatorPriorities[(string)operatorStack.Peek()] >= State.OperatorPriorities[token])
                     {
@@ -561,7 +568,12 @@ namespace SharpCalculatorLib
                     operands.Push(ch);
                 }
             }
-            return (string)operands.Pop();
+            result = (string)operands.Pop();
+            if (operands.Count != 0)
+            {
+                throw new Exception();
+            }
+            return result;
         }
 
         public static List<string> GetAllFunctions()

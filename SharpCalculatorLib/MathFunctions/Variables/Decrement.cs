@@ -19,18 +19,25 @@ namespace SharpCalculatorLib.MathFunctions
             get => _argumentsCount;
         }
 
-        private String _infixOperator = "--";
+        private String _postfixOperator = "--";
+
+        public String PostfixOperator
+        {
+            get => _postfixOperator;
+        }
+
+        private String _infixOperator = "None";
 
         public String InfixOperator
         {
             get => _infixOperator;
         }
 
-        private int _infixOperatorPriority = 4;
+        private int _OperatorPriority = 4;
 
-        public int InfixOperatorPriority
+        public int OperatorPriority
         {
-            get => _infixOperatorPriority;
+            get => _OperatorPriority;
         }
 
         private List<String> _aliases = new List<string>();

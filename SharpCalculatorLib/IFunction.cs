@@ -7,8 +7,10 @@ namespace SharpCalculatorLib
     {
         String Docstring { get; }
         int ArgumentsCount { get; }
+
+        String PostfixOperator { get; }
         String InfixOperator { get; }
-        int InfixOperatorPriority { get; }
+        int OperatorPriority { get; }
 
         public string ExecuteFunction(State state, List<string> args);
 
