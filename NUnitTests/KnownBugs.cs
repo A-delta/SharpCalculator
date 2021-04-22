@@ -119,6 +119,10 @@ namespace NUnitTests
             Assert.Throws<Exception>(() => _calc.ProcessExpression("2*(4))"));
             Assert.Throws<Exception>(() => _calc.ProcessExpression("2*((4)"));
             Assert.Throws<Exception>(() => _calc.ProcessExpression("(2*(4-4)"));
+
+            _result = _calc.ProcessExpression("a=2");
+            _result = _calc.ProcessExpression("a-2");
+            Assert.IsTrue(_result == "0", "was a bug");
         }
 
         [Test]
