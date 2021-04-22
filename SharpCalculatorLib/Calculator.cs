@@ -76,6 +76,8 @@ namespace SharpCalculatorLib
         {
             List<String> cleanedInfixExpression = new();
             List<String> finalInfixExpression = new();
+
+            bool isInfixOperator = false;
             String isFunctionMemory = "";
             String isInfixOperatorMemory = "";
 
@@ -87,11 +89,17 @@ namespace SharpCalculatorLib
 
             foreach (char token in characters)
             {
-                if (State.InfixOperators.Contains(token.ToString())) // OPERATOR
+                foreach (string ope in State.InfixOperators)
                 {
-                    isInfixOperatorMemory += token.ToString();
+                    if (ope.Contains(token) || ope == token.ToString())
+                    {
+                        isInfixOperatorMemory += token.ToString();
+                        isInfixOperator = true;
+                        break;
+                    }
                 }
-                else if (isInfixOperatorMemory.Length != 0)  // IS END OPERATOR ?
+
+                if (!isInfixOperator && isInfixOperatorMemory.Length != 0)  // IS END OPERATOR ?
                 {
                     if (!State.InfixOperators.Contains(isInfixOperatorMemory))
                     {
@@ -189,7 +197,7 @@ namespace SharpCalculatorLib
                         last = TokenTypes.Number;
                     }
                 }
-
+                isInfixOperator = false;
                 space = (token == ' ');
                 last2 = last;
             }
