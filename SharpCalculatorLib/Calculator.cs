@@ -111,7 +111,6 @@ namespace SharpCalculatorLib
                     }
                     if (isInfixOperatorMemory == "-" && last != TokenTypes.Number && last != TokenTypes.RightParenthesis && last != TokenTypes.Character)  // NEGATIVE NUMBER
                     {
-                        Logger.DebugLog("1");
                         cleanedInfixExpression.Add("(");
                         cleanedInfixExpression.Add("0");
                         cleanedInfixExpression.Add(isInfixOperatorMemory);
@@ -133,11 +132,12 @@ namespace SharpCalculatorLib
                         cleanedInfixExpression.Add("*");
                         last = TokenTypes.Operator;
                     }
-                    if (last == TokenTypes.Character)
+                    if (last == TokenTypes.Character || last == TokenTypes.Function)
                     {
+                        isFunctionMemory = cleanedInfixExpression[^1];
                         cleanedInfixExpression[^1] += token.ToString();
                     }
-                    else
+                    else if (last != TokenTypes.Function)
                     {
                         cleanedInfixExpression.Add(token.ToString());
                     }
@@ -162,6 +162,7 @@ namespace SharpCalculatorLib
 
                 if (token == ',') { cleanedInfixExpression.Add(token.ToString()); last = TokenTypes.Comma; }
 
+                Logger.DebugLog(last.ToString());
                 if (token == '(')
                 {
                     if (last == TokenTypes.Function)
@@ -228,7 +229,6 @@ namespace SharpCalculatorLib
                 }
                 if (isInfixOperatorMemory == "-" && last != TokenTypes.Number && last != TokenTypes.RightParenthesis)  // NEGATIVE NUMBER
                 {
-                    Logger.DebugLog("2");
                     cleanedInfixExpression.Add("0");
                     cleanedInfixExpression.Add(isInfixOperatorMemory);
                 }
