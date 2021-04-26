@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "SharpCalculatorCLI": {
+      "commandName": "Project"
+    }
+  }
+}

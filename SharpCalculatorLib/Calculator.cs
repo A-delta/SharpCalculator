@@ -120,7 +120,6 @@ namespace SharpCalculatorLib
 
                     last = (State.PostfixOperators.Contains(isInfixOperatorMemory) ? TokenTypes.PostFixOperator : TokenTypes.Operator);
                     isInfixOperatorMemory = "";
-                    //last = TokenTypes.Operator;
                 }
 
                 if ((97 <= (int)token && (int)token <= 122) || (65 <= (int)token && (int)token <= 90))  // Is a character -> variable or fcn ?
@@ -191,15 +190,6 @@ namespace SharpCalculatorLib
                             break;
                         }
                     }
-
-                    //if (AreParenthesisMatching(string.Join("", cleanedInfixExpression)))
-                    //{
-                    //    cleanedInfixExpression.Add("]");
-                    //}
-                    //else
-                    //{
-                    //    cleanedInfixExpression.Add(token.ToString());
-                    //}
                     last = TokenTypes.RightParenthesis;
                 }
                 else if (".0123456789".Contains(token))  // DIGIT
@@ -238,7 +228,6 @@ namespace SharpCalculatorLib
                 }
                 last = (State.PostfixOperators.Contains(isInfixOperatorMemory) ? TokenTypes.PostFixOperator : TokenTypes.Operator);
                 isInfixOperatorMemory = "";
-                //last = TokenTypes.Operator;
             }
 
             if (cleanedInfixExpression.Contains("["))
@@ -532,7 +521,7 @@ namespace SharpCalculatorLib
                 {
                     output.Add(token);
                     output.Add("Get"); // temp but used to throws exception
-                    Logger.DebugLog("temp was called");
+                    //Logger.DebugLog("temp was called");
                 }
             }
 
