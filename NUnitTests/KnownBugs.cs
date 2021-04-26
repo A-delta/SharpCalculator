@@ -44,6 +44,15 @@ namespace NUnitTests
 
             _result = _calc.ProcessExpression("1==1.0");
             Assert.IsTrue(_result == "True", "was a bug 11/04/21");
+
+            _result = _calc.ProcessExpression("ln(e)");
+            Assert.IsTrue(_result == "1", "");
+
+            _result = _calc.ProcessExpression("log(10)");
+            Assert.IsTrue(_result == "1", "");
+
+            _result = _calc.ProcessExpression("logb(e, e)");
+            Assert.IsTrue(_result == "1", "https://github.com/A-delta/SharpCalculator/commit/b7f9ff81bfab7ae1c4285c6cedb4098a7db72a87");
         }
 
         [Test]

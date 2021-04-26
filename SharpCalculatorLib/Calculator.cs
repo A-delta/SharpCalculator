@@ -162,7 +162,6 @@ namespace SharpCalculatorLib
 
                 if (token == ',') { cleanedInfixExpression.Add(token.ToString()); last = TokenTypes.Comma; }
 
-                Logger.DebugLog(last.ToString());
                 if (token == '(')
                 {
                     if (last == TokenTypes.Function)
@@ -291,7 +290,6 @@ namespace SharpCalculatorLib
             {
                 finalInfixExpression = cleanedInfixExpression;
             }
-            //Logger.DebugLog(expression);
             return VerifyCleanedExpression(expression, finalInfixExpression);
         }
 
@@ -346,7 +344,6 @@ namespace SharpCalculatorLib
                 {
                     if (varName.Contains(ope))
                     {
-                        Logger.DebugLog(ope);
                         throw new IllegalVariableNameException($"Variable names can not contain number, operators or bool value.");
                     }
                 }
