@@ -85,6 +85,7 @@ namespace SharpCalculatorLib
 
             TokenTypes last = TokenTypes.None;
             TokenTypes last2 = TokenTypes.None;
+            bool needClose = false;
             bool space = false;
 
             char[] characters = expression.ToCharArray();
@@ -110,8 +111,11 @@ namespace SharpCalculatorLib
                     }
                     if (isInfixOperatorMemory == "-" && last != TokenTypes.Number && last != TokenTypes.RightParenthesis && last != TokenTypes.Character)  // NEGATIVE NUMBER
                     {
+                        Logger.DebugLog("1");
+                        cleanedInfixExpression.Add("(");
                         cleanedInfixExpression.Add("0");
                         cleanedInfixExpression.Add(isInfixOperatorMemory);
+                        needClose = true;
                     }
                     else
                     {
@@ -206,6 +210,11 @@ namespace SharpCalculatorLib
                         last = TokenTypes.Number;
                     }
                 }
+                if (needClose)
+                {
+                    cleanedInfixExpression.Add(")");
+                    needClose = false;
+                }
                 isInfixOperator = false;
                 space = (token == ' ');
                 last2 = last;
@@ -219,6 +228,7 @@ namespace SharpCalculatorLib
                 }
                 if (isInfixOperatorMemory == "-" && last != TokenTypes.Number && last != TokenTypes.RightParenthesis)  // NEGATIVE NUMBER
                 {
+                    Logger.DebugLog("2");
                     cleanedInfixExpression.Add("0");
                     cleanedInfixExpression.Add(isInfixOperatorMemory);
                 }
