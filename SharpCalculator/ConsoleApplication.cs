@@ -99,6 +99,7 @@ namespace SharpCalculatorApp
         {
             int i = 0;
             bool keepOpen = false;
+            string[] expressions;
             if (args.Length != 0)
             {
                 foreach (string arg in args)
@@ -125,7 +126,7 @@ namespace SharpCalculatorApp
 
                         case "-i":
                         case "--input":
-                            string[] expressions = LoadFile(args[i + 1]);
+                            expressions = LoadFile(args[i + 1]);
                             int lineNumber = 1;
                             Console.WriteLine($"Processing {args[i + 1]} : ");
                             foreach (string expression in expressions)
@@ -133,16 +134,14 @@ namespace SharpCalculatorApp
                                 Console.WriteLine($"{lineNumber}\t{expression} = {calc.ProcessExpression(expression)}");
                                 lineNumber++;
                             }
-
                             break;
 
                         case "-ri":
                         case "--rawinput":
-                            string[] expressions = LoadFile(args[i + 1]);
+                            expressions = LoadFile(args[i + 1]);
                             foreach (string expression in expressions)
                             {
                                 Console.WriteLine($"{expression} = {calc.ProcessExpression(expression)}");
-                                lineNumber++;
                             }
 
                             break;
