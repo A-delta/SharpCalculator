@@ -135,6 +135,17 @@ namespace SharpCalculatorApp
                             }
 
                             break;
+
+                        case "-ri":
+                        case "--rawinput":
+                            string[] expressions = LoadFile(args[i + 1]);
+                            foreach (string expression in expressions)
+                            {
+                                Console.WriteLine($"{expression} = {calc.ProcessExpression(expression)}");
+                                lineNumber++;
+                            }
+
+                            break;
                     }
                     i++;
                 }
