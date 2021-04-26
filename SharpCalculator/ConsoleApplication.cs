@@ -13,7 +13,7 @@ namespace SharpCalculatorApp
         public ConsoleApplication(string[] args)
         {
             calc = new Calculator(false);
-            ProcessArguments(args);
+            ProcessCLIArguments(args);
 
             Version Appversion = System.Reflection.Assembly.GetEntryAssembly().GetName().Version;
             Version libVersion = System.Reflection.Assembly.Load("SharpCalculatorLib").GetName().Version;
@@ -46,11 +46,6 @@ namespace SharpCalculatorApp
                     }
                 }
             }
-        }
-
-        public static List<string> GetMathFunctions()
-        {
-            return Calculator.GetAllFunctions();
         }
 
         private void ProcessExpression(string expression)
@@ -95,7 +90,7 @@ namespace SharpCalculatorApp
             }
         }
 
-        private void ProcessArguments(string[] args)
+        private void ProcessCLIArguments(string[] args)
         {
             int i = 0;
             bool keepOpen = false;
@@ -162,6 +157,11 @@ namespace SharpCalculatorApp
             {
                 throw new FileNotFoundException();
             }
+        }
+
+        public static List<string> GetMathFunctions()
+        {
+            return Calculator.GetAllFunctions();
         }
 
         private void PrintHelp() // DIRTY
