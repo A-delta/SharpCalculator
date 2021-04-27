@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace SharpCalculatorLib.MathFunctions
 {
-    public class Divide : IFunction
+    public class GetExactValue : IFunction
     {
-        private String _docstring = "Returns the fraction of two numbers";
+        private String _docstring = "Returns the division of two numbers";
 
         public String Docstring
         {
@@ -26,7 +26,7 @@ namespace SharpCalculatorLib.MathFunctions
             get => _postfixOperator;
         }
 
-        private String _infixOperator = "/";
+        private String _infixOperator = "//";
 
         public String InfixOperator
         {
@@ -44,14 +44,17 @@ namespace SharpCalculatorLib.MathFunctions
 
         public List<String> getAliases()
         {
-            _aliases.Add("divide");
-            _aliases.Add("/");
+            _aliases.Add("exact");
+            _aliases.Add("//");
             return _aliases;
         }
 
         public string ExecuteFunction(State state, List<string> args)
         {
-            return FractionSimplifier.Simplify(state, args);
+            double arg1 = VarNumberConverter.GetNumber(state, args[1]);
+            double arg2 = VarNumberConverter.GetNumber(state, args[0]);
+
+            return (arg1 / arg2).ToString();
         }
     }
 }

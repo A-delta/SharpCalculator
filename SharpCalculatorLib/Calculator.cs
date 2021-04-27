@@ -561,7 +561,7 @@ namespace SharpCalculatorLib
             string result;
 
             Stack operands = new();
-
+            IFunction function;
             foreach (String ch in PostfixExpression)
             {
                 if (Double.TryParse(ch, out double temp))
@@ -574,7 +574,14 @@ namespace SharpCalculatorLib
                 }
                 else if (IsFunctionCall(ch) != "None")
                 {
-                    IFunction function = GetFunction(ch);
+                    if (ch == "Divide" && PostfixExpression.Count > 3)
+                    {
+                        function = GetFunction("GetExactValue");
+                    }
+                    else
+                    {
+                        function = GetFunction(ch);
+                    }
 
                     int argumentsCount = function.ArgumentsCount;
                     List<string> args = new();
@@ -585,7 +592,6 @@ namespace SharpCalculatorLib
                     }
 
                     result = function.ExecuteFunction(State, args);
-
                     _logger.ConsoleLogCalculation(ch, args, result);
                     operands.Push(result);
                 }

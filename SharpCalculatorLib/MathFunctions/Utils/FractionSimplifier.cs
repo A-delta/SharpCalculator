@@ -18,6 +18,7 @@ namespace SharpCalculatorLib.MathFunctions
 
                 return (bot != 1 ? top + " / " + bot : top.ToString());
             }
+
             return a + " / " + b;
         }
     }
