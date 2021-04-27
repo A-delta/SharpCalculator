@@ -53,6 +53,12 @@ namespace NUnitTests
 
             _result = _calc.ProcessExpression("logb(e, e)");
             Assert.IsTrue(_result == "1", "https://github.com/A-delta/SharpCalculator/commit/b7f9ff81bfab7ae1c4285c6cedb4098a7db72a87");
+
+            _result = _calc.ProcessExpression("-e");
+            Assert.IsTrue(_result == "-2.718281828459045", "");
+
+            _result = _calc.ProcessExpression("-pi");
+            Assert.IsTrue(_result == "-3.141592653589793", "");
         }
 
         [Test]
