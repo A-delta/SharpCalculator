@@ -51,10 +51,7 @@ namespace SharpCalculatorLib.MathFunctions
 
         public string ExecuteFunction(State state, List<string> args)
         {
-            double arg1 = VarNumberConverter.GetNumber(state, args[0]);
-            double arg2 = VarNumberConverter.GetNumber(state, args[1]);
-
-            return (arg2 / arg1).ToString();
+            return FractionSimplifier.Simplify(state, args);
         }
     }
 }
