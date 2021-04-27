@@ -55,8 +55,8 @@ namespace SharpCalculatorLib
         private Dictionary<string, string> setCommonVariables()
         {
             Dictionary<string, string> variables = new();
-            variables.Add("pi", "3.14159265358979323846264338327950288419716939937510");
-            variables.Add("e", "2.718281828459045235360287471352662497757247093699");
+            variables.Add("pi", "3.141592653589793");
+            variables.Add("e", "2.718281828459045");
 
             return variables;
         }
