@@ -85,6 +85,7 @@ namespace SharpCalculatorLib
 
             TokenTypes last = TokenTypes.None;
             TokenTypes last2 = TokenTypes.None;
+            bool needClose = false;
             bool space = false;
 
             char[] characters = expression.ToCharArray();
@@ -110,8 +111,18 @@ namespace SharpCalculatorLib
                     }
                     if (isInfixOperatorMemory == "-" && last != TokenTypes.Number && last != TokenTypes.RightParenthesis && last != TokenTypes.Character)  // NEGATIVE NUMBER
                     {
-                        cleanedInfixExpression.Add("0");
-                        cleanedInfixExpression.Add(isInfixOperatorMemory);
+                        if (last == TokenTypes.Operator)
+                        {
+                            cleanedInfixExpression.Add("(");
+                            cleanedInfixExpression.Add("0");
+                            cleanedInfixExpression.Add(isInfixOperatorMemory);
+                            needClose = true;
+                        }
+                        else
+                        {
+                            cleanedInfixExpression.Add("0");
+                            cleanedInfixExpression.Add(isInfixOperatorMemory);
+                        }
                     }
                     else
                     {
@@ -207,10 +218,24 @@ namespace SharpCalculatorLib
                         last = TokenTypes.Number;
                     }
                 }
+
+                if (needClose && last != TokenTypes.Character && IsVariableCall(cleanedInfixExpression[^2]))
+                {
+                    cleanedInfixExpression.Insert(cleanedInfixExpression.Count - 1, ")");
+                    needClose = false;
+                }
+
                 isInfixOperator = false;
                 space = (token == ' ');
                 last2 = last;
             }
+
+            if (needClose && last == TokenTypes.Character && IsVariableCall(cleanedInfixExpression[^1]))
+            {
+                cleanedInfixExpression.Add(")");
+                needClose = false;
+            }
+
 
             if (isInfixOperatorMemory.Length != 0)
             {

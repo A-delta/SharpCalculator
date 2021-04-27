@@ -141,6 +141,9 @@ namespace NUnitTests
 
             _result = _calc.ProcessExpression("(4 - sqrt(25))");
             Assert.IsTrue(_result == "-1", "was a bug");
+
+            _result = _calc.ProcessExpression("45 * -pi");
+            Assert.IsTrue(_result == "-141.3716694115407", "was a bug");
         }
 
         [Test]
