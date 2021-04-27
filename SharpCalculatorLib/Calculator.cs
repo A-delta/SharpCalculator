@@ -106,7 +106,7 @@ namespace SharpCalculatorLib
                 {
                     if (!State.InfixOperators.Contains(isInfixOperatorMemory) && !State.PostfixOperators.Contains(isInfixOperatorMemory))
                     {
-                        Logger.DebugLog(isInfixOperatorMemory);
+                        //Logger.DebugLog(isInfixOperatorMemory);
                         throw new UnknownOperatorException("This operator does not exist");
                     }
                     if (isInfixOperatorMemory == "-" && last != TokenTypes.Number && last != TokenTypes.RightParenthesis && last != TokenTypes.Character)  // NEGATIVE NUMBER
@@ -235,7 +235,6 @@ namespace SharpCalculatorLib
                 cleanedInfixExpression.Add(")");
                 needClose = false;
             }
-
 
             if (isInfixOperatorMemory.Length != 0)
             {
