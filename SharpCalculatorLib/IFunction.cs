@@ -12,7 +12,7 @@ namespace SharpCalculatorLib
         String InfixOperator { get; }
         int OperatorPriority { get; }
 
-        public string ExecuteFunction(State state, List<string> args);
+        public Fraction ExecuteFunction(State state, List<string> args);
 
         public List<String> getAliases();
     }

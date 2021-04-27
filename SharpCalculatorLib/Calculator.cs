@@ -558,7 +558,7 @@ namespace SharpCalculatorLib
 
         public string EvaluatePostfixExpression(List<String> PostfixExpression)
         {
-            string result;
+            Fraction result;
 
             Stack operands = new();
 
@@ -586,7 +586,7 @@ namespace SharpCalculatorLib
 
                     result = function.ExecuteFunction(State, args);
 
-                    _logger.ConsoleLogCalculation(ch, args, result);
+                    _logger.ConsoleLogCalculation(ch, args, result.ToString());
                     operands.Push(result);
                 }
                 else
@@ -594,12 +594,12 @@ namespace SharpCalculatorLib
                     operands.Push(ch);
                 }
             }
-            result = (string)operands.Pop();
+            result = (Fraction)operands.Pop();
             if (operands.Count != 0)
             {
                 throw new Exception();
             }
-            return result;
+            return result.ToString();
         }
 
         public static List<string> GetAllFunctions()

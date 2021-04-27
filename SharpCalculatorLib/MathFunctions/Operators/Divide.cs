@@ -5,7 +5,7 @@ namespace SharpCalculatorLib.MathFunctions
 {
     public class Divide : IFunction
     {
-        private String _docstring = "Returns the division of two numbers";
+        private String _docstring = "Returns the fraction of two numbers";
 
         public String Docstring
         {
@@ -19,6 +19,8 @@ namespace SharpCalculatorLib.MathFunctions
             get => _argumentsCount;
         }
 
+        private String _infixOperator = "/";
+
         private String _postfixOperator = "None";
 
         public String PostfixOperator
@@ -26,18 +28,16 @@ namespace SharpCalculatorLib.MathFunctions
             get => _postfixOperator;
         }
 
-        private String _infixOperator = "/";
-
         public String InfixOperator
         {
             get => _infixOperator;
         }
 
-        private int _operatorPriority = 4;
+        private int _OperatorPriority = 4;
 
         public int OperatorPriority
         {
-            get => _operatorPriority;
+            get => _OperatorPriority;
         }
 
         private List<String> _aliases = new List<string>();
@@ -49,12 +49,21 @@ namespace SharpCalculatorLib.MathFunctions
             return _aliases;
         }
 
-        public string ExecuteFunction(State state, List<string> args)
+        public Fraction ExecuteFunction(State state, List<string> args)
         {
-            double arg1 = VarNumberConverter.GetNumber(state, args[0]);
-            double arg2 = VarNumberConverter.GetNumber(state, args[1]);
+            if (args[0].Contains("/") && args[1].Contains("/"))
+            {
+                Fraction arg1 = Fraction.Parse(args[0] + "/" + args[1]);
 
-            return (arg2 / arg1).ToString();
+                return arg1;
+            }
+            else
+            {
+                Fraction arg1 = Fraction.Parse(args[1]);
+                Fraction arg2 = Fraction.Parse(args[0]);
+
+                return (arg1 / arg2);
+            }
         }
     }
 }

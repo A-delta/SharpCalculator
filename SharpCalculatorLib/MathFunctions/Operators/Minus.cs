@@ -19,14 +19,14 @@ namespace SharpCalculatorLib.MathFunctions
             get => _argumentsCount;
         }
 
+        private String _infixOperator = "-";
+
         private String _postfixOperator = "None";
 
         public String PostfixOperator
         {
             get => _postfixOperator;
         }
-
-        private String _infixOperator = "-";
 
         public String InfixOperator
         {
@@ -49,12 +49,12 @@ namespace SharpCalculatorLib.MathFunctions
             return _aliases;
         }
 
-        public string ExecuteFunction(State state, List<string> args)
+        public Fraction ExecuteFunction(State state, List<string> args)
         {
-            double arg1 = VarNumberConverter.GetNumber(state, args[0]);
-            double arg2 = VarNumberConverter.GetNumber(state, args[1]);
+            Fraction arg1 = Fraction.Parse(args[1]);
+            Fraction arg2 = Fraction.Parse(args[0]);
 
-            return (arg2 - arg1).ToString();
+            return (arg1 - arg2);
         }
     }
 }
