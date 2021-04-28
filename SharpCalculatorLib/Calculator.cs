@@ -11,6 +11,7 @@ namespace SharpCalculatorLib
     public class Calculator
     {
         private readonly Logger _logger;
+        private bool outputFrac;
         public State State;
 
         private enum TokenTypes
@@ -31,6 +32,8 @@ namespace SharpCalculatorLib
             _logger = new Logger(verbose);
             State = new State();
 
+            outputFrac = true;
+
             CultureInfo cultureInfo = (CultureInfo)Thread.CurrentThread.CurrentCulture.Clone();
             cultureInfo.NumberFormat.NegativeInfinitySymbol = "-Infinity"; // some system printed "8" instead of +oo
             cultureInfo.NumberFormat.PositiveInfinitySymbol = "+Infinity";
@@ -40,6 +43,11 @@ namespace SharpCalculatorLib
         public void ChangeVerboseState()
         {
             _logger.Verbose = !_logger.Verbose;
+        }
+
+        public void ChangeOutputType()
+        {
+            outputFrac = !outputFrac;
         }
 
         public Dictionary<string, IFunction> GetHelp()
@@ -552,6 +560,8 @@ namespace SharpCalculatorLib
             {
                 output.Add(IsFunctionCall((string)operatorStack.Pop()));
             }
+
+            if (!outputFrac) { output.Add("Exact"); }
 
             return output;
         }

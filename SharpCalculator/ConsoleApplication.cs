@@ -59,6 +59,12 @@ namespace SharpCalculatorApp
                     calc.ChangeVerboseState();
                     break;
 
+                case "<":
+                case "frac":
+                case "dec":
+                    calc.ChangeOutputType();
+                    break;
+
                 case "history":
                 case "hist":
                     PrintHistory();
@@ -119,6 +125,17 @@ namespace SharpCalculatorApp
                             _verbose = true;
                             keepOpen = true;
                             calc.ChangeVerboseState();
+                            break;
+
+                        case "-f":
+                        case "--fraction":
+                            keepOpen = true;
+                            break;
+
+                        case "-d":
+                        case "--decimal":
+                            calc.ChangeOutputType();
+                            keepOpen = true;
                             break;
 
                         case "-i":
