@@ -572,13 +572,21 @@ namespace SharpCalculatorLib
                     for (int i = 0; i < argumentsCount; i++)
                     {
                         var popped = operands.Pop();
-                        args.Add((string)popped);
+                        args.Add(popped.ToString());
                     }
 
                     result = function.ExecuteFunction(State, args);
 
-                    _logger.ConsoleLogCalculation(ch, args, result.ToString());
-                    operands.Push(result.ToString());
+                    if (result.exact)
+                    {
+                        operands.Push(result.RoundedValue);
+                        _logger.ConsoleLogCalculation(ch, args, result.RoundedValue.ToString());
+                    }
+                    else
+                    {
+                        operands.Push(result);
+                        _logger.ConsoleLogCalculation(ch, args, result.ToString());
+                    }
                 }
                 else
                 {
