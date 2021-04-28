@@ -9,6 +9,7 @@ namespace SharpCalculatorApp
     {
         private bool _verbose;
         private readonly Calculator calc;
+        private string lastExpression = ""; // temp need wewrite history
 
         public ConsoleApplication(string[] args)
         {
@@ -61,6 +62,11 @@ namespace SharpCalculatorApp
                     break;
 
                 case "<":
+                    calc.ChangeOutputType();
+                    ProcessExpression(lastExpression);
+                    calc.ChangeOutputType();
+                    break;
+
                 case "frac":
                 case "dec":
                     calc.ChangeOutputType();
@@ -94,6 +100,7 @@ namespace SharpCalculatorApp
                     break;
 
                 default:
+                    lastExpression = expression; // temp
                     string result = calc.ProcessExpression(expression);
                     Console.WriteLine(">>  " + result + "\n");
                     break;
