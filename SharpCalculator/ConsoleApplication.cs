@@ -57,12 +57,14 @@ namespace SharpCalculatorApp
                 case "verbose":
                     _verbose = !_verbose;
                     calc.ChangeVerboseState();
+                    Console.WriteLine("Changed verbose state");
                     break;
 
                 case "<":
                 case "frac":
                 case "dec":
                     calc.ChangeOutputType();
+                    Console.WriteLine("Changed output type");
                     break;
 
                 case "history":
