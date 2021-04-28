@@ -17,19 +17,37 @@ namespace SharpCalculatorLib
 
             if (Denominator != 1)
             {
-                int pgcd = PGCD(Numerator, Denominator);
-                if (pgcd > 1)
-                {
-                    Numerator /= pgcd;
-                    Denominator /= pgcd;
-                }
-
-                RoundedValue = (double)Numerator / (double)Denominator;
+                Simplify();
             }
             else
             {
                 RoundedValue = numerator;
             }
+        }
+
+        public Fraction(double num, double den)
+        {
+            int afterCommaMaxNum = 0;
+            int afterCommaMaxDen = 0;
+
+            string numString = num.ToString().Length >= 8 ? num.ToString()[0..8] : num.ToString();
+
+            string denString = den.ToString().Length >= 8 ? den.ToString()[0..8] : den.ToString();
+
+            if (numString.Contains("."))
+            {
+                afterCommaMaxNum = numString.Substring(numString.IndexOf(".")).Length - 1;
+            }
+            if (denString.Contains("."))
+            {
+                afterCommaMaxDen = denString.Substring(denString.IndexOf(".")).Length - 1;
+            }
+
+            int afterCommaMax = Math.Max(afterCommaMaxNum, afterCommaMaxDen);
+
+            Numerator = (int)(num * (Math.Pow(10, afterCommaMax)));
+            Denominator = (int)(den * (Math.Pow(10, afterCommaMax)));
+            Simplify();
         }
 
         public Fraction(double roundedValue)
@@ -77,6 +95,18 @@ namespace SharpCalculatorLib
 
                 return wantRounded ? new Fraction((double)num / (double)den) : new Fraction(num, den);
             }
+        }
+
+        private void Simplify()
+        {
+            int pgcd = PGCD(Numerator, Denominator);
+            if (pgcd > 1)
+            {
+                Numerator /= pgcd;
+                Denominator /= pgcd;
+            }
+
+            RoundedValue = (double)Numerator / (double)Denominator;
         }
 
         public static Fraction operator +(Fraction a, Fraction b)
@@ -133,6 +163,8 @@ namespace SharpCalculatorLib
             return new Fraction(a.Numerator * b.Denominator, a.Denominator * b.Numerator);
         }
 
+        public static Fraction Pow(Fraction a, Fraction b) => new Fraction(Math.Pow(b.Numerator, a.RoundedValue), Math.Pow(b.Denominator, a.RoundedValue));
+
         public override string ToString()
         {
             if (this.exact)
@@ -142,8 +174,6 @@ namespace SharpCalculatorLib
 
             return (this.Denominator == 1 ? this.Numerator.ToString() : $"{this.Numerator}/{this.Denominator}");
         }
-
-        //public static implicit operator string(Fraction a) => $"{a.Numerator}/{a.Denominator}";
 
         private int PGCD(int a, int b)
         {
