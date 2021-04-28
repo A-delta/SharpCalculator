@@ -6,16 +6,22 @@ namespace SharpCalculatorLib
     {
         public int Numerator;
         public int Denominator;
+        public Fraction ExactValue;
 
         public Fraction(int numerator, int denominator = 1)
         {
             Numerator = numerator;
             Denominator = denominator;
-            int pgcd = PGCD(Numerator, Denominator);
-            if (pgcd > 1)
+            if (Denominator != 1)
             {
-                Numerator /= pgcd;
-                Denominator /= pgcd;
+                int pgcd = PGCD(Numerator, Denominator);
+                if (pgcd > 1)
+                {
+                    Numerator /= pgcd;
+                    Denominator /= pgcd;
+                }
+
+                ExactValue = new Fraction(Numerator / Denominator, 1);
             }
         }
 
@@ -68,8 +74,10 @@ namespace SharpCalculatorLib
 
         public override string ToString()
         {
-            return (this.Denominator == 1 ? this.Numerator.ToString() : $"{this.Numerator} / {this.Denominator}");
+            return (this.Denominator == 1 ? this.Numerator.ToString() : $"{this.Numerator}/{this.Denominator}");
         }
+
+        //public static implicit operator string(Fraction a) => $"{a.Numerator}/{a.Denominator}";
 
         private int PGCD(int a, int b)
         {

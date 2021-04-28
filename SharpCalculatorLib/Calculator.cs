@@ -559,20 +559,11 @@ namespace SharpCalculatorLib
         public string EvaluatePostfixExpression(List<String> PostfixExpression)
         {
             Fraction result;
-
             Stack operands = new();
 
             foreach (String ch in PostfixExpression)
             {
-                if (Double.TryParse(ch, out double temp))
-                {
-                    operands.Push(ch);
-                }
-                else if (ch == "true" || ch == "false")
-                {
-                    return ch;
-                }
-                else if (IsFunctionCall(ch) != "None")
+                if (IsFunctionCall(ch) != "None")
                 {
                     IFunction function = GetFunction(ch);
 
@@ -581,20 +572,23 @@ namespace SharpCalculatorLib
                     for (int i = 0; i < argumentsCount; i++)
                     {
                         var popped = operands.Pop();
-                        args.Add(popped.ToString());
+                        args.Add((string)popped);
                     }
 
                     result = function.ExecuteFunction(State, args);
 
                     _logger.ConsoleLogCalculation(ch, args, result.ToString());
-                    operands.Push(result);
+                    operands.Push(result.ToString());
                 }
                 else
                 {
                     operands.Push(ch);
                 }
             }
-            result = (Fraction)operands.Pop();
+            var poppedRes = operands.Pop();
+
+            result = Fraction.Parse(poppedRes.ToString());
+
             if (operands.Count != 0)
             {
                 throw new Exception();
