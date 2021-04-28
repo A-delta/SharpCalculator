@@ -109,11 +109,6 @@ namespace SharpCalculatorLib
 
         public static Fraction operator *(Fraction a, Fraction b)
         {
-            Logger.DebugLog(a.exact.ToString());
-            Logger.DebugLog(b.exact.ToString());
-
-            //Logger.DebugLog(a.RoundedValue.ToString());
-            //Logger.DebugLog(b.RoundedValue.ToString());
             if (a.exact || b.exact)
             {
                 return new Fraction(a.RoundedValue * b.RoundedValue);

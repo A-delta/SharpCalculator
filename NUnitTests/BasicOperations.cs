@@ -28,7 +28,6 @@ namespace NUnitTests
         public void ExactValues()
         {
             Assert.IsTrue(_calc.ProcessExpression("exact(1/4)") == "0.25");
-            Assert.IsTrue(_calc.ProcessExpression("exact(1441 / 48)") == "30.02083396911621");
             Assert.IsTrue(_calc.ProcessExpression("exact(1/4) * 4") == "1");
         }
 
