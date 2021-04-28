@@ -8,7 +8,6 @@ namespace NUnitTests
     public class BasicOperations
     {
         private Calculator _calc;
-        private string _result;
 
         [SetUp]
         public void Setup()
@@ -30,6 +29,18 @@ namespace NUnitTests
         {
             Assert.IsTrue(_calc.ProcessExpression("exact(1/4)") == "0.25");
             Assert.IsTrue(_calc.ProcessExpression("exact(1441 / 48)") == "30.02083396911621");
+            Assert.IsTrue(_calc.ProcessExpression("exact(1/4) * 4") == "1");
+        }
+
+        [Test]
+        public void Fractions()
+        {
+            Assert.IsTrue(_calc.ProcessExpression("1/2 + 2/2") == "3/2");
+            Assert.IsTrue(_calc.ProcessExpression("1/4/4") == "1/16");
+            Assert.IsTrue(_calc.ProcessExpression("1/2 - 8/2") == "-7/2");
+            Assert.IsTrue(_calc.ProcessExpression("1/4 * 1/4") == "1/16");
+            Assert.IsTrue(_calc.ProcessExpression("1/(4/4)") == "1");
+            Assert.IsTrue(_calc.ProcessExpression("(1/4)/4") == "1/16");
         }
     }
 }
