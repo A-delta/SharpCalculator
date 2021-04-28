@@ -561,7 +561,7 @@ namespace SharpCalculatorLib
                 output.Add(IsFunctionCall((string)operatorStack.Pop()));
             }
 
-            if (!outputFrac) { output.Add("Exact"); }
+            if (!outputFrac) { output.Add("Decimal"); }
 
             return output;
         }

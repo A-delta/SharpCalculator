@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace SharpCalculatorLib.MathFunctions
 {
-    public class Exact : IFunction
+    public class Fractional : IFunction
     {
-        private String _docstring = "Returns the exact value of a fraction";
+        private String _docstring = "Returns the fraction representation of a value";
 
         public String Docstring
         {
@@ -44,14 +44,27 @@ namespace SharpCalculatorLib.MathFunctions
 
         public List<String> getAliases()
         {
-            _aliases.Add("exact");
+            _aliases.Add("frac");
+            _aliases.Add("fraction");
             return _aliases;
         }
 
         public Fraction ExecuteFunction(State state, List<string> args)
         {
-            Fraction arg1 = Fraction.Parse(args[0], true);
-            return arg1;
+            string nbString = args[0];
+            Fraction nb = SharpCalculatorLib.Fraction.Parse(nbString, false);
+
+            if (!nbString.Contains("."))
+            {
+                return nb;
+            }
+
+            int afterComma = (nbString.Substring(nbString.IndexOf(".")).Length - 1);
+
+            double num = nb.RoundedValue * (Math.Pow(10, afterComma));
+
+            nb = new Fraction((int)num, (int)Math.Pow(10, afterComma));
+            return nb;
         }
     }
 }
