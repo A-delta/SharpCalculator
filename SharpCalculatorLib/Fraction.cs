@@ -30,9 +30,9 @@ namespace SharpCalculatorLib
             int afterCommaMaxNum = 0;
             int afterCommaMaxDen = 0;
 
-            string numString = num.ToString().Length >= 8 ? num.ToString()[0..8] : num.ToString();
+            string numString = num.ToString().Length >= 8 ? num.ToString()[0..10] : num.ToString();
 
-            string denString = den.ToString().Length >= 8 ? den.ToString()[0..8] : den.ToString();
+            string denString = den.ToString().Length >= 8 ? den.ToString()[0..10] : den.ToString();
 
             if (numString.Contains("."))
             {

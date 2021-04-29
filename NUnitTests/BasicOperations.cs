@@ -27,8 +27,8 @@ namespace NUnitTests
         [Test]
         public void ExactValues()
         {
-            Assert.IsTrue(_calc.ProcessExpression("exact(1/4)") == "0.25");
-            Assert.IsTrue(_calc.ProcessExpression("exact(1/4) * 4") == "1");
+            Assert.IsTrue(_calc.ProcessExpression("dec(1/4)") == "0.25");
+            Assert.IsTrue(_calc.ProcessExpression("dec(1/4) * 4") == "1");
         }
 
         [Test]
@@ -40,6 +40,12 @@ namespace NUnitTests
             Assert.IsTrue(_calc.ProcessExpression("1/4 * 1/4") == "1/16");
             Assert.IsTrue(_calc.ProcessExpression("1/(4/4)") == "1");
             Assert.IsTrue(_calc.ProcessExpression("(1/4)/4") == "1/16");
+        }
+
+        [Test]
+        public void Simplify()
+        {
+            Assert.IsTrue(_calc.ProcessExpression("2/4") == "1/2");
         }
     }
 }
