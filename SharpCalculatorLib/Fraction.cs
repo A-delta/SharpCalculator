@@ -5,8 +5,8 @@ namespace SharpCalculatorLib
 {
     public class Fraction
     {
-        public int Numerator;
-        public int Denominator;
+        public double Numerator;
+        public double Denominator;
         public double RoundedValue;
         public bool exact;
 
@@ -46,8 +46,8 @@ namespace SharpCalculatorLib
 
             int afterCommaMax = Math.Max(afterCommaMaxNum, afterCommaMaxDen);
 
-            Numerator = (int)(num * (Math.Pow(10, afterCommaMax)));
-            Denominator = (int)(den * (Math.Pow(10, afterCommaMax)));
+            Numerator = (num * (Math.Pow(10, afterCommaMax)));
+            Denominator = (den * (Math.Pow(10, afterCommaMax)));
             Simplify();
         }
 
@@ -64,8 +64,8 @@ namespace SharpCalculatorLib
         {
             Logger.DebugLog(expression);
 
-            int num;
-            int den;
+            double num;
+            double den;
 
             if (expression.Contains("."))
             {
@@ -90,7 +90,7 @@ namespace SharpCalculatorLib
 
                 return wantRounded ? new Fraction((double)num / (double)den) : new Fraction(num, den);
             }
-            else if (int.TryParse(expression, out num))
+            else if (double.TryParse(expression, out num))
             {
                 den = 1;
                 return wantRounded ? new Fraction((double)num / (double)den) : new Fraction(num, den);
@@ -121,7 +121,7 @@ namespace SharpCalculatorLib
 
         private void Simplify()
         {
-            int pgcd = PGCD(Numerator, Denominator);
+            int pgcd = PGCD((int)Numerator, (int)Denominator);
             if (pgcd > 1)
             {
                 Numerator /= pgcd;
