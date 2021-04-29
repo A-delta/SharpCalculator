@@ -578,11 +578,11 @@ namespace SharpCalculatorLib
                     IFunction function = GetFunction(ch);
 
                     int argumentsCount = function.ArgumentsCount;
-                    List<string> args = new();
+                    List<Fraction> args = new();
                     for (int i = 0; i < argumentsCount; i++)
                     {
-                        var popped = operands.Pop();
-                        args.Add(popped.ToString());
+                        Fraction popped = Fraction.Parse(operands.Pop().ToString());
+                        args.Add(popped);
                     }
 
                     result = function.ExecuteFunction(State, args);

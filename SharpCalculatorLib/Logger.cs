@@ -73,16 +73,16 @@ namespace SharpCalculatorLib
             }
         }
 
-        public void ConsoleLogCalculation(String functionName, List<string> args, string result)
+        public void ConsoleLogCalculation(String functionName, List<Fraction> args, string result)
         {
             if (Verbose)
             {
                 String log;
                 log = functionName + "(";
                 args.Reverse();
-                foreach (string arg in args)
+                foreach (Fraction arg in args)
                 {
-                    log = log + arg + ", ";
+                    log = log + arg.ToString() + ", ";
                 }
                 log = "\t" + log[0..^2] + ") = " + result;
 

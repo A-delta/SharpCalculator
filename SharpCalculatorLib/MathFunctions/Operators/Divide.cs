@@ -49,21 +49,9 @@ namespace SharpCalculatorLib.MathFunctions
             return _aliases;
         }
 
-        public Fraction ExecuteFunction(State state, List<string> args)
+        public Fraction ExecuteFunction(State state, List<Fraction> args)
         {
-            if (args[0].Contains("/") && args[1].Contains("/"))
-            {
-                Fraction arg1 = Fraction.Parse(args[0] + "/" + args[1]);
-
-                return arg1;
-            }
-            else
-            {
-                Fraction arg1 = Fraction.Parse(args[1]);
-                Fraction arg2 = Fraction.Parse(args[0]);
-
-                return (arg1 / arg2);
-            }
+            return (args[0] / args[1]);
         }
     }
 }
