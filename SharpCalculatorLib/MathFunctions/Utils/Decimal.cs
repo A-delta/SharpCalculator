@@ -49,10 +49,10 @@ namespace SharpCalculatorLib.MathFunctions
             return _aliases;
         }
 
-        public Fraction ExecuteFunction(State state, List<string> args)
+        public Fraction ExecuteFunction(State state, List<Fraction> args)
         {
-            Fraction arg1 = Fraction.Parse(args[0], true);
-            return arg1;
+            return Fraction.Parse(state, args[0].RoundedValue.ToString(), true);
+            //return new Fraction(args[0].RoundedValue, 1);
         }
     }
 }

@@ -538,11 +538,6 @@ namespace SharpCalculatorLib
                 else if (IsVariableCall(token) && expression[index + 1] != "=")
                 {
                     output.Add(token);
-                    if (expression.Count == 2)
-                    {
-                        output.Add("Get");  // when typing variable name only
-                    }
-                    //output.Add("Get");  // DELETE THIS AND DO IT IN PROCESS
                 }
                 else if (expression[index + 1] == "=")
                 {
@@ -551,8 +546,6 @@ namespace SharpCalculatorLib
                 else
                 {
                     output.Add(token);
-                    output.Add("Get"); // temp but used to throws exception
-                    //Logger.DebugLog("temp was called");
                 }
             }
 
@@ -581,7 +574,7 @@ namespace SharpCalculatorLib
                     List<Fraction> args = new();
                     for (int i = 0; i < argumentsCount; i++)
                     {
-                        Fraction popped = Fraction.Parse(operands.Pop().ToString());
+                        Fraction popped = Fraction.Parse(State, operands.Pop().ToString());
                         args.Add(popped);
                     }
 
@@ -605,7 +598,7 @@ namespace SharpCalculatorLib
             }
             var poppedRes = operands.Pop();
 
-            result = Fraction.Parse(poppedRes.ToString());
+            result = Fraction.Parse(State, poppedRes.ToString());
 
             if (operands.Count != 0)
             {

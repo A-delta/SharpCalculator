@@ -49,22 +49,19 @@ namespace SharpCalculatorLib.MathFunctions
             return _aliases;
         }
 
-        public Fraction ExecuteFunction(State state, List<string> args)
+        public Fraction ExecuteFunction(State state, List<Fraction> args)
         {
-            string nbString = args[0];
-            Fraction nb = SharpCalculatorLib.Fraction.Parse(nbString, false);
+            Fraction frac = args[0];
+            double nb = args[0].RoundedValue;
+            string nbString = nb.ToString();
 
             if (!nbString.Contains("."))
             {
-                return nb;
+                return frac;
             }
 
-            int afterComma = (nbString.Substring(nbString.IndexOf(".")).Length - 1);
-
-            double num = nb.RoundedValue * (Math.Pow(10, afterComma));
-
-            nb = new Fraction((int)num, (int)Math.Pow(10, afterComma));
-            return nb;
+            frac = new Fraction(nb, 1);
+            return frac;
         }
     }
 }

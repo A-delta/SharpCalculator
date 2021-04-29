@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SharpCalculatorLib.MathFunctions
 {
-    public class Get : IFunction
+    public class Get
     {
         private String _docstring = "Used to get a variable's value";
 
@@ -48,23 +48,22 @@ namespace SharpCalculatorLib.MathFunctions
             return _aliases;
         }
 
-        public Fraction ExecuteFunction(State state, List<string> args)
+        public Fraction ExecuteFunction(State state, string varName)
         {
-            string name = args[0];
-            if (!state.VarManager.UserVars.ContainsKey(name))
+            if (!state.VarManager.UserVars.ContainsKey(varName))
             {
-                if (!state.VarManager.Constants.ContainsKey(name))
+                if (!state.VarManager.Constants.ContainsKey(varName))
                 {
                     throw new ArgumentException("This variable isn't initialised");
                 }
                 else
                 {
-                    return Fraction.Parse(state.VarManager.Constants[name]);
+                    return Fraction.Parse(state, state.VarManager.Constants[varName]);
                 }
             }
             else
             {
-                return Fraction.Parse(state.VarManager.UserVars[name]);
+                return Fraction.Parse(state, state.VarManager.UserVars[varName]);
             }
         }
     }

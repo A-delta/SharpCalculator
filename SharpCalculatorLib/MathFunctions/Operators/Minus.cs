@@ -51,7 +51,7 @@ namespace SharpCalculatorLib.MathFunctions
 
         public Fraction ExecuteFunction(State state, List<Fraction> args)
         {
-            return (args[0] - args[1]);
+            return (args[1] - args[0]);
         }
     }
 }

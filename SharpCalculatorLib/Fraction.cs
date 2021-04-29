@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SharpCalculatorLib.MathFunctions;
+using System;
 
 namespace SharpCalculatorLib
 {
@@ -30,9 +31,9 @@ namespace SharpCalculatorLib
             int afterCommaMaxNum = 0;
             int afterCommaMaxDen = 0;
 
-            string numString = num.ToString().Length >= 8 ? num.ToString()[0..10] : num.ToString();
+            string numString = num.ToString().Length >= 10 ? num.ToString()[0..10] : num.ToString();
 
-            string denString = den.ToString().Length >= 8 ? den.ToString()[0..10] : den.ToString();
+            string denString = den.ToString().Length >= 10 ? den.ToString()[0..10] : den.ToString();
 
             if (numString.Contains("."))
             {
@@ -59,8 +60,13 @@ namespace SharpCalculatorLib
             RoundedValue = roundedValue;
         }
 
-        public static Fraction Parse(string expression, bool wantRounded = false)
+        public static Fraction Parse(State state, string expression, bool wantRounded = false)
         {
+            Logger.DebugLog(expression);
+
+            int num;
+            int den;
+
             if (expression.Contains("."))
             {
                 double value;
@@ -76,24 +82,40 @@ namespace SharpCalculatorLib
 
                 return new Fraction(value);
             }
-            else
+            else if (expression.Contains("/"))
             {
-                int num;
-                int den;
+                string[] expressions = expression.Split("/");
+                num = int.Parse(expressions[0]);
+                den = int.Parse(expressions[1]);
 
-                if (expression.Contains("/"))
+                return wantRounded ? new Fraction((double)num / (double)den) : new Fraction(num, den);
+            }
+            else if (int.TryParse(expression, out num))
+            {
+                den = 1;
+                return wantRounded ? new Fraction((double)num / (double)den) : new Fraction(num, den);
+            }
+            else if (state.VarManager.Constants.ContainsKey(expression) || state.VarManager.UserVars.ContainsKey(expression))
+            {
+                if (!state.VarManager.UserVars.ContainsKey(expression))
                 {
-                    string[] expressions = expression.Split("/");
-                    num = int.Parse(expressions[0]);
-                    den = int.Parse(expressions[1]);
+                    if (!state.VarManager.Constants.ContainsKey(expression))
+                    {
+                        throw new ArgumentException("This variable isn't initialised");
+                    }
+                    else
+                    {
+                        return Fraction.Parse(state, state.VarManager.Constants[expression]);
+                    }
                 }
                 else
                 {
-                    num = int.Parse(expression);
-                    den = 1;
+                    return Fraction.Parse(state, state.VarManager.UserVars[expression]);
                 }
-
-                return wantRounded ? new Fraction((double)num / (double)den) : new Fraction(num, den);
+            }
+            else
+            {
+                throw new ArgumentException("This variable isn't initialised");
             }
         }
 
