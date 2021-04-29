@@ -35,18 +35,23 @@ namespace DieseCalcCLI
                 String input = Console.ReadLine();
                 if (input.Length != 0)
                 {
-                    ProcessExpression(input);
-                    //}
-                    //try
-                    //{
-                    //    ProcessExpression(input);
-                    //}
-                    //catch (Exception e)
-                    //{
-                    //    Console.ForegroundColor = ConsoleColor.Red;
-                    //    Console.Write($"[ERROR] {e.Message}\n");
-                    //    Console.ForegroundColor = ConsoleColor.White;
-                    //}
+                    if (_verbose)
+                    {
+                        ProcessExpression(input);
+                    }
+                    else
+                    {
+                        try
+                        {
+                            ProcessExpression(input);
+                        }
+                        catch (Exception e)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.Write($"[ERROR] {e.Message}\n");
+                            Console.ForegroundColor = ConsoleColor.White;
+                        }
+                    }
                 }
             }
         }
