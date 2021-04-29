@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SharpCalculatorLib.MathFunctions
+namespace DieseCalcLib.MathFunctions
 {
-    public class Pow : IFunction
+    public class Multiply : IFunction
     {
-        private String _docstring = "Returns the a^b";
+        private String _docstring = "Returns the product of two numbers";
 
         public String Docstring
         {
@@ -19,7 +19,7 @@ namespace SharpCalculatorLib.MathFunctions
             get => _argumentsCount;
         }
 
-        private String _infixOperator = "^";
+        private String _infixOperator = "*";
 
         private String _postfixOperator = "None";
 
@@ -44,15 +44,14 @@ namespace SharpCalculatorLib.MathFunctions
 
         public List<String> getAliases()
         {
-            _aliases.Add("power");
-            _aliases.Add("pow");
-            _aliases.Add("^");
+            _aliases.Add("multiply");
+            _aliases.Add("*");
             return _aliases;
         }
 
         public Fraction ExecuteFunction(State state, List<Fraction> args)
         {
-            return (Fraction.Pow(args[0], args[1]));
+            return (args[1] * args[0]);
         }
     }
 }

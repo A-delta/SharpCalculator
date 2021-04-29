@@ -1,9 +1,9 @@
-﻿using SharpCalculatorLib;
+﻿using DieseCalcLib;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace SharpCalculatorApp
+namespace DieseCalcCLI
 {
     public class ConsoleApplication
     {
@@ -17,7 +17,7 @@ namespace SharpCalculatorApp
             ProcessCLIArguments(args);
 
             Version Appversion = System.Reflection.Assembly.GetEntryAssembly().GetName().Version;
-            Version libVersion = System.Reflection.Assembly.Load("SharpCalculatorLib").GetName().Version;
+            Version libVersion = System.Reflection.Assembly.Load("DieseCalcLib").GetName().Version;
 
             Console.WriteLine($"SharpCalculatorCLI {Appversion.Major}.{Appversion.Minor}.{Appversion.Build}");
             Console.WriteLine($"Using SharpCalculatorLib {libVersion.Major}.{libVersion.Minor}.{libVersion.Build}\n");

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SharpCalculatorLib.MathFunctions
+namespace DieseCalcLib.MathFunctions
 {
-    public class Decimal : IFunction
+    public class Fractional : IFunction
     {
-        private String _docstring = "Returns the decimal value of a fraction";
+        private String _docstring = "Returns the fraction representation of a value";
 
         public String Docstring
         {
@@ -44,15 +44,24 @@ namespace SharpCalculatorLib.MathFunctions
 
         public List<String> getAliases()
         {
-            _aliases.Add("decimal");
-            _aliases.Add("dec");
+            _aliases.Add("frac");
+            _aliases.Add("fraction");
             return _aliases;
         }
 
         public Fraction ExecuteFunction(State state, List<Fraction> args)
         {
-            return Fraction.Parse(state, args[0].RoundedValue.ToString(), true);
-            //return new Fraction(args[0].RoundedValue, 1);
+            Fraction frac = args[0];
+            double nb = args[0].RoundedValue;
+            string nbString = nb.ToString();
+
+            if (!nbString.Contains("."))
+            {
+                return frac;
+            }
+
+            frac = new Fraction(nb, 1);
+            return frac;
         }
     }
 }

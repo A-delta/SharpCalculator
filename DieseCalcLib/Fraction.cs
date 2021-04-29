@@ -1,7 +1,7 @@
-﻿using SharpCalculatorLib.MathFunctions;
+﻿using DieseCalcLib.MathFunctions;
 using System;
 
-namespace SharpCalculatorLib
+namespace DieseCalcLib
 {
     public class Fraction
     {
@@ -31,10 +31,11 @@ namespace SharpCalculatorLib
             int afterCommaMaxNum = 0;
             int afterCommaMaxDen = 0;
 
-            string numString = num.ToString().Length >= 10 ? num.ToString()[0..10] : num.ToString();
+            //string numString = num.ToString().Length >= 20 ? num.ToString()[0..20] : num.ToString();
 
-            string denString = den.ToString().Length >= 10 ? den.ToString()[0..10] : den.ToString();
-
+            //string denString = den.ToString().Length >= 20 ? den.ToString()[0..20] : den.ToString();
+            string numString = num.ToString();
+            string denString = den.ToString();
             if (numString.Contains("."))
             {
                 afterCommaMaxNum = numString.Substring(numString.IndexOf(".")).Length - 1;
@@ -62,8 +63,6 @@ namespace SharpCalculatorLib
 
         public static Fraction Parse(State state, string expression, bool wantRounded = false)
         {
-            Logger.DebugLog(expression);
-
             double num;
             double den;
 
@@ -85,10 +84,10 @@ namespace SharpCalculatorLib
             else if (expression.Contains("/"))
             {
                 string[] expressions = expression.Split("/");
-                num = int.Parse(expressions[0]);
-                den = int.Parse(expressions[1]);
+                num = double.Parse(expressions[0]);
+                den = double.Parse(expressions[1]);
 
-                return wantRounded ? new Fraction((double)num / (double)den) : new Fraction(num, den);
+                return wantRounded ? new Fraction(num / den) : new Fraction(num, den);
             }
             else if (double.TryParse(expression, out num))
             {
@@ -185,7 +184,7 @@ namespace SharpCalculatorLib
             return new Fraction(a.Numerator * b.Denominator, a.Denominator * b.Numerator);
         }
 
-        public static Fraction Pow(Fraction a, Fraction b) => new Fraction(Math.Pow(b.Numerator, a.RoundedValue), Math.Pow(b.Denominator, a.RoundedValue));
+        public static Fraction Pow(Fraction a, Fraction b) => new Fraction(Math.Pow(b.Numerator, a.RoundedValue), Math.Pow(b.Denominator, a.RoundedValue)); // maybe -> power fcn
 
         public override string ToString()
         {

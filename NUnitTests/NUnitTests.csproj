@@ -14,9 +14,4 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\SharpCalculatorLib\SharpCalculatorLib.csproj" />
-    <ProjectReference Include="..\SharpCalculator\SharpCalculatorCLI.csproj" />
-  </ItemGroup>
-
 </Project>

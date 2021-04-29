@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SharpCalculatorLib.MathFunctions
+namespace DieseCalcLib.MathFunctions
 {
     public class Get
     {

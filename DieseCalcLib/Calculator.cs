@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
-using SharpCalculatorLib.Exceptions;
+using DieseCalcLib.Exceptions;
 
-namespace SharpCalculatorLib
+namespace DieseCalcLib
 {
     public class Calculator
     {
@@ -645,7 +645,7 @@ namespace SharpCalculatorLib
 
         public static IFunction GetFunction(String functionName)
         {
-            return (IFunction)System.Activator.CreateInstance(Type.GetType("SharpCalculatorLib.MathFunctions." + functionName));
+            return (IFunction)System.Activator.CreateInstance(Type.GetType("DieseCalcLib.MathFunctions." + functionName));
         }
 
         ~Calculator()

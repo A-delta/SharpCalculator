@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SharpCalculatorLib.MathFunctions
+namespace DieseCalcLib.MathFunctions
 {
-    public class Multiply : IFunction
+    public class Minus : IFunction
     {
-        private String _docstring = "Returns the product of two numbers";
+        private String _docstring = "Returns the difference of two numbers";
 
         public String Docstring
         {
@@ -19,7 +19,7 @@ namespace SharpCalculatorLib.MathFunctions
             get => _argumentsCount;
         }
 
-        private String _infixOperator = "*";
+        private String _infixOperator = "-";
 
         private String _postfixOperator = "None";
 
@@ -33,7 +33,7 @@ namespace SharpCalculatorLib.MathFunctions
             get => _infixOperator;
         }
 
-        private int _OperatorPriority = 4;
+        private int _OperatorPriority = 3;
 
         public int OperatorPriority
         {
@@ -44,14 +44,14 @@ namespace SharpCalculatorLib.MathFunctions
 
         public List<String> getAliases()
         {
-            _aliases.Add("multiply");
-            _aliases.Add("*");
+            _aliases.Add("minus");
+            _aliases.Add("-");
             return _aliases;
         }
 
         public Fraction ExecuteFunction(State state, List<Fraction> args)
         {
-            return (args[1] * args[0]);
+            return (args[1] - args[0]);
         }
     }
 }

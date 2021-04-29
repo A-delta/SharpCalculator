@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
-using SharpCalculatorLib;
+using DieseCalcLib;
 using System;
-using SharpCalculatorLib.Exceptions;
+using DieseCalcLib.Exceptions;
 
 namespace NUnitTests
 {

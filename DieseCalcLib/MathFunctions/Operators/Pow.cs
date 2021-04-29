@@ -1,25 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SharpCalculatorLib.MathFunctions
+namespace DieseCalcLib.MathFunctions
 {
-    public class Fractional : IFunction
+    public class Pow : IFunction
     {
-        private String _docstring = "Returns the fraction representation of a value";
+        private String _docstring = "Returns the a^b";
 
         public String Docstring
         {
             get => _docstring;
         }
 
-        private int _argumentsCount = 1;
+        private int _argumentsCount = 2;
 
         public int ArgumentsCount
         {
             get => _argumentsCount;
         }
 
-        private String _infixOperator = "None";
+        private String _infixOperator = "^";
 
         private String _postfixOperator = "None";
 
@@ -33,7 +33,7 @@ namespace SharpCalculatorLib.MathFunctions
             get => _infixOperator;
         }
 
-        private int _OperatorPriority = 1;
+        private int _OperatorPriority = 4;
 
         public int OperatorPriority
         {
@@ -44,24 +44,15 @@ namespace SharpCalculatorLib.MathFunctions
 
         public List<String> getAliases()
         {
-            _aliases.Add("frac");
-            _aliases.Add("fraction");
+            _aliases.Add("power");
+            _aliases.Add("pow");
+            _aliases.Add("^");
             return _aliases;
         }
 
         public Fraction ExecuteFunction(State state, List<Fraction> args)
         {
-            Fraction frac = args[0];
-            double nb = args[0].RoundedValue;
-            string nbString = nb.ToString();
-
-            if (!nbString.Contains("."))
-            {
-                return frac;
-            }
-
-            frac = new Fraction(nb, 1);
-            return frac;
+            return (Fraction.Pow(args[0], args[1]));
         }
     }
 }

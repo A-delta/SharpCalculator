@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SharpCalculatorApp
+namespace DieseCalcCLI
 {
     internal class Program
     {

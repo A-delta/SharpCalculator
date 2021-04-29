@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SharpCalculatorLib.Exceptions
+namespace DieseCalcLib.Exceptions
 {
     [Serializable]
     public class IllegalVariableNameException : Exception

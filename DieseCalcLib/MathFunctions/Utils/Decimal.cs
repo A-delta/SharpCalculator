@@ -1,25 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SharpCalculatorLib.MathFunctions
+namespace DieseCalcLib.MathFunctions
 {
-    public class Minus : IFunction
+    public class Decimal : IFunction
     {
-        private String _docstring = "Returns the difference of two numbers";
+        private String _docstring = "Returns the decimal value of a fraction";
 
         public String Docstring
         {
             get => _docstring;
         }
 
-        private int _argumentsCount = 2;
+        private int _argumentsCount = 1;
 
         public int ArgumentsCount
         {
             get => _argumentsCount;
         }
 
-        private String _infixOperator = "-";
+        private String _infixOperator = "None";
 
         private String _postfixOperator = "None";
 
@@ -33,7 +33,7 @@ namespace SharpCalculatorLib.MathFunctions
             get => _infixOperator;
         }
 
-        private int _OperatorPriority = 3;
+        private int _OperatorPriority = 1;
 
         public int OperatorPriority
         {
@@ -44,14 +44,15 @@ namespace SharpCalculatorLib.MathFunctions
 
         public List<String> getAliases()
         {
-            _aliases.Add("minus");
-            _aliases.Add("-");
+            _aliases.Add("decimal");
+            _aliases.Add("dec");
             return _aliases;
         }
 
         public Fraction ExecuteFunction(State state, List<Fraction> args)
         {
-            return (args[1] - args[0]);
+            return Fraction.Parse(state, args[0].RoundedValue.ToString(), true);
+            //return new Fraction(args[0].RoundedValue, 1);
         }
     }
 }
