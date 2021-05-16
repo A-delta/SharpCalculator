@@ -2,7 +2,7 @@
 The SharpCalculatorApp project is a console application written to interact with the DièseCalculatorLib library. There will be a graphical application in the future (other repo) and a complete documentation.
 
 # DièseCalculatorLib
-The SharpCalculatorLib library is a math expression cleaner, parser and evaluator supporting functions, variables and basic operations (with implicit products support)
+The DièseCalculatorLib library is a math expression cleaner, parser and evaluator supporting functions, variables and basic operations (with implicit products support)
 You can download the NuGet package [here](https://www.nuget.org/packages/SharpCalculatorLib/) or check the repository [here](https://github.com/DieseCalc/DieseCalcLib)
 
 # In the future
