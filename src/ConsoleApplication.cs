@@ -236,9 +236,9 @@ namespace DieseCalcCLI
 
         private void PrintUserVariables()
         {
-            foreach (KeyValuePair<string, string> item in calc.State.VarManager.UserVars)
+            foreach (KeyValuePair<string, Fraction> item in calc.State.VarManager.UserVars)
             {
-                Console.WriteLine($"{item.Key} = {item.Value}");
+                Console.WriteLine($"{item.Key} = {item.Value.RoundedValue}");
             }
         }
 
