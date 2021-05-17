@@ -11,6 +11,8 @@ namespace DieseCalcCLI
         private readonly Calculator calc;
         private string lastExpression = ""; // temp need wewrite history
 
+        private string docUrl = "";
+
         public ConsoleApplication(string[] args)
         {
             calc = new Calculator(false);
@@ -66,18 +68,6 @@ namespace DieseCalcCLI
                     Console.WriteLine("Changed verbose state");
                     break;
 
-                case "<":
-                    calc.ChangeOutputType();
-                    ProcessExpression(lastExpression);
-                    calc.ChangeOutputType();
-                    break;
-
-                case "frac":
-                case "dec":
-                    calc.ChangeOutputType();
-                    Console.WriteLine("Changed output type");
-                    break;
-
                 case "history":
                 case "hist":
                     PrintHistory();
@@ -100,8 +90,15 @@ namespace DieseCalcCLI
                     Console.Clear();
                     break;
 
+                case "math":
+                case "helpmath":
+                    PrintMathHelp();
+                    break;
+
                 case "help":
-                    PrintHelp();
+                case "cmds":
+                case "commands":
+                    Console.WriteLine(docUrl);
                     break;
 
                 default:
@@ -131,7 +128,7 @@ namespace DieseCalcCLI
 
                         case "-h":
                         case "--help":
-                            PrintHelp();
+                            PrintMathHelp();
                             break;
 
                         case "-v":
@@ -143,12 +140,6 @@ namespace DieseCalcCLI
 
                         case "-f":
                         case "--fraction":
-                            keepOpen = true;
-                            break;
-
-                        case "-d":
-                        case "--decimal":
-                            calc.ChangeOutputType();
                             keepOpen = true;
                             break;
 
@@ -197,7 +188,7 @@ namespace DieseCalcCLI
             return Calculator.GetAllFunctions();
         }
 
-        private void PrintHelp() // DIRTY
+        private void PrintMathHelp() // DIRTY
         {
             Dictionary<string, IFunction> functionList = calc.GetHelp();
 
@@ -236,9 +227,9 @@ namespace DieseCalcCLI
 
         private void PrintUserVariables()
         {
-            foreach (KeyValuePair<string, Fraction> item in calc.State.VarManager.UserVars)
+            foreach (KeyValuePair<string, string> item in calc.State.VarManager.UserVars)
             {
-                Console.WriteLine($"{item.Key} = {item.Value.RoundedValue}");
+                Console.WriteLine($"{item.Key} = {item.Value.ToString()}");
             }
         }
 
