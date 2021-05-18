@@ -9,10 +9,8 @@ namespace DieseCalcCLI
     {
         private bool _verbose;
         private readonly Calculator calc;
-        private string lastExpression = ""; // temp need wewrite history
 
         private string appDocsUrl = "https://github.com/DieseCalc/DieseCalcCLI/blob/master/docs/docs.md";
-        //private string libDocsUrl = "https://github.com/DieseCalc/DieseCalcLib/blob/master/docs/docs.md";
 
         public ConsoleApplication(string[] args)
         {
@@ -51,7 +49,7 @@ namespace DieseCalcCLI
                         }
                         else
                         {
-                            Console.Write($"[ERROR] {e.Message}\n");
+                            Console.Write($"[DEBUG ERROR] {e.Message}\n");
                         }
                         Console.ForegroundColor = ConsoleColor.White;
                     }
@@ -106,7 +104,6 @@ namespace DieseCalcCLI
                     break;
 
                 default:
-                    lastExpression = expression; // temp
                     string result = calc.ProcessExpression(expression);
                     Console.WriteLine(">>  " + result + "\n");
                     break;
