@@ -11,7 +11,8 @@ namespace DieseCalcCLI
         private readonly Calculator calc;
         private string lastExpression = ""; // temp need wewrite history
 
-        private string docUrl = "";
+        private string appDocsUrl = "https://github.com/DieseCalc/DieseCalcCLI/blob/master/docs/docs.md";
+        //private string libDocsUrl = "https://github.com/DieseCalc/DieseCalcLib/blob/master/docs/docs.md";
 
         public ConsoleApplication(string[] args)
         {
@@ -98,7 +99,10 @@ namespace DieseCalcCLI
                 case "help":
                 case "cmds":
                 case "commands":
-                    Console.WriteLine(docUrl);
+                    Console.Write("\nApp documentation : ");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(appDocsUrl + "\n");
+                    Console.ForegroundColor = ConsoleColor.Cyan;
                     break;
 
                 default:
@@ -113,6 +117,7 @@ namespace DieseCalcCLI
         {
             int i = 0;
             bool keepOpen = false;
+            _verbose = false;
             string[] expressions;
             if (args.Length != 0)
             {
@@ -133,7 +138,7 @@ namespace DieseCalcCLI
 
                         case "-v":
                         case "--verbose":
-                            _verbose = true;
+                            _verbose = !_verbose;
                             keepOpen = true;
                             calc.ChangeVerboseState();
                             break;
@@ -169,6 +174,7 @@ namespace DieseCalcCLI
                 }
                 if (keepOpen == false) { System.Environment.Exit(1); }
             }
+            if (_verbose == false) { Console.Clear(); }
         }
 
         private static string[] LoadFile(string fileName)
