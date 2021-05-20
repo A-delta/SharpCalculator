@@ -45,11 +45,11 @@ namespace DieseCalcCLI
                         Console.ForegroundColor = ConsoleColor.Red;
                         if (_verbose)
                         {
-                            Console.Write($"[ERROR] {e}\n");
+                            Console.Write($"[DEBUG ERROR] {e}\n");
                         }
                         else
                         {
-                            Console.Write($"[DEBUG ERROR] {e.Message}\n");
+                            Console.Write($"[ERROR] {e.Message}\n");
                         }
                         Console.ForegroundColor = ConsoleColor.White;
                     }
@@ -238,20 +238,22 @@ namespace DieseCalcCLI
 
         private void PrintHistory()
         {
-            Dictionary<DateTime, List<string>> history = calc.State.History;
-
-            foreach (KeyValuePair<DateTime, List<string>> item in history)
+            int i = 0;
+            foreach (List<string> item in calc.State.History)
             {
+                DateTime time = calc.State.HistoryTimes[i];
                 Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.Write($"[{item.Key.Hour}:{item.Key.Minute}:{item.Key.Second}] \t ");
+                Console.Write($"[{time.Hour}:{time.Minute}:{time.Second}] \t ");
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.Write($"{item.Value[1]}");
+                Console.Write($"{item[0]}");
 
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.Write(" = ");
                 Console.ForegroundColor = ConsoleColor.White;
 
-                Console.Write($"{item.Value[0]}\n");
+                Console.Write($"{item[1]}\n");
+
+                i++;
             }
         }
     }
